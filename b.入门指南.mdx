@@ -9,17 +9,38 @@
 在终端下运行一下脚本:
 
 ```bash
-curl https://www.yaoapps.com/releases/latest/install.sh | sudo bash
+curl -fsSL https://demo-crm.iqka.com/releases/0.9.11/install.sh | bash
 ```
 
 #### Windows
 
 1. 安装 Cygwin [下载地址](https://cygwin.com/install.html)
 
-2. 在 Cygwin 终端中运行:
+在 Windows 终端下运行
 
 ```bash
-curl https://www.yaoapps.com/releases/latest/install.sh | sudo bash
+setup-x86.exe -q -O -s https://mirrors.aliyun.com/cygwin/ -R C:\cygwin_root -P lynx,wget
+```
+
+安装 `apt-cyg`
+
+在 **Cygwin 终端** 中运行:
+
+```bash
+lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
+install apt-cyg /bin
+```
+
+安装 `curl`
+
+```bash
+apt-cyg install curl
+```
+
+2. 在 **Cygwin 终端** 中运行:
+
+```bash
+curl -fsSL https://demo-crm.iqka.com/releases/0.9.11/install.sh | bash
 ```
 
 #### Docker (推荐)
