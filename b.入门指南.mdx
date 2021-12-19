@@ -49,15 +49,16 @@ yao init
 
 ```bash
 ├── yao_modules # 用于存放公共数据模型文件、数业流文件、数据流脚本等
-├── apis # 用于存放接口描述文件
-├── data # 用于存放应用产生的文件，如图片,PDF等
-├── db   # 用于存放 SQLite 数据库文件
+├── apis        # 用于存放接口描述文件
+├── data        # 用于存放应用产生的文件，如图片,PDF等
+├── db          # 用于存放 SQLite 数据库文件
 │   └── xiang.db
-├── flows   # 用于存放数据流描述文件
-├── models  # 用于存放数据模型描述文件
-├── plugins # 用于存放GRPC插件文件
-├── tables  # 用于存放GRPC插件文件
-└── ui      # 静态文件服务器文件目录，可以放置自定义前端制品，该目录下文件可通过 http://host:port/文件名称 访问。
+├── flows     # 用于存放数据流描述文件
+├── models    # 用于存放数据模型描述文件
+├── plugins   # 用于存放GRPC插件文件
+├── tables    # 用于数据表格界面描述文件
+└── ui        # 静态文件服务器文件目录，可以放置自定义前端制品，该目录下文件可通过 http://host:port/文件名称 访问。
+└── app.json  # 应用配置文件, 用来定义应用名称等
 ```
 
 #### 2. 设计数据模型
@@ -75,15 +76,15 @@ yao init
 | desc       | text       |                            |         | 简历                      |
 | status     | enum       | ["enabled"], ["disabled"], | enabled | 状态                      |
 
-##### 创建数据模型描述文件
+**创建数据模型描述文件**
 
 在项目 `models` 目录下，创建数据模型描述文件 `customer.mod.yao`
 
-```jsonc
+```json
 {
   "name": "客户",
   "table": {
-    "name": "customer", // 数据库中对应的数据表名称
+    "name": "customer",
     "comment": "客户表"
   },
   "columns": [
@@ -102,7 +103,7 @@ yao init
       "index": true
     },
     {
-      "label": "客户姓名",
+      "label": "姓名",
       "name": "name",
       "type": "string",
       "length": 80,
@@ -111,7 +112,7 @@ yao init
       "index": true
     },
     {
-      "label": "公司名称",
+      "label": "公司",
       "name": "company",
       "type": "string",
       "length": 200,
@@ -153,25 +154,24 @@ yao init
     }
   ],
   "option": {
-    "timestamps": true, // 自动创建 created_at, updated_at 字段
-    "soft_deletes": true // 自动创建 deleted_at 字段
+    "timestamps": true,
+    "soft_deletes": true
   },
   "values": [
-    // 自动创建默认数据集
     {
       "id": 1,
-      "name": "张三",
+      "name": "莉莉",
       "company": "yaoapps.com"
     }
   ]
 }
 ```
 
-##### 创建数据表
+**创建数据表**
 
 使用 `yao migrate` 命令创建数据表
 
-打开命令行终端，**在项目跟录下运行**:
+打开命令行终端，**在项目根录下运行**:
 
 ```bash
 yao migrate
@@ -179,7 +179,7 @@ yao migrate
 
 可以使用 `yao run` 命令查询数据
 
-打开命令行终端，**在项目跟录下运行**:
+打开命令行终端，**在项目根录下运行**:
 
 ```bash
 yao run models.customer.find 1
@@ -187,13 +187,168 @@ yao run models.customer.find 1
 
 #### 3. 编写界面描述
 
+在项目 `tables` 目录下，创建数据表格描述文件 `customer.tab.yao`
+
+```json
+{
+  "name": "客户",
+  "version": "1.0.0",
+  "decription": "客户管理数据表格",
+  "bind": {
+    "model": "customer"
+  },
+  "columns": {},
+  "filters": {
+    "关键词": { "@": "filter.关键词", "in": ["where.name.match"] },
+    "排序": { "@": "filter.排序" }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "公司", "width": 200 },
+        { "name": "姓名", "width": 100 },
+        { "name": "性别", "width": 80 },
+        { "name": "生日", "width": 100 },
+        { "name": "来源", "width": 80 },
+        { "name": "状态", "width": 140 },
+        { "name": "更新时间", "width": 160 }
+      ],
+      "filters": [{ "name": "关键词" }, { "name": "来源", "width": 3 }]
+    },
+    "actions": {
+      "create": {
+        "type": "button",
+        "props": { "label": "添加客户", "icon": "fas fa-plus" }
+      },
+      "pagination": {}
+    }
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "姓名", "width": 12 },
+            { "name": "性别", "width": 3 },
+            { "name": "生日", "width": 3 },
+            { "name": "来源", "width": 3 },
+            { "name": "状态", "width": 3 },
+            { "name": "公司", "width": 24 },
+            { "name": "介绍", "width": 24 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": { "@": "action.保存" },
+      "delete": { "@": "action.删除" }
+    }
+  }
+}
+```
+
+**启动服务**
+
+如果使用 `docker` 方式安装，忽略本步骤。
+
+**在调试模式下，保存界面描述文件，会自动更新重启服务，刷新页面接口实时预览**
+
+打开命令行终端，**在项目根录下运行**:
+
+```bash
+yao start
+```
+
+**访问客户管理模块**
+
+打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，默认管理员名称密码为:
+
+用户名: `xiang@iqka.com`
+密码: `A123456p+`
+
+成功登录后，在地址栏输入 `https://127.0.0.1:5099/xiang/table/customer` 即可访问客户管理模块。可以在菜单管理界面，将 `/xiang/table/customer` 路由添加为菜单项。
+
+#### 4. 自定义初始数据
+
+在项目自动部署，发布时，可以使用数据流，设定菜单项，默认账号密码及创建初始数据，使用 `yao run` 命令运行，创建初始化脚本。
+
+在项目 `flows` 目录下，创建数据流描述文件 `init.flow.yao`
+
+```json
+{
+  "label": "初始化数据",
+  "version": "1.0.0",
+  "description": "初始化数据",
+  "nodes": [
+    {
+      "name": "重建数据库",
+      "process": "xiang.migrate"
+    },
+    {
+      "name": "清空管理账号",
+      "process": "models.xiang.user.DeleteWhere",
+      "args": [{}]
+    },
+    {
+      "name": "清空菜单",
+      "process": "models.xiang.menu.DeleteWhere",
+      "args": [{}]
+    },
+    {
+      "name": "创建新管理账号",
+      "process": "models.xiang.user.Save",
+      "args": [
+        {
+          "name": "管理员",
+          "type": "admin",
+          "email": "xiang@yaoapp.com",
+          "password": "A123456p+",
+          "key": "8304925176",
+          "secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
+          "status": "enabled",
+          "extra": { "sex": "男" }
+        }
+      ]
+    },
+    {
+      "name": "添加菜单",
+      "process": "models.xiang.menu.Insert",
+      "args": [
+        ["name", "path", "icon", "rank", "status"],
+        [["客户管理", "/table/customer", "icon-users", 1, "enabled"]]
+      ]
+    }
+  ]
+}
+```
+
+打开命令行终端，**在项目根录下运行**:
+
+```bash
+yao run flows.init
+```
+
+打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，使用新用户名密码登录。
+
 ### 部署
 
 #### 1. 部署到云
 
-#### 2. 部署到端
+打开命令行终端，**在项目根录下运行**:
 
-#### 3. 自定义界面
+```bash
+yao publish -e online.env --cloud amazon flows.init
+```
+
+#### 2. 部署指定服务器
+
+```bash
+yao publish -e online.env --ssh root@10.110.202.10 -i ~/.ssh/id_rsa flows.init
+```
 
 ### 进阶
 
