@@ -1,126 +1,146 @@
 ## 入门指南
 
-从零到一构建一个拥有 6 个实体对象、10 个业务模块的支持增删改查的后台项目需要多长时间？
+从零到一创建一个客户管理模块，实现客户资料增删改查。
 
-一个拥有 5 年开发经验的 Php 开发者可能会说:半个月即可。
+### 安装
 
-一个拥有 5 年开发经验的 Java 开发者可能会说:半个月设计架构、数据模型，半个月写样板代码，半个月打包测试，45 天差不多可以完成。
+#### MacOS / Linux
 
-一个拥有 3 年开发经验的 JS 全栈开发着可能会说:社区有大量现成的模版，一个月就能搞定。
-
-一个拥有 6 年开发经验的 Golang 开发者可能会说:这种项目不需要使用 Go 来写，找别人吧，如果要写的话，三个月，我敢保证应用性能比其他语言的都要强。
-
-现在，如果有人告诉你，一个工作经验两年的开发者，只需一个星期就能完成上述任务，你觉得这是真的吗？Yao 会给你答案。
-
-只需以下几步，即可创建一个 YaoApp:
-
-### 拉取样板代码
+在终端下运行一下脚本:
 
 ```bash
-git clone git@github.com:YaoApp/xiang-spec.git
+curl https://www.yaoapps.com/releases/latest/install.sh | sudo bash
 ```
 
-<Title> 下载应用引擎 </Title>
+#### Windows
 
-#### 1.根据操作系统和 CPU 型号下载象传应用引擎:
+1. 安装 Cygwin [下载地址](https://cygwin.com/install.html)
 
-**[0.9.11]**
-
-[MacOS xiang-darwin-amd64](xiang/xiang-0.9.11-darwin-amd64)
-
-[Linux X86 xiang-linux-amd64](xiang/xiang-0.9.11-linux-amd64)
-
-[Linux ARM64 xiang-linux-arm64](xiang/xiang-0.9.11-linux-arm64)
-
-[Linux ARM xiang-linux-arm](xiang/xiang-0.9.11-linux-arm)
-
-#### 2.将象传应用引擎保存到 `PATH` 目录
-
-下载后将可执行文件保存到任意 `$PATH` 目录, 改名为 `xiang`, 添加可执行权限。
-
-Linux :
+2. 在 Cygwin 终端中运行:
 
 ```bash
-sudo mv xiang-linux-amd64 /usr/local/bin/xiang
-sudo chmod +x /usr/local/bin/xiang
+curl https://www.yaoapps.com/releases/latest/install.sh | sudo bash
 ```
 
-MacOS:
+#### Docker (推荐)
+
+1. 安装 Docker [安装并下载 Docker](https://docs.docker.com/get-docker/)
+
+2. 创建并启动容器
 
 ```bash
-sudo mv xiang-darwin-amd64 /usr/local/bin/xiang
-sudo chmod +x /usr/local/bin/xiang
+docker run -d -v /your-project-root:/app -p 5099:5099 yaoapps/yao-dev:latest
 ```
 
-### 安装 mysql 数据库
+### 开发
 
-确认你的电脑已安装 docker，启动 docker engine，执行以下命令:
+#### 1. 创建项目
+
+创建一个空目录，作为项目目录，并使用 `yao init` 命令，对项目目录初始化。
+
+打开命令行终端，**在项目跟录下运行**:
 
 ```bash
-docker pull mysql
+cd your-project
+yao init
 ```
 
-待镜像拉取完成执行，执行以下命令生成 mysql 容器，并将容器内部的数据卷映射到宿主机上:
+命令成功执行，将创建以下文件和目录。
 
 ```bash
-docker run --name mysql -v /Users/***/Data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql
+├── yao_modules # 用于存放公共数据模型文件、数业流文件、数据流脚本等
+├── apis # 用于存放接口描述文件
+├── data # 用于存放应用产生的文件，如图片,PDF等
+├── db   # 用于存放 SQLite 数据库文件
+│   └── xiang.db
+├── flows   # 用于存放数据流描述文件
+├── models  # 用于存放数据模型描述文件
+├── plugins # 用于存放GRPC插件文件
+├── tables  # 用于存放GRPC插件文件
+└── ui      # 静态文件服务器文件目录，可以放置自定义前端制品，该目录下文件可通过 http://host:port/文件名称 访问。
 ```
 
-`/Users/***/Data/mysql:/var/lib/mysql`即为，宿主机数据卷存放位置:容器内部数据卷存放位置。注意前者需要根据个人电脑自行设置，这一步的目的是让数据库数据持久化到宿主机的磁盘上，后续直接启动容器，不需要再重复创建相关数据库。
+#### 2. 设计数据模型
 
-执行完以上命令之后如果容器运行状态正常，且宿主机数据卷存放位置有相关 mysql 数据，则表示 mysql 启动成功，如果存在命令行卡死的情况，删除容器并重启 docker engine 即可。
+设计一张数据表 `customer`，用于存放客户资料数据。数据表结构如下:
 
-### 创建数据库
+| 字段       | 类型       | 长度/参数                  | 默认值  | 说明                      |
+| ---------- | ---------- | -------------------------- | ------- | ------------------------- |
+| id         | ID         |                            |         | 数据表 ID                 |
+| channel_id | bigInteger |                            |         | 客户来源                  |
+| name       | string     | 80                         |         | 客户姓名                  |
+| company    | string     | 200                        |         | 公司名称                  |
+| gender     | integer    |                            | 0       | 性别 0, 未知，1 男，2，女 |
+| birthday   | date       |                            |         | 生日                      |
+| desc       | text       |                            |         | 简历                      |
+| status     | enum       | ["enabled"], ["disabled"], | enabled | 状态                      |
 
-连接 mysql 数据库，创建名称为`yao`的数据库，字符集为 utf8，创建成功之后设置`.env`环境变量:
+##### 创建数据模型描述文件
 
-```bash
-XIANG_MODE="debug"
-XIANG_DB_DEBUG=true
-XIANG_DB_DRIVER=mysql
-XIANG_DB_PRIMARY="root:123456@tcp(localhost:3306)/yao?charset=utf8mb4&parseTime=True&loc=Local"
-XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
-```
+在项目 `models` 目录下，创建数据模型描述文件 `customer.mod.yao`
 
-### 创建数据模型
-
-在应用模型目录(`$XIANG_ROOT/models`)创建数据模型并保存定义文件。
-
-`vi {$XIANG_ROOT}/models/pet.json`
-
-```json
+```jsonc
 {
-  "name": "宠物",
+  "name": "客户",
   "table": {
-    "name": "pet",
-    "comment": "宠物表",
-    "engine": "InnoDB"
+    "name": "customer", // 数据库中对应的数据表名称
+    "comment": "客户表"
   },
   "columns": [
-    { "name": "id", "type": "ID" },
     {
-      "label": "名称",
-      "name": "name",
-      "type": "string",
-      "length": 200,
-      "comment": "名称",
-      "unique": true
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID"
     },
     {
-      "label": "科",
-      "name": "kind",
-      "type": "enum",
-      "option": ["狗", "猫", "其他"],
-      "comment": "宠物类型 狗, 猫, 其他",
-      "default": "猫",
+      "label": "来源",
+      "name": "channel_id",
+      "type": "bigInteger",
+      "comment": "客户来源",
+      "nullable": true,
       "index": true
     },
     {
-      "label": "排序",
-      "name": "rank",
+      "label": "客户姓名",
+      "name": "name",
+      "type": "string",
+      "length": 80,
+      "comment": "客户姓名",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "公司名称",
+      "name": "company",
+      "type": "string",
+      "length": 200,
+      "comment": "公司全称",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "性别",
+      "name": "gender",
       "type": "integer",
-      "default": 9999999,
-      "comment": "查询排序"
+      "comment": "性别",
+      "default": 0,
+      "index": true
+    },
+    {
+      "label": "生日",
+      "name": "birthday",
+      "type": "date",
+      "comment": "性别",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "介绍",
+      "name": "desc",
+      "type": "text",
+      "comment": "介绍",
+      "nullable": true
     },
     {
       "label": "状态",
@@ -132,203 +152,79 @@ XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
       "index": true
     }
   ],
-  "relations": {},
-  "option": { "timestamps": true, "soft_deletes": true },
+  "option": {
+    "timestamps": true, // 自动创建 created_at, updated_at 字段
+    "soft_deletes": true // 自动创建 deleted_at 字段
+  },
   "values": [
-    { "name": "Cookie", "kind": "猫" },
-    { "name": "旺财", "kind": "狗" },
-    { "name": "金龙", "kind": "鱼" }
-  ]
-}
-```
-
-### 定义业务逻辑
-
-在应用业务逻辑目录(`$XIANG_ROOT/flows`)创建数据模型并保存定义文件。
-业务逻辑可以作为 API 的处理器(`process`), 命名规则为 `flows.<flow name>`
-
-`vi {$XIANG_ROOT}/flows/latest.flow.json`
-
-```json
-{
-  "label": "最新信息",
-  "version": "1.0.0",
-  "description": "最新信息",
-  "nodes": [
+    // 自动创建默认数据集
     {
-      "name": "pets",
-      "process": "models.pet.get",
-      "args": [
-        {
-          "select": ["id", "name", "kind", "rank", "status"],
-          "limit": 20,
-          "orders": [{ "column": "created_at", "option": "desc" }],
-          "wheres": [
-            { "column": "status", "value": "enabled" },
-            { "column": "name", "value": "{{$in.0}}", "op": "like" }
-          ]
-        }
-      ],
-      "outs": ["{{$out.pets}}"]
-    },
-    {
-      "name": "count",
-      "script": "count"
-    }
-  ],
-  "output": {
-    "params": "{{$in}}",
-    "data": {
-      "pets": "{{$res.pets.0}}",
-      "pet_ids": "{{$res.count.pet_ids}}",
-      "count": "{{$res.count}}"
-    }
-  }
-}
-```
-
-创建 `latest` 数据处理脚本 `latest.count.js`
-
-`vi {$XIANG_ROOT}/flows/latest.count.js`
-
-```javascript
-// 结果集处理脚本 (仅支持ES5)
-function main(args, pets, data) {
-  // 解析厂商ID
-  var pet_ids = [];
-  for (var i in pets) {
-    var id = pets[i].id;
-    if (id) {
-      pet_ids.push(id);
-    }
-  }
-
-  // 处理返回结果
-  var res = {
-    pets: pets,
-    pet_ids: pet_ids,
-  };
-  return res;
-}
-```
-
-### 编写接口
-
-在应用服务接口目录(`$XIANG_ROOT/apis`)创建数据模型并保存定义文件。
-
-`vi {$XIANG_ROOT}/apis/pet.json`
-
-```json
-{
-  "name": "宠物接口",
-  "version": "1.0.0",
-  "description": "宠物API",
-  "group": "pet",
-  "guard": "bearer-jwt",
-  "paths": [
-    {
-      "path": "/search",
-      "method": "GET",
-      "guard": "-",
-      "process": "models.pet.Paginate",
-      "in": [":param", "$param.page", "$param.pagesize"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
-    },
-    {
-      "path": "/find/:id",
-      "method": "GET",
-      "process": "models.pet.Find",
-      "in": ["$param.id", ":params"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
-    },
-    {
-      "path": "/latest",
-      "method": "GET",
-      "process": "flows.latest",
-      "in": ["$param.name"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
+      "id": 1,
+      "name": "张三",
+      "company": "yaoapps.com"
     }
   ]
 }
 ```
 
-### 描述界面
+##### 创建数据表
 
-在应用服务接口目录(`$XIANG_ROOT/table`)创建 table 页并保存定义文件。
+使用 `yao migrate` 命令创建数据表
 
-`vi {$XIANG_ROOT}/tables/pet.json`
+打开命令行终端，**在项目跟录下运行**:
 
-```json
-{
-  "name": "宠物",
-  "version": "1.0.0",
-  "decription": "宠物表格",
-  "bind": {
-    "model": "pet"
-  },
-  "apis": {
-    "search": {
-      "default": [
-        {
-          "orders": [{ "column": "updated_at", "option": "desc" }]
-        },
-        null,
-        10
-      ]
-    }
-  },
-  "filters": {
-    "名称": { "@": "filter.名称", "in": ["where.key.match"] }
-  },
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "名称" },
-        { "name": "科" },
-        { "name": "排序" },
-        { "name": "状态" },
-        { "name": "更新时间" },
-        { "name": "创建时间" }
-      ],
-      "filters": [{ "name": "名称" }]
-    },
-    "actions": {
-      "pagination": { "props": { "showTotal": true } }
-    },
-    "option": {}
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [
-            { "name": "名称", "width": 12 },
-            { "name": "科", "width": 12 },
-            { "name": "排序", "width": 12 },
-            { "name": "状态", "width": 12 }
-          ]
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": { "@": "action.保存" },
-      "delete": { "@": "action.删除" }
-    }
-  },
-  "insert": {},
-  "view": {}
-}
+```bash
+yao migrate
 ```
+
+可以使用 `yao run` 命令查询数据
+
+打开命令行终端，**在项目跟录下运行**:
+
+```bash
+yao run models.customer.find 1
+```
+
+#### 3. 编写界面描述
+
+### 部署
+
+#### 1. 部署到云
+
+#### 2. 部署到端
+
+#### 3. 自定义界面
+
+### 进阶
+
+#### 1.自定义 API
+
+#### 2.复杂数据查询
+
+#### 3.使用数据流
+
+#### 4.增加数据看板功能
+
+#### 5.增加飞书登录功能
+
+### 高级
+
+#### 1. 使用 MySQL 数据库
+
+#### 2. 使用 JavaScript 编写处理器
+
+#### 3. 编写处理器插件
+
+#### 4. 分享到创意工坊
+
+### 资源
+
+#### 一键安装脚本
+
+#### Docker 镜像
+
+#### 示例代码
+
+#### Sketch 设计资源
+
+### 常见问题
