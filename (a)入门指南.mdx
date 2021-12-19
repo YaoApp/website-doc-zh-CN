@@ -2,25 +2,25 @@
 
 从零到一构建一个拥有 6 个实体对象、10 个业务模块的支持增删改查的后台项目需要多长时间？
 
-一个拥有 5 年开发经验的 Php 开发者可能会说：半个月即可。
+一个拥有 5 年开发经验的 Php 开发者可能会说:半个月即可。
 
-一个拥有 5 年开发经验的 Java 开发者可能会说：半个月设计架构、数据模型，半个月写样板代码，半个月打包测试，45 天差不多可以完成。
+一个拥有 5 年开发经验的 Java 开发者可能会说:半个月设计架构、数据模型，半个月写样板代码，半个月打包测试，45 天差不多可以完成。
 
-一个拥有 3 年开发经验的 JS 全栈开发着可能会说：社区有大量现成的模版，一个月就能搞定。
+一个拥有 3 年开发经验的 JS 全栈开发着可能会说:社区有大量现成的模版，一个月就能搞定。
 
-一个拥有 6 年开发经验的 Golang 开发者可能会说：这种项目不需要使用 Go 来写，找别人吧，如果要写的话，三个月，我敢保证应用性能比其他语言的都要强。
+一个拥有 6 年开发经验的 Golang 开发者可能会说:这种项目不需要使用 Go 来写，找别人吧，如果要写的话，三个月，我敢保证应用性能比其他语言的都要强。
 
 现在，如果有人告诉你，一个工作经验两年的开发者，只需一个星期就能完成上述任务，你觉得这是真的吗？Yao 会给你答案。
 
-只需以下几步，即可创建一个 YaoApp：
+只需以下几步，即可创建一个 YaoApp:
 
-<Title>拉取样板代码</Title>
+### 拉取样板代码
 
 ```bash
 git clone git@github.com:YaoApp/xiang-spec.git
 ```
 
-<Title>下载应用引擎</Title>
+### 下载应用引擎
 
 #### 1.根据操作系统和 CPU 型号下载象传应用引擎:
 
@@ -52,15 +52,15 @@ sudo mv xiang-darwin-amd64 /usr/local/bin/xiang
 sudo chmod +x /usr/local/bin/xiang
 ```
 
-<Title>安装 mysql 数据库</Title>
+### 安装 mysql 数据库
 
-确认你的电脑已安装 docker，启动 docker engine，执行以下命令：
+确认你的电脑已安装 docker，启动 docker engine，执行以下命令:
 
 ```bash
 docker pull mysql
 ```
 
-待镜像拉取完成执行，执行以下命令生成 mysql 容器，并将容器内部的数据卷映射到宿主机上：
+待镜像拉取完成执行，执行以下命令生成 mysql 容器，并将容器内部的数据卷映射到宿主机上:
 
 ```bash
 docker run --name mysql -v /Users/***/Data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql
@@ -70,9 +70,9 @@ docker run --name mysql -v /Users/***/Data/mysql:/var/lib/mysql -e MYSQL_ROOT_PA
 
 执行完以上命令之后如果容器运行状态正常，且宿主机数据卷存放位置有相关 mysql 数据，则表示 mysql 启动成功，如果存在命令行卡死的情况，删除容器并重启 docker engine 即可。
 
-<Title>创建数据库</Title>
+### 创建数据库
 
-连接 mysql 数据库，创建名称为`yao`的数据库，字符集为 utf8，创建成功之后设置`.env`环境变量：
+连接 mysql 数据库，创建名称为`yao`的数据库，字符集为 utf8，创建成功之后设置`.env`环境变量:
 
 ```bash
 XIANG_MODE="debug"
@@ -82,7 +82,7 @@ XIANG_DB_PRIMARY="root:123456@tcp(localhost:3306)/yao?charset=utf8mb4&parseTime=
 XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
 ```
 
-<Title>创建数据模型</Title>
+### 创建数据模型
 
 在应用模型目录(`$XIANG_ROOT/models`)创建数据模型并保存定义文件。
 
@@ -90,59 +90,59 @@ XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
 
 ```json
 {
-	"name": "宠物",
-	"table": {
-		"name": "pet",
-		"comment": "宠物表",
-		"engine": "InnoDB"
-	},
-	"columns": [
-		{ "name": "id", "type": "ID" },
-		{
-			"label": "名称",
-			"name": "name",
-			"type": "string",
-			"length": 200,
-			"comment": "名称",
-			"unique": true
-		},
-		{
-			"label": "科",
-			"name": "kind",
-			"type": "enum",
-			"option": ["狗", "猫", "其他"],
-			"comment": "宠物类型 狗, 猫, 其他",
-			"default": "猫",
-			"index": true
-		},
-		{
-			"label": "排序",
-			"name": "rank",
-			"type": "integer",
-			"default": 9999999,
-			"comment": "查询排序"
-		},
-		{
-			"label": "状态",
-			"name": "status",
-			"type": "enum",
-			"default": "enabled",
-			"option": ["enabled", "disabled"],
-			"comment": "状态 enabled 开启, disabled 关闭",
-			"index": true
-		}
-	],
-	"relations": {},
-	"option": { "timestamps": true, "soft_deletes": true },
-	"values": [
-		{ "name": "Cookie", "kind": "猫" },
-		{ "name": "旺财", "kind": "狗" },
-		{ "name": "金龙", "kind": "鱼" }
-	]
+  "name": "宠物",
+  "table": {
+    "name": "pet",
+    "comment": "宠物表",
+    "engine": "InnoDB"
+  },
+  "columns": [
+    { "name": "id", "type": "ID" },
+    {
+      "label": "名称",
+      "name": "name",
+      "type": "string",
+      "length": 200,
+      "comment": "名称",
+      "unique": true
+    },
+    {
+      "label": "科",
+      "name": "kind",
+      "type": "enum",
+      "option": ["狗", "猫", "其他"],
+      "comment": "宠物类型 狗, 猫, 其他",
+      "default": "猫",
+      "index": true
+    },
+    {
+      "label": "排序",
+      "name": "rank",
+      "type": "integer",
+      "default": 9999999,
+      "comment": "查询排序"
+    },
+    {
+      "label": "状态",
+      "name": "status",
+      "type": "enum",
+      "default": "enabled",
+      "option": ["enabled", "disabled"],
+      "comment": "状态 enabled 开启, disabled 关闭",
+      "index": true
+    }
+  ],
+  "relations": {},
+  "option": { "timestamps": true, "soft_deletes": true },
+  "values": [
+    { "name": "Cookie", "kind": "猫" },
+    { "name": "旺财", "kind": "狗" },
+    { "name": "金龙", "kind": "鱼" }
+  ]
 }
 ```
 
-<Title>定义业务逻辑</Title>
+### 定义业务逻辑
 
 在应用业务逻辑目录(`$XIANG_ROOT/flows`)创建数据模型并保存定义文件。
 业务逻辑可以作为 API 的处理器(`process`), 命名规则为 `flows.<flow name>`
@@ -151,39 +151,39 @@ XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
 
 ```json
 {
-	"label": "最新信息",
-	"version": "1.0.0",
-	"description": "最新信息",
-	"nodes": [
-		{
-			"name": "pets",
-			"process": "models.pet.get",
-			"args": [
-				{
-					"select": ["id", "name", "kind", "rank", "status"],
-					"limit": 20,
-					"orders": [{ "column": "created_at", "option": "desc" }],
-					"wheres": [
-						{ "column": "status", "value": "enabled" },
-						{ "column": "name", "value": "{{$in.0}}", "op": "like" }
-					]
-				}
-			],
-			"outs": ["{{$out.pets}}"]
-		},
-		{
-			"name": "count",
-			"script": "count"
-		}
-	],
-	"output": {
-		"params": "{{$in}}",
-		"data": {
-			"pets": "{{$res.pets.0}}",
-			"pet_ids": "{{$res.count.pet_ids}}",
-			"count": "{{$res.count}}"
-		}
-	}
+  "label": "最新信息",
+  "version": "1.0.0",
+  "description": "最新信息",
+  "nodes": [
+    {
+      "name": "pets",
+      "process": "models.pet.get",
+      "args": [
+        {
+          "select": ["id", "name", "kind", "rank", "status"],
+          "limit": 20,
+          "orders": [{ "column": "created_at", "option": "desc" }],
+          "wheres": [
+            { "column": "status", "value": "enabled" },
+            { "column": "name", "value": "{{$in.0}}", "op": "like" }
+          ]
+        }
+      ],
+      "outs": ["{{$out.pets}}"]
+    },
+    {
+      "name": "count",
+      "script": "count"
+    }
+  ],
+  "output": {
+    "params": "{{$in}}",
+    "data": {
+      "pets": "{{$res.pets.0}}",
+      "pet_ids": "{{$res.count.pet_ids}}",
+      "count": "{{$res.count}}"
+    }
+  }
 }
 ```
 
@@ -194,25 +194,25 @@ XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
 ```javascript
 // 结果集处理脚本 (仅支持ES5)
 function main(args, pets, data) {
-	// 解析厂商ID
-	var pet_ids = []
-	for (var i in pets) {
-		var id = pets[i].id
-		if (id) {
-			pet_ids.push(id)
-		}
-	}
+  // 解析厂商ID
+  var pet_ids = [];
+  for (var i in pets) {
+    var id = pets[i].id;
+    if (id) {
+      pet_ids.push(id);
+    }
+  }
 
-	// 处理返回结果
-	var res = {
-		pets: pets,
-		pet_ids: pet_ids
-	}
-	return res
+  // 处理返回结果
+  var res = {
+    pets: pets,
+    pet_ids: pet_ids,
+  };
+  return res;
 }
 ```
 
-<Title>编写接口</Title>
+### 编写接口
 
 在应用服务接口目录(`$XIANG_ROOT/apis`)创建数据模型并保存定义文件。
 
@@ -220,48 +220,48 @@ function main(args, pets, data) {
 
 ```json
 {
-	"name": "宠物接口",
-	"version": "1.0.0",
-	"description": "宠物API",
-	"group": "pet",
-	"guard": "bearer-jwt",
-	"paths": [
-		{
-			"path": "/search",
-			"method": "GET",
-			"guard": "-",
-			"process": "models.pet.Paginate",
-			"in": [":param", "$param.page", "$param.pagesize"],
-			"out": {
-				"status": 200,
-				"type": "application/json"
-			}
-		},
-		{
-			"path": "/find/:id",
-			"method": "GET",
-			"process": "models.pet.Find",
-			"in": ["$param.id", ":params"],
-			"out": {
-				"status": 200,
-				"type": "application/json"
-			}
-		},
-		{
-			"path": "/latest",
-			"method": "GET",
-			"process": "flows.latest",
-			"in": ["$param.name"],
-			"out": {
-				"status": 200,
-				"type": "application/json"
-			}
-		}
-	]
+  "name": "宠物接口",
+  "version": "1.0.0",
+  "description": "宠物API",
+  "group": "pet",
+  "guard": "bearer-jwt",
+  "paths": [
+    {
+      "path": "/search",
+      "method": "GET",
+      "guard": "-",
+      "process": "models.pet.Paginate",
+      "in": [":param", "$param.page", "$param.pagesize"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    },
+    {
+      "path": "/find/:id",
+      "method": "GET",
+      "process": "models.pet.Find",
+      "in": ["$param.id", ":params"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    },
+    {
+      "path": "/latest",
+      "method": "GET",
+      "process": "flows.latest",
+      "in": ["$param.name"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
 }
 ```
 
-<Title>描述界面</Title>
+### 描述界面
 
 在应用服务接口目录(`$XIANG_ROOT/table`)创建 table 页并保存定义文件。
 
@@ -269,66 +269,66 @@ function main(args, pets, data) {
 
 ```json
 {
-	"name": "宠物",
-	"version": "1.0.0",
-	"decription": "宠物表格",
-	"bind": {
-		"model": "pet"
-	},
-	"apis": {
-		"search": {
-			"default": [
-				{
-					"orders": [{ "column": "updated_at", "option": "desc" }]
-				},
-				null,
-				10
-			]
-		}
-	},
-	"filters": {
-		"名称": { "@": "filter.名称", "in": ["where.key.match"] }
-	},
-	"list": {
-		"primary": "id",
-		"layout": {
-			"columns": [
-				{ "name": "ID", "width": 80 },
-				{ "name": "名称" },
-				{ "name": "科" },
-				{ "name": "排序" },
-				{ "name": "状态" },
-				{ "name": "更新时间" },
-				{ "name": "创建时间" }
-			],
-			"filters": [{ "name": "名称" }]
-		},
-		"actions": {
-			"pagination": { "props": { "showTotal": true } }
-		},
-		"option": {}
-	},
-	"edit": {
-		"primary": "id",
-		"layout": {
-			"fieldset": [
-				{
-					"columns": [
-						{ "name": "名称", "width": 12 },
-						{ "name": "科", "width": 12 },
-						{ "name": "排序", "width": 12 },
-						{ "name": "状态", "width": 12 }
-					]
-				}
-			]
-		},
-		"actions": {
-			"cancel": {},
-			"save": { "@": "action.保存" },
-			"delete": { "@": "action.删除" }
-		}
-	},
-	"insert": {},
-	"view": {}
+  "name": "宠物",
+  "version": "1.0.0",
+  "decription": "宠物表格",
+  "bind": {
+    "model": "pet"
+  },
+  "apis": {
+    "search": {
+      "default": [
+        {
+          "orders": [{ "column": "updated_at", "option": "desc" }]
+        },
+        null,
+        10
+      ]
+    }
+  },
+  "filters": {
+    "名称": { "@": "filter.名称", "in": ["where.key.match"] }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "名称" },
+        { "name": "科" },
+        { "name": "排序" },
+        { "name": "状态" },
+        { "name": "更新时间" },
+        { "name": "创建时间" }
+      ],
+      "filters": [{ "name": "名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } }
+    },
+    "option": {}
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "名称", "width": 12 },
+            { "name": "科", "width": 12 },
+            { "name": "排序", "width": 12 },
+            { "name": "状态", "width": 12 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": { "@": "action.保存" },
+      "delete": { "@": "action.删除" }
+    }
+  },
+  "insert": {},
+  "view": {}
 }
 ```
