@@ -2,7 +2,7 @@
 
 从零到一创建一个客户管理模块，实现客户资料增删改查。
 
-### 安装
+<Title>安装</Title>
 
 #### MacOS / Linux
 
@@ -53,7 +53,7 @@ curl -fsSL https://demo-crm.iqka.com/releases/0.9.11/install.sh | bash
 docker run -d -v /your-project-root:/app -p 5099:5099 yaoapps/yao-dev:latest
 ```
 
-### 开发
+<Title>开发</Title>
 
 #### 1. 创建项目
 
@@ -103,88 +103,88 @@ yao init
 
 ```json
 {
-  "name": "客户",
-  "table": {
-    "name": "customer",
-    "comment": "客户表"
-  },
-  "columns": [
-    {
-      "label": "ID",
-      "name": "id",
-      "type": "ID",
-      "comment": "ID"
-    },
-    {
-      "label": "来源",
-      "name": "channel_id",
-      "type": "bigInteger",
-      "comment": "客户来源",
-      "nullable": true,
-      "index": true
-    },
-    {
-      "label": "姓名",
-      "name": "name",
-      "type": "string",
-      "length": 80,
-      "comment": "客户姓名",
-      "nullable": true,
-      "index": true
-    },
-    {
-      "label": "公司",
-      "name": "company",
-      "type": "string",
-      "length": 200,
-      "comment": "公司全称",
-      "nullable": true,
-      "index": true
-    },
-    {
-      "label": "性别",
-      "name": "gender",
-      "type": "integer",
-      "comment": "性别",
-      "default": 0,
-      "index": true
-    },
-    {
-      "label": "生日",
-      "name": "birthday",
-      "type": "date",
-      "comment": "性别",
-      "nullable": true,
-      "index": true
-    },
-    {
-      "label": "介绍",
-      "name": "desc",
-      "type": "text",
-      "comment": "介绍",
-      "nullable": true
-    },
-    {
-      "label": "状态",
-      "name": "status",
-      "type": "enum",
-      "default": "enabled",
-      "option": ["enabled", "disabled"],
-      "comment": "状态 enabled 开启, disabled 关闭",
-      "index": true
-    }
-  ],
-  "option": {
-    "timestamps": true,
-    "soft_deletes": true
-  },
-  "values": [
-    {
-      "id": 1,
-      "name": "莉莉",
-      "company": "yaoapps.com"
-    }
-  ]
+	"name": "客户",
+	"table": {
+		"name": "customer",
+		"comment": "客户表"
+	},
+	"columns": [
+		{
+			"label": "ID",
+			"name": "id",
+			"type": "ID",
+			"comment": "ID"
+		},
+		{
+			"label": "来源",
+			"name": "channel_id",
+			"type": "bigInteger",
+			"comment": "客户来源",
+			"nullable": true,
+			"index": true
+		},
+		{
+			"label": "姓名",
+			"name": "name",
+			"type": "string",
+			"length": 80,
+			"comment": "客户姓名",
+			"nullable": true,
+			"index": true
+		},
+		{
+			"label": "公司",
+			"name": "company",
+			"type": "string",
+			"length": 200,
+			"comment": "公司全称",
+			"nullable": true,
+			"index": true
+		},
+		{
+			"label": "性别",
+			"name": "gender",
+			"type": "integer",
+			"comment": "性别",
+			"default": 0,
+			"index": true
+		},
+		{
+			"label": "生日",
+			"name": "birthday",
+			"type": "date",
+			"comment": "性别",
+			"nullable": true,
+			"index": true
+		},
+		{
+			"label": "介绍",
+			"name": "desc",
+			"type": "text",
+			"comment": "介绍",
+			"nullable": true
+		},
+		{
+			"label": "状态",
+			"name": "status",
+			"type": "enum",
+			"default": "enabled",
+			"option": ["enabled", "disabled"],
+			"comment": "状态 enabled 开启, disabled 关闭",
+			"index": true
+		}
+	],
+	"option": {
+		"timestamps": true,
+		"soft_deletes": true
+	},
+	"values": [
+		{
+			"id": 1,
+			"name": "莉莉",
+			"company": "yaoapps.com"
+		}
+	]
 }
 ```
 
@@ -212,63 +212,63 @@ yao run models.customer.find 1
 
 ```json
 {
-  "name": "客户",
-  "version": "1.0.0",
-  "decription": "客户管理数据表格",
-  "bind": {
-    "model": "customer"
-  },
-  "columns": {},
-  "filters": {
-    "关键词": { "@": "filter.关键词", "in": ["where.name.match"] },
-    "排序": { "@": "filter.排序" }
-  },
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "公司", "width": 200 },
-        { "name": "姓名", "width": 100 },
-        { "name": "性别", "width": 80 },
-        { "name": "生日", "width": 100 },
-        { "name": "来源", "width": 80 },
-        { "name": "状态", "width": 140 },
-        { "name": "更新时间", "width": 160 }
-      ],
-      "filters": [{ "name": "关键词" }, { "name": "来源", "width": 3 }]
-    },
-    "actions": {
-      "create": {
-        "type": "button",
-        "props": { "label": "添加客户", "icon": "fas fa-plus" }
-      },
-      "pagination": {}
-    }
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [
-            { "name": "姓名", "width": 12 },
-            { "name": "性别", "width": 3 },
-            { "name": "生日", "width": 3 },
-            { "name": "来源", "width": 3 },
-            { "name": "状态", "width": 3 },
-            { "name": "公司", "width": 24 },
-            { "name": "介绍", "width": 24 }
-          ]
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": { "@": "action.保存" },
-      "delete": { "@": "action.删除" }
-    }
-  }
+	"name": "客户",
+	"version": "1.0.0",
+	"decription": "客户管理数据表格",
+	"bind": {
+		"model": "customer"
+	},
+	"columns": {},
+	"filters": {
+		"关键词": { "@": "filter.关键词", "in": ["where.name.match"] },
+		"排序": { "@": "filter.排序" }
+	},
+	"list": {
+		"primary": "id",
+		"layout": {
+			"columns": [
+				{ "name": "ID", "width": 80 },
+				{ "name": "公司", "width": 200 },
+				{ "name": "姓名", "width": 100 },
+				{ "name": "性别", "width": 80 },
+				{ "name": "生日", "width": 100 },
+				{ "name": "来源", "width": 80 },
+				{ "name": "状态", "width": 140 },
+				{ "name": "更新时间", "width": 160 }
+			],
+			"filters": [{ "name": "关键词" }, { "name": "来源", "width": 3 }]
+		},
+		"actions": {
+			"create": {
+				"type": "button",
+				"props": { "label": "添加客户", "icon": "fas fa-plus" }
+			},
+			"pagination": {}
+		}
+	},
+	"edit": {
+		"primary": "id",
+		"layout": {
+			"fieldset": [
+				{
+					"columns": [
+						{ "name": "姓名", "width": 12 },
+						{ "name": "性别", "width": 3 },
+						{ "name": "生日", "width": 3 },
+						{ "name": "来源", "width": 3 },
+						{ "name": "状态", "width": 3 },
+						{ "name": "公司", "width": 24 },
+						{ "name": "介绍", "width": 24 }
+					]
+				}
+			]
+		},
+		"actions": {
+			"cancel": {},
+			"save": { "@": "action.保存" },
+			"delete": { "@": "action.删除" }
+		}
+	}
 }
 ```
 
@@ -301,49 +301,49 @@ yao start
 
 ```json
 {
-  "label": "初始化数据",
-  "version": "1.0.0",
-  "description": "初始化数据",
-  "nodes": [
-    {
-      "name": "重建数据库",
-      "process": "xiang.migrate"
-    },
-    {
-      "name": "清空管理账号",
-      "process": "models.xiang.user.DeleteWhere",
-      "args": [{}]
-    },
-    {
-      "name": "清空菜单",
-      "process": "models.xiang.menu.DeleteWhere",
-      "args": [{}]
-    },
-    {
-      "name": "创建新管理账号",
-      "process": "models.xiang.user.Save",
-      "args": [
-        {
-          "name": "管理员",
-          "type": "admin",
-          "email": "xiang@yaoapp.com",
-          "password": "A123456p+",
-          "key": "8304925176",
-          "secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
-          "status": "enabled",
-          "extra": { "sex": "男" }
-        }
-      ]
-    },
-    {
-      "name": "添加菜单",
-      "process": "models.xiang.menu.Insert",
-      "args": [
-        ["name", "path", "icon", "rank", "status"],
-        [["客户管理", "/table/customer", "icon-users", 1, "enabled"]]
-      ]
-    }
-  ]
+	"label": "初始化数据",
+	"version": "1.0.0",
+	"description": "初始化数据",
+	"nodes": [
+		{
+			"name": "重建数据库",
+			"process": "xiang.migrate"
+		},
+		{
+			"name": "清空管理账号",
+			"process": "models.xiang.user.DeleteWhere",
+			"args": [{}]
+		},
+		{
+			"name": "清空菜单",
+			"process": "models.xiang.menu.DeleteWhere",
+			"args": [{}]
+		},
+		{
+			"name": "创建新管理账号",
+			"process": "models.xiang.user.Save",
+			"args": [
+				{
+					"name": "管理员",
+					"type": "admin",
+					"email": "xiang@yaoapp.com",
+					"password": "A123456p+",
+					"key": "8304925176",
+					"secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
+					"status": "enabled",
+					"extra": { "sex": "男" }
+				}
+			]
+		},
+		{
+			"name": "添加菜单",
+			"process": "models.xiang.menu.Insert",
+			"args": [
+				["name", "path", "icon", "rank", "status"],
+				[["客户管理", "/table/customer", "icon-users", 1, "enabled"]]
+			]
+		}
+	]
 }
 ```
 
@@ -355,7 +355,7 @@ yao run flows.init
 
 打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，使用新用户名密码登录。
 
-### 部署
+<Title>部署</Title>
 
 #### 1. 部署到云
 
