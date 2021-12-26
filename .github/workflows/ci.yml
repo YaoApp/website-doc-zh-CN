@@ -18,5 +18,5 @@ jobs:
                           port: ${{ secrets.PORT }}
                           command_timeout: 20m
                           script: |
-                                cd /app/website
-                                npm run submodule:update
+                                cd /app/website/website-doc-zh-CN
+                                git pull
