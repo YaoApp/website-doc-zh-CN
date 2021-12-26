@@ -1,0 +1,22 @@
+name: Sync
+
+on:
+      push:
+            branches:
+                  - master
+
+jobs:
+      build-and-deploy:
+            runs-on: ubuntu-latest
+            steps:
+                  - name: Sync
+                    uses: appleboy/ssh-action@master
+                    with:
+                          host: ${{ secrets.HOST }}
+                          username: ${{ secrets.USERNAME }}
+                          key: ${{ secrets.KEY }}
+                          port: ${{ secrets.PORT }}
+                          command_timeout: 20m
+                          script: |
+                                cd /app/website
+                                npm run submodule:update
