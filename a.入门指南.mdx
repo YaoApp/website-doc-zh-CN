@@ -9,7 +9,7 @@
 在终端下运行一下脚本:
 
 ```bash
-curl -fsSL https://demo-crm.iqka.com/releases/0.9.11/install.sh | bash
+curl -fsSL https://demo-crm.iqka.com/releases/0.9.15/install.sh | bash
 ```
 
 ### Windows
@@ -32,7 +32,7 @@ curl -fsSL https://demo-crm.iqka.com/releases/0.9.11/install.sh | bash
 
 1. 安装 Docker [安装并下载 Docker](https://docs.docker.com/get-docker/)
 
-2. 创建并启动容器: `docker run -d -v /your-project-root:/app -p 5099:5099 yaoapps/yao:0.9.11`
+2. 创建并启动容器: `docker run -d -v /your-project-root:/app -p 5099:5099 yaoapps/yao:0.9.15`
 
 ## 开发
 
@@ -82,88 +82,88 @@ yao init
 
 ```json
 {
-	"name": "客户",
-	"table": {
-		"name": "customer",
-		"comment": "客户表"
-	},
-	"columns": [
-		{
-			"label": "ID",
-			"name": "id",
-			"type": "ID",
-			"comment": "ID"
-		},
-		{
-			"label": "来源",
-			"name": "channel_id",
-			"type": "bigInteger",
-			"comment": "客户来源",
-			"nullable": true,
-			"index": true
-		},
-		{
-			"label": "姓名",
-			"name": "name",
-			"type": "string",
-			"length": 80,
-			"comment": "客户姓名",
-			"nullable": true,
-			"index": true
-		},
-		{
-			"label": "公司",
-			"name": "company",
-			"type": "string",
-			"length": 200,
-			"comment": "公司全称",
-			"nullable": true,
-			"index": true
-		},
-		{
-			"label": "性别",
-			"name": "gender",
-			"type": "integer",
-			"comment": "性别",
-			"default": 0,
-			"index": true
-		},
-		{
-			"label": "生日",
-			"name": "birthday",
-			"type": "date",
-			"comment": "性别",
-			"nullable": true,
-			"index": true
-		},
-		{
-			"label": "介绍",
-			"name": "desc",
-			"type": "text",
-			"comment": "介绍",
-			"nullable": true
-		},
-		{
-			"label": "状态",
-			"name": "status",
-			"type": "enum",
-			"default": "enabled",
-			"option": ["enabled", "disabled"],
-			"comment": "状态 enabled 开启, disabled 关闭",
-			"index": true
-		}
-	],
-	"option": {
-		"timestamps": true,
-		"soft_deletes": true
-	},
-	"values": [
-		{
-			"id": 1,
-			"name": "莉莉",
-			"company": "yaoapps.com"
-		}
-	]
+  "name": "客户",
+  "table": {
+    "name": "customer",
+    "comment": "客户表"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID"
+    },
+    {
+      "label": "来源",
+      "name": "channel_id",
+      "type": "bigInteger",
+      "comment": "客户来源",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "姓名",
+      "name": "name",
+      "type": "string",
+      "length": 80,
+      "comment": "客户姓名",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "公司",
+      "name": "company",
+      "type": "string",
+      "length": 200,
+      "comment": "公司全称",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "性别",
+      "name": "gender",
+      "type": "integer",
+      "comment": "性别",
+      "default": 0,
+      "index": true
+    },
+    {
+      "label": "生日",
+      "name": "birthday",
+      "type": "date",
+      "comment": "性别",
+      "nullable": true,
+      "index": true
+    },
+    {
+      "label": "介绍",
+      "name": "desc",
+      "type": "text",
+      "comment": "介绍",
+      "nullable": true
+    },
+    {
+      "label": "状态",
+      "name": "status",
+      "type": "enum",
+      "default": "enabled",
+      "option": ["enabled", "disabled"],
+      "comment": "状态 enabled 开启, disabled 关闭",
+      "index": true
+    }
+  ],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "name": "莉莉",
+      "company": "yaoapps.com"
+    }
+  ]
 }
 ```
 
@@ -187,72 +187,89 @@ yao run models.customer.find 1
 
 ```json
 {
-	"name": "客户",
-	"version": "1.0.0",
-	"decription": "客户管理数据表格",
-	"bind": {
-		"model": "customer"
-	},
-	"columns": {},
-	"filters": {
-		"关键词": { "@": "filter.关键词", "in": ["where.name.match"] },
-		"排序": { "@": "filter.排序" }
-	},
-	"list": {
-		"primary": "id",
-		"layout": {
-			"columns": [
-				{ "name": "ID", "width": 80 },
-				{ "name": "公司", "width": 200 },
-				{ "name": "姓名", "width": 100 },
-				{ "name": "性别", "width": 80 },
-				{ "name": "生日", "width": 100 },
-				{ "name": "来源", "width": 80 },
-				{ "name": "状态", "width": 140 },
-				{ "name": "更新时间", "width": 160 }
-			],
-			"filters": [{ "name": "关键词" }, { "name": "来源", "width": 3 }]
-		},
-		"actions": {
-			"create": {
-				"type": "button",
-				"props": { "label": "添加客户", "icon": "fas fa-plus" }
-			},
-			"pagination": {}
-		}
-	},
-	"edit": {
-		"primary": "id",
-		"layout": {
-			"fieldset": [
-				{
-					"columns": [
-						{ "name": "姓名", "width": 12 },
-						{ "name": "性别", "width": 3 },
-						{ "name": "生日", "width": 3 },
-						{ "name": "来源", "width": 3 },
-						{ "name": "状态", "width": 3 },
-						{ "name": "公司", "width": 24 },
-						{ "name": "介绍", "width": 24 }
-					]
-				}
-			]
-		},
-		"actions": {
-			"cancel": {},
-			"save": { "@": "action.保存" },
-			"delete": { "@": "action.删除" }
-		}
-	}
+  "name": "客户",
+  "version": "1.0.0",
+  "decription": "客户管理数据表格",
+  "bind": {
+    "model": "customer"
+  },
+  "columns": {},
+  "filters": {
+    "关键词": { "@": "filter.关键词", "in": ["where.name.match"] },
+    "排序": { "@": "filter.排序" }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "公司", "width": 200 },
+        { "name": "姓名", "width": 100 },
+        { "name": "性别", "width": 80 },
+        { "name": "生日", "width": 100 },
+        { "name": "来源", "width": 80 },
+        { "name": "状态", "width": 140 },
+        { "name": "更新时间", "width": 160 }
+      ],
+      "filters": [{ "name": "关键词" }, { "name": "来源", "width": 3 }]
+    },
+    "actions": {
+      "create": {
+        "type": "button",
+        "props": { "label": "添加客户", "icon": "fas fa-plus" }
+      },
+      "pagination": {}
+    }
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "姓名", "width": 12 },
+            { "name": "性别", "width": 3 },
+            { "name": "生日", "width": 3 },
+            { "name": "来源", "width": 3 },
+            { "name": "状态", "width": 3 },
+            { "name": "公司", "width": 24 },
+            { "name": "介绍", "width": 24 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": { "@": "action.保存" },
+      "delete": { "@": "action.删除" }
+    }
+  }
 }
 ```
 
 #### 启动服务
 
-如果使用 `docker` 方式安装，忽略本步骤。**在调试模式下，保存界面描述文件，会自动更新重启服务，刷新页面接口实时预览**，打开命令行终端，**在项目根录下运行**:
+### MacOS / Linux
+
+**在调试模式下，保存界面描述文件，会自动更新重启服务，刷新页面接口实时预览**，打开命令行终端，**在项目根录下运行**:
 
 ```bash
 yao start
+```
+
+### Docker
+
+```bash
+
+# 运行容器 bash， 进入容器
+docker exec -it <容器名称> /bin/bash
+
+# 在容器中: 进入项目目录
+cd /data/app
+
+# 在容器中: 运行
+yao start
+
 ```
 
 #### 访问客户管理模块
@@ -265,49 +282,49 @@ yao start
 
 ```json
 {
-	"label": "初始化数据",
-	"version": "1.0.0",
-	"description": "初始化数据",
-	"nodes": [
-		{
-			"name": "重建数据库",
-			"process": "xiang.migrate"
-		},
-		{
-			"name": "清空管理账号",
-			"process": "models.xiang.user.DeleteWhere",
-			"args": [{}]
-		},
-		{
-			"name": "清空菜单",
-			"process": "models.xiang.menu.DeleteWhere",
-			"args": [{}]
-		},
-		{
-			"name": "创建新管理账号",
-			"process": "models.xiang.user.Save",
-			"args": [
-				{
-					"name": "管理员",
-					"type": "admin",
-					"email": "xiang@yaoapp.com",
-					"password": "A123456p+",
-					"key": "8304925176",
-					"secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
-					"status": "enabled",
-					"extra": { "sex": "男" }
-				}
-			]
-		},
-		{
-			"name": "添加菜单",
-			"process": "models.xiang.menu.Insert",
-			"args": [
-				["name", "path", "icon", "rank", "status"],
-				[["客户管理", "/table/customer", "icon-users", 1, "enabled"]]
-			]
-		}
-	]
+  "label": "初始化数据",
+  "version": "1.0.0",
+  "description": "初始化数据",
+  "nodes": [
+    {
+      "name": "重建数据库",
+      "process": "xiang.migrate"
+    },
+    {
+      "name": "清空管理账号",
+      "process": "models.xiang.user.DeleteWhere",
+      "args": [{}]
+    },
+    {
+      "name": "清空菜单",
+      "process": "models.xiang.menu.DeleteWhere",
+      "args": [{}]
+    },
+    {
+      "name": "创建新管理账号",
+      "process": "models.xiang.user.Save",
+      "args": [
+        {
+          "name": "管理员",
+          "type": "admin",
+          "email": "xiang@yaoapp.com",
+          "password": "A123456p+",
+          "key": "8304925176",
+          "secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
+          "status": "enabled",
+          "extra": { "sex": "男" }
+        }
+      ]
+    },
+    {
+      "name": "添加菜单",
+      "process": "models.xiang.menu.Insert",
+      "args": [
+        ["name", "path", "icon", "rank", "status"],
+        [["客户管理", "/table/customer", "icon-users", 1, "enabled"]]
+      ]
+    }
+  ]
 }
 ```
 
@@ -337,29 +354,33 @@ yao publish -e online.env --ssh root@10.110.202.10 -i ~/.ssh/id_rsa flows.init
 
 ## 视频讲解
 
-<Video src='https://player.bilibili.com/player.html?aid=507380047&bvid=BV1Sg411w7hs&cid=465617729&page=1'></Video>
+<Video src="https://player.bilibili.com/player.html?aid=507380047&bvid=BV1Sg411w7hs&cid=465617729&page=1"></Video>
 
 ## 相关内容
 
-接下来，建议学习以下章节：
+接下来，建议学习以下章节:
 
 <Extend
-	title='编写接口'
-	desc='了解如何调用创建的 Model 来编写接口'
-	link='/doc/c.基础特性/b.编写接口'
+  title="编写接口"
+  desc="了解如何调用创建的 Model 来编写接口"
+  link="/doc/c.基础特性/b.编写接口"
 ></Extend>
 
 <Extend
-	title='使用数据流'
-	desc='进一步了解 Yao 中的所谓的数据流是什么'
-	link='/doc/c.基础特性/e.编写数据流'
+  title="使用数据流"
+  desc="进一步了解 Yao 中的所谓的数据流是什么"
+  link="/doc/c.基础特性/e.编写数据流"
 ></Extend>
 
 <!-- <Div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 	<Link type='next' title='为什么选择Yao' link='/doc/b.为什么选择Yao'></Link>
 </Div> -->
 
-<Div style={{ display: 'flex', justifyContent: 'space-between' }}>
-	<Link type='prev' title='创建数据模型' link='/doc/c.基础特性/a.创建数据模型'></Link>
-	<Link type='next' title='描述界面' link='/doc/c.基础特性/c.描述界面'></Link>
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link
+    type="prev"
+    title="创建数据模型"
+    link="/doc/c.基础特性/a.创建数据模型"
+  ></Link>
+  <Link type="next" title="描述界面" link="/doc/c.基础特性/c.描述界面"></Link>
 </Div>
