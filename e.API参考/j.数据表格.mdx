@@ -212,26 +212,23 @@
 
 厂商表格 `manu.tab.json`
 
-````json
+```json
 {
   "name": "厂商",
   "version": "1.0.0",
   "decription": "厂商管理表格",
   "bind": {
-    "model": "manu",
+    "model": "manu"
   },
   "apis": {
-    "search": { "default":[null, null, 10] }
+    "search": { "default": [null, null, 10] }
   },
   "columns": {},
   "filters": {},
   "list": {
     "primary": "id",
     "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "名称" }
-      ],
+      "columns": [{ "name": "ID", "width": 80 }, { "name": "名称" }],
       "filters": []
     },
     "actions": {
@@ -248,9 +245,7 @@
     "layout": {
       "fieldset": [
         {
-          "columns": [
-            { "name": "名称", "width": 18 }
-          ]
+          "columns": [{ "name": "名称", "width": 18 }]
         }
       ]
     },
@@ -351,4 +346,4 @@
   "insert": {},
   "view": {}
 }
-````
+```
