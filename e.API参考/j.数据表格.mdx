@@ -14,6 +14,8 @@
 
 ### 关联查询
 
+[查看完整示例代码](https://github.com/YaoApp/examples-zh-CN/tree/main/tables/remote-select)
+
 #### 数据模型
 
 厂商模型 `manu`
@@ -82,6 +84,12 @@
       "name": "id",
       "type": "ID",
       "comment": "ID"
+    },
+    {
+      "label": "厂商",
+      "name": "manu_id",
+      "type": "bigInteger",
+      "comment": "厂商ID"
     },
     {
       "label": "姓名",
@@ -157,12 +165,12 @@
           "showSearch": true,
           "useValue": true,
           "remote": {
-            "api": "/api/table/manu/select",
-            "query": { "name": "name", "value": "id", "limit": 20 }
+            "api": "/api/xiang/table/manu/select",
+            "query": { "select": ["name", "id"], "limit": 20 }
           },
           "search": {
-            "api": "/api/table/manu/select",
-            "query": { "name": "name", "value": "id", "limit": 20 },
+            "api": "/api/xiang/table/manu/select",
+            "query": { "select": ["name", "id"], "limit": 20 },
             "key": "keyword"
           }
         }
@@ -207,147 +215,5 @@
       ]
     }
   }
-}
-```
-
-#### 完整示例
-
-厂商表格 `manu.tab.json`
-
-```json
-{
-  "name": "厂商",
-  "version": "1.0.0",
-  "decription": "厂商管理表格",
-  "bind": {
-    "model": "manu"
-  },
-  "apis": {
-    "search": { "default": [null, null, 10] }
-  },
-  "columns": {},
-  "filters": {},
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [{ "name": "ID", "width": 80 }, { "name": "名称" }],
-      "filters": []
-    },
-    "actions": {
-      "pagination": {},
-      "create": {
-        "type": "button",
-        "props": { "label": "添加厂商", "icon": "fas fa-plus" }
-      }
-    },
-    "option": {}
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [{ "name": "名称", "width": 18 }]
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": { "@": "action.保存" },
-      "delete": { "@": "action.删除" }
-    },
-    "option": {}
-  },
-  "insert": {},
-  "view": {}
-}
-```
-
-用户表格 `user.tab.json`
-
-```json
-{
-  "name": "用户",
-  "version": "1.0.0",
-  "decription": "用户管理表格",
-  "bind": {
-    "model": "user",
-    "withs": { "manu": {} }
-  },
-  "apis": {
-    "search": {
-      "default": [{ "withs": { "manu": {} } }, null, 10]
-    }
-  },
-  "columns": {
-    "所属厂商": {
-      "label": "所属厂商",
-      "view": {
-        "type": "label",
-        "props": {
-          "value": ":manu.name"
-        }
-      },
-      "edit": {
-        "type": "select",
-        "props": {
-          "bind": "manu.name",
-          "value": ":manu_id",
-          "showSearch": true,
-          "useValue": true,
-          "remote": {
-            "api": "/api/table/manu/select",
-            "query": { "name": "name", "value": "id", "limit": 20 }
-          },
-          "search": {
-            "api": "/api/table/manu/select",
-            "query": { "name": "name", "value": "id", "limit": 20 },
-            "key": "keyword"
-          }
-        }
-      }
-    }
-  },
-  "filters": {},
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "所属厂商" },
-        { "name": "姓名" }
-      ],
-      "filters": []
-    },
-    "actions": {
-      "pagination": { "props": { "showTotal": true } },
-      "create": {
-        "type": "button",
-        "props": { "label": "添加用户", "icon": "fas fa-plus" }
-      }
-    },
-    "option": {}
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [
-            { "name": "姓名", "width": 18 },
-            { "name": "所属厂商", "width": 6 }
-          ]
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": { "@": "action.保存" },
-      "delete": { "@": "action.删除" }
-    },
-    "option": { "dev": false }
-  },
-  "insert": {},
-  "view": {}
 }
 ```
