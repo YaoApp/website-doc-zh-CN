@@ -67,24 +67,14 @@ yao init # 运行初始化程序
 
 创建数据表对应的 `JSON 描述文件` :
 
-````json
-
 在项目 `models` 目录下，创建数据模型描述文件 `customer.mod.json`
 
 ```json
 {
   "name": "客户",
-  "table": {
-    "name": "customer",
-    "comment": "客户表"
-  },
+  "table": { "name": "customer", "comment": "客户表" },
   "columns": [
-    {
-      "label": "ID",
-      "name": "id",
-      "type": "ID",
-      "comment": "ID"
-    },
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
     {
       "label": "来源",
       "name": "channel_id",
@@ -144,19 +134,10 @@ yao init # 运行初始化程序
       "index": true
     }
   ],
-  "option": {
-    "timestamps": true,
-    "soft_deletes": true
-  },
-  "values": [
-    {
-      "id": 1,
-      "name": "莉莉",
-      "company": "yaoapps.com"
-    }
-  ]
+  "option": { "timestamps": true, "soft_deletes": true },
+  "values": [{ "id": 1, "name": "莉莉", "company": "yaoapps.com" }]
 }
-````
+```
 
 使用 `yao migrate` 命令创建数据表，打开命令行终端，**在项目根录下运行**:
 
@@ -244,7 +225,15 @@ yao run models.customer.find 1
 yao start
 ```
 
-打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，默认管理员名称密码为: 用户名: `xiang@iqka.com`，密码: `A123456p+`，成功登录后，在地址栏输入 `https://127.0.0.1:5099/xiang/table/customer` 即可访问客户管理模块。可以在菜单管理界面，将 `/xiang/table/customer` 路由添加为菜单项。
+打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，
+
+默认管理员账号:
+
+用户名: `xiang@iqka.com`，
+
+密码: `A123456p+`
+
+成功登录后， 可在地址栏输入 `https://127.0.0.1:5099/xiang/table/customer` 访问客户管理模块。建议将 `/xiang/table/customer` 路由添加为菜单项。
 
 ### 视频讲解
 
