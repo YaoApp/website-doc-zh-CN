@@ -30,7 +30,7 @@ Yao 内置了一套界面组件，通过编写 **JSON** 描述界面布局，即
 
 [打开在线调试环境](https://ide-demo.yaoapps.com)
 
-### 创建项目
+### 第一步: 创建项目
 
 新建一个项目目录，进入项目目录，运行 `yao init` 命令，创建一个空白的 Yao 应用。
 
@@ -50,7 +50,7 @@ yao init # 运行初始化程序
 └── app.json    # 应用配置文件, 用来定义应用名称等
 ```
 
-### 创建数据模型
+### 第二步: 创建数据模型
 
 设计一张数据表 customer，用于存放客户资料数据。数据表结构如下:
 
@@ -67,7 +67,7 @@ yao init # 运行初始化程序
 
 创建数据表对应的 `JSON 描述文件` :
 
-在项目 `models` 目录下，创建数据模型描述文件 `customer.mod.json`
+在项目 `models` 目录下 (例如: `/data/crm/models`)，创建数据模型描述文件 `customer.mod.json`
 
 ```json
 {
@@ -151,9 +151,9 @@ yao migrate
 yao run models.customer.find 1
 ```
 
-### 编写 CURD-管理界面
+### 第三步：编写管理界面
 
-在项目 `tables` 目录下，创建数据表格描述文件 `customer.tab.yao`
+在项目 `tables` 目录下 (例如: `/data/crm/models`)，创建数据表格描述文件 `customer.tab.json`
 
 ```json
 {
@@ -227,7 +227,7 @@ yao start
 
 打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，
 
-默认管理员账号:
+默认管理员账号密码:
 
 用户名: `xiang@iqka.com`，
 
