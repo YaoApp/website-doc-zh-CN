@@ -145,15 +145,15 @@ yao init # 运行初始化程序
 yao migrate
 ```
 
-<Notice type="warning">
-  注意：由于该项目诞生之初主要是为了提高团队内部生产力，在约定俗成的写法描述下，并没有做细粒度的抛错处理，所以开发者可能会在编写
-  JSON 调试界面的过程当中遇到界面为空的情况。
-  [详细说明](/components/a.%E9%A1%B5%E9%9D%A2%E6%8F%8F%E8%BF%B0/0.%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9)
+<Notice type="success">
+  技巧: 调试过程中，需要频繁检查数据。可以使用 `yao run` 命令查询数据。例如:
+  在命令行终端中运行 `yao run models.customer.find 1` 即可查询 `customer` 数据表
+  ID=1 的数据。
 </Notice>
 
-<Notice type="info">
-  调试过程中，可以使用 `yao run` 命令查询数据。例如: 在命令行终端中运行 `yao run
-  models.customer.find 1` 即可查询 `customer` 数据表 ID=1 的数据。
+<Notice type="warning">
+  注意：由于该项目诞生之初主要是为了提高团队内部生产力，在约定俗成的写法描述下，并没有做细粒度的抛错处理，所以开发者可能会在编写
+  JSON 调试界面的过程当中遇到界面为空的情况。处置方式见组件文档。
 </Notice>
 
 ### 第三步: 编写管理界面
