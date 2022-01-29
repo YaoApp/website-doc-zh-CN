@@ -52,8 +52,8 @@ yao run models.customer.Get 1
 
 | 参数    | 必填 | 说明                                                       |
 | ------- | ---- | ---------------------------------------------------------- |
-| process | 是   | 运行处理器名称. [处理器文档](/b.基础特性/d.使用处理器.mdx) |
-| args... | 否   | 处理器的输入参数表。[处理器文档](/d.API参考/d.处理器.mdx)  |
+| process | 是   | 运行处理器名称. [处理器文档](/doc/b.基础特性/d.使用处理器) |
+| args... | 否   | 处理器的输入参数表。[处理器文档](/doc/d.API参考/d.处理器)  |
 
 ### Start 启动服务
 
@@ -90,7 +90,7 @@ export XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
 ```bash
 XIANG_MODE="debug" # 开启调试模式
 XIANG_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 数据源
-XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 数据加密存储 AES KEY
+XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"   # 加密存储字段 AES KEY
 XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
 ```
 
@@ -105,7 +105,7 @@ XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
 <Extend
   title="创建数据模型"
   desc="了解如何创建模型，存储数据到数据库"
-  link="/doc/a2.安装调试"
+  link="/doc/b.基础特性/a.创建数据模型"
 ></Extend>
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
