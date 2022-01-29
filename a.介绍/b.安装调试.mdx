@@ -1,5 +1,7 @@
 # 安装调试
 
+本章节介绍如何在本地建立 Yao 开发调试环境。生产环境使用，请参考 [部署](../g.部署) 文档。
+
 ## 安装
 
 ### Linux & MacOS
@@ -50,10 +52,10 @@ yao run models.customer.Get 1
 
 参数表:
 
-| 参数    | 必填 | 说明                                                       |
-| ------- | ---- | ---------------------------------------------------------- |
-| process | 是   | 运行处理器名称. [处理器文档](/doc/b.基础特性/d.使用处理器) |
-| args... | 否   | 处理器的输入参数表。[处理器文档](/doc/d.API参考/d.处理器)  |
+| 参数    | 必填 | 说明                                                     |
+| ------- | ---- | -------------------------------------------------------- |
+| process | 是   | 运行处理器名称. [处理器文档](../b.基础特性/d.使用处理器) |
+| args... | 否   | 处理器的输入参数表。[处理器文档](../d.API参考/d.处理器)  |
 
 ### Start 启动服务
 
@@ -96,8 +98,8 @@ XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
 
 <Extend
   title="环境变量文档"
-  desc="全部环境变量参考文档"
-  link="/doc/d.API参考/l.环境变量"
+  desc="查阅全部环境变量参考文档"
+  link="../d.API参考/l.环境变量"
 ></Extend>
 
 ## 视频讲解
@@ -111,14 +113,14 @@ XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
 <Extend
   title="创建数据模型"
   desc="了解如何创建模型，存储数据到数据库"
-  link="/doc/b.基础特性/a.创建数据模型"
+  link="../b.基础特性/a.创建数据模型"
 ></Extend>
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
-  <Link type="prev" title="入门指南" link="/doc/a.介绍/a.入门指南"></Link>
+  <Link type="prev" title="入门指南" link="../a.介绍/a.入门指南"></Link>
   <Link
     type="next"
     title="为什么选择Yao"
-    link="/doc/a.介绍/c.为什么选择Yao"
+    link="../a.介绍/c.为什么选择Yao"
   ></Link>
 </Div>
