@@ -1,0 +1,21 @@
+# 数据模型
+
+## 命名规范
+
+数据模型描述文件是以**小写英文字母和下划线** 命名的 JSON 文本文件 `<name>.mod.json` 。 描述文件放置在项目的 `models` 文件夹中。
+
+| 文件名                          | 模型名称             | 处理器 (在 API / Flow / CLI 中使用)   |
+| ------------------------------- | -------------------- | ------------------------------------- |
+| /models/name.json               | `name`               | `models.name.<process>`               |
+| /models/group/foo_bar.json      | `gorup.foo_bar`      | `models.gorup.foo_bar.<process>`      |
+| /models/group1/group2/name.json | `gorup1.gorup2.name` | `models.gorup1.group2.name.<process>` |
+
+## 字段定义
+
+## 数据约束
+
+## 默认数据
+
+## 模型关联
+
+## 数据迁移
