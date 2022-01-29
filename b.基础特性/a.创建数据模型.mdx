@@ -13,8 +13,8 @@
 
 ```json
 {
-  "name": "客户",
-  "table": { "name": "pet", "comment": "客户表" },
+  "name": "宠物",
+  "table": { "name": "pet", "comment": "宠物表" },
   "columns": [
     { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
     { "label": "编号", "name": "sn", "type": "string", "unique": true },
@@ -90,7 +90,7 @@ yao run models.pet.Delete 1
 新增一条数据
 
 ```bash
-yao run models.pet.Create '::{"name":"球球", "desc":"新成员"}'
+yao run models.pet.Create '::{"sn":"200001", "name":"球球", "desc":"新成员"}'
 ```
 
 更新一条数据
@@ -102,7 +102,7 @@ yao run models.pet.Update 1 '::{"desc":"一只可爱的三色猫"}'
 保存一条数据，指定主键则更新，不指定创建创建。
 
 ```bash
-yao run models.pet.Save '::{"name":"天狼", "desc":"新成员"}'
+yao run models.pet.Save '::{"sn":"200002", "name":"天狼", "desc":"新成员"}'
 ```
 
 ```bash
