@@ -1,1 +1,118 @@
 # 安装调试
+
+## 安装
+
+### Linux & MacOS
+
+在终端下运行脚本:
+
+```bash
+curl -fsSL https://download.yaoapps.com/releases/latest/install.sh | bash
+```
+
+### Windows
+
+1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
+
+2. 启动运行容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao-x86:latest`
+
+### Docker (推荐)
+
+1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
+
+2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao-<CPU>:latest`
+
+启动命令清单:
+
+| CPU   | 启动命令                                                                                    |
+| ----- | ------------------------------------------------------------------------------------------- |
+| X86   | `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao-x86:latest`   |
+| Arm64 | `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao-arm64:latest` |
+
+<Notice type="success">
+  Yao 默认使用 Sqlite 存储数据，如果您需要使用
+  MySQL、PostgreSQL数据库作为数据源，请参照数据库官方文档下载并安装。推荐使用
+  MySQL 8 或Postgres14。
+</Notice>
+
+## 调试
+
+### Run 运行处理器
+
+进入项目目录，使用 `run` 命令，运行数据流、脚本、插件以及内建的处理器。
+
+`yao run <process> [args...]`
+
+```bash
+cd /data/customer
+yao run models.customer.Get 1
+```
+
+参数表:
+
+| 参数    | 必填 | 说明                                                       |
+| ------- | ---- | ---------------------------------------------------------- |
+| process | 是   | 运行处理器名称. [处理器文档](/b.基础特性/d.使用处理器.mdx) |
+| args... | 否   | 处理器的输入参数表。[处理器文档](/d.API参考/d.处理器.mdx)  |
+
+### Start 启动服务
+
+`yao start [alpha]`
+
+进入项目目录，使用 `start` 命令，启动服务。默认服务端口为 `5099`， 可通过声明环境变量，指定服务端口。 [环境变量](#环境变量)
+
+```bash
+cd /data/customer
+yao start
+```
+
+参数表:
+
+| 参数  | 必填 | 说明                                                             |
+| ----- | ---- | ---------------------------------------------------------------- |
+| alpha | 否   | 如果希望试用 Yao 的一些内测功能，试用 `yao start alpha` 命令启动 |
+
+## 环境变量
+
+可以通过声明环境变量，指定服务端口，配置数据库连接 例如：
+
+```bash
+export XIANG_MODE="debug"
+export XIANG_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"
+export XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
+export XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
+```
+
+可以在项目目录根目录下添加 `.env`，服务启动时将优先使用 .env 声明的环境变量；或将以上命令追加到 `~/.bashrc` 文件（macos `~/.bash_profile` )
+
+`/data/customer/.env` 文件内容
+
+```bash
+XIANG_MODE="debug" # 开启调试模式
+XIANG_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 数据源
+XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 数据加密存储 AES KEY
+XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
+```
+
+## 视频讲解
+
+<Video src="https://player.bilibili.com/player.html?aid=507380047&bvid=BV1Sg411w7hs&cid=465617729&page=1"></Video>
+
+## 相关内容
+
+接下来，建议学习以下章节:
+
+<Extend
+  title="创建数据模型"
+  desc="了解如何创建模型，存储数据到数据库"
+  link="/doc/a2.安装调试"
+></Extend>
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link type="prev" title="入门指南" link="/doc/a.介绍/a.入门指南"></Link>
+  <Link
+    type="next"
+    title="为什么选择Yao"
+    link="/doc/a.介绍/c.为什么选择Yao"
+  ></Link>
+</Div>
