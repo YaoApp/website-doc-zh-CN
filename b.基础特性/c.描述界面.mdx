@@ -1,0 +1,181 @@
+# 描述界面
+
+<blockquote>
+  编写 JSON 页面描述，将其放置在 `tables`
+  目录中，即可实现一套数据列表、数据展示和数据编辑的界面。
+</blockquote>
+
+通过类似的方式，还可以描述分析图表界面 (`charts`目录)、 数据看板界面 (
+`kanban` 目录) 和 数据大屏界面 (`screens` 目录) 。
+
+对于特殊页面，可以编写 HTML
+页面，放置在 `ui` 目录，可作为独立界面展示，亦可通过 `iframe` 嵌入管理系统。
+
+## 数据表格
+
+编写一个数据表格描述文件 pet.tab.json，放置在应用的 tables 目录中。
+
+**描述文件内容:**
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "宠物",
+  "version": "1.0.0",
+  "decription": "宠物管理表格",
+  "bind": { "model": "pet" },
+  "apis": {},
+  "columns": {
+    "ID": {
+      "label": "ID",
+      "view": { "type": "label", "props": { "value": ":id" } }
+    },
+    "编号": {
+      "label": "编号",
+      "view": { "type": "label", "props": { "value": ":sn" } },
+      "edit": { "type": "input", "props": { "value": ":sn" } }
+    },
+    "名称": {
+      "label": "名称",
+      "view": { "type": "label", "props": { "value": ":name" } },
+      "edit": { "type": "input", "props": { "value": ":name" } }
+    },
+    "类型": {
+      "label": "类型",
+      "view": { "type": "label", "props": { "value": ":kind" } },
+      "edit": {
+        "type": "select",
+        "props": {
+          "value": ":kind",
+          "options": [
+            { "label": "猫", "value": "猫" },
+            { "label": "狗", "value": "狗" }
+          ]
+        }
+      }
+    },
+    "介绍": {
+      "label": "介绍",
+      "view": { "type": "label", "props": { "value": ":desc" } },
+      "edit": { "type": "textArea", "props": { "value": ":desc", "rows": 4 } }
+    }
+  },
+  "filters": {
+    "关键词": {
+      "label": "关键词",
+      "bind": "where.name.match",
+      "input": { "type": "input", "props": { "placeholder": "请输入关键词" } }
+    }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "编号", "width": 100 },
+        { "name": "名称", "width": 200 },
+        { "name": "类型" }
+      ],
+      "filters": [{ "name": "关键词" }]
+    },
+    "actions": { "pagination": { "props": { "showTotal": true } } },
+    "option": {}
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "编号", "width": 8 },
+            { "name": "名称", "width": 8 },
+            { "name": "类型", "width": 8 },
+            { "name": "介绍", "width": 24 }
+          ]
+        }
+      ]
+    },
+    "actions": { "cancel": {}, "save": {}, "delete": {} }
+  }
+}
+```
+
+</Detail>
+
+**应用目录结构:**
+
+```bash
+├── apis        # 用于存放接口描述文件
+│   └── pet.http.json
+├── models        # 用于存放数据模型描述文件
+│   └── pet.mod.json
+├── tables        # 用于存放数据表格描述文件
+│   └── pet.tab.json
+├── db
+└── ui
+└── app.json
+```
+
+**访问表格界面:**
+
+页面路由: `/xiang/table/<Table Name>`
+
+1. 打开浏览器, 访问 `https://127.0.0.1:5099/xiang/login/admin`，
+
+2. 输入默认用户名: `xiang@iqka.com`， 密码: `A123456p+`
+
+3. 成功登录后在地址栏输入 `https://127.0.0.1:5099/xiang/table/pet`
+
+4. 建议将 `/xiang/table/pet` 路由添加为菜单项。
+
+<Notice type="warning">
+  注意：由于该项目诞生之初主要是为了提高团队内部生产力，在约定俗成的写法描述下，并没有做细粒度的抛错处理，所以开发者可能会在编写
+  JSON 调试界面的过程当中遇到界面为空的情况。处置方式请查阅组件文档。
+</Notice>
+
+<Notice type="success">
+  提示：Yao 将根据数据模型中定义的字段类型，自动生成组件关联。如在 `columns`
+  中重新声明，将覆盖默认关联组件。
+</Notice>
+
+<Notice type="success">
+  提示：数据模型与数据表格不耦合，如不设置数据模型绑定，可以通过指定处理器的方式，指定列表，详情的数据读取逻辑，以及保存、删除等操作的处理逻辑。
+</Notice>
+
+<Notice type="success">
+  技巧：一个模型可以与多张表格绑定，可以共享字段关联的组件描述，不必为每张表格都重写一遍；将字段描述放置在
+  `libs` 目录，通过 `@` 引入，详情查阅数据表格API文档。
+</Notice>
+
+扩展阅读:
+
+<Extend
+  title="数据表格"
+  desc="了解数据表格组件、筛选器、批量管理、文件导入等功能描述方式。"
+  link="d.API参考/j.数据表格"
+></Extend>
+
+<Extend
+  title="组件"
+  desc="用于数据展示、数据录入及图表组件列表"
+  link="/components"
+></Extend>
+
+## 数据看板
+
+<Detail title="查看源码">
+
+</Detail>
+
+## 分析图表
+
+<Detail title="查看源码">
+
+</Detail>
+
+## HTML 页面
+
+<Detail title="查看源码">
+
+</Detail>
