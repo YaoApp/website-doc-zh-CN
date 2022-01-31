@@ -158,17 +158,24 @@ yao run models.pet.Get '::{}'
 
 ### 应用引擎
 
-应用引擎相关处理器
+应用引擎相关处理器。
 
-| 处理器           | 说明             | 文档                                    |
-| ---------------- | ---------------- | --------------------------------------- |
-| yao.sys.Ping     | 返回 `PONG`      | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.sys.Inspect  | 返回应用系统信息 | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.sys.Print    | 在控制台打印数据 | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.env.Get      | 读取环境变量     | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.env.Set      | 设置环境变量     | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.env.MultiSet | 批量设置环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
-| yao.env.MultiGet | 批量读取环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
+| 处理器             | 说明             | 文档                                    |
+| ------------------ | ---------------- | --------------------------------------- |
+| xiang.sys.Ping     | 返回 `PONG`      | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.sys.Inspect  | 返回应用系统信息 | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.sys.Print    | 在控制台打印数据 | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.env.Get      | 读取环境变量     | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.env.Set      | 设置环境变量     | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.env.MultiSet | 批量设置环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
+| xiang.env.MultiGet | 批量读取环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
+
+<Notice type="warning">
+  注意：应用引擎内建处理器命名空间为 <strong>xiang</strong> ,
+  防止在命令行使用时与
+  <strong>yao</strong> 混淆。 <strong>xiang</strong> 是应用引擎的内部研发代号, 名称源自周易
+  <strong>《象传》[xiàng zhuàn]</strong>，用来解释卦辞爻辞，取观测万象，预测趋势之意。
+</Notice>
 
 ### 数据模型
 
