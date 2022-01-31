@@ -15,12 +15,20 @@
 
 | 处理器                 | 说明                                       |
 | ---------------------- | ------------------------------------------ |
-| yao.\*.\*              | 内建处理器                                 |
+| xiang.\*.\*            | 内建处理器                                 |
 | models.<模型名称\>.\*  | 内建处理器，数据模型原子操作               |
 | flows.<数据流名称\>    | 内建处理器，通过数据流编写的处理器         |
 | scripts.<脚本名称\>.\* | 内建处理器，通过 JavaScript 脚本编写处理器 |
 | plugins.<插件名称\>.\* | 通过 GRPC 插件编写处理器                   |
 | session.\*             | 系统内建，会话数据处理器                   |
+
+<Notice type="warning">
+  注意：应用引擎内建处理器命名空间为 <strong>xiang</strong> ,
+  防止在命令行使用时与
+  <strong>yao</strong> 混淆。 <strong>xiang</strong> 是应用引擎的内部研发代号, 名称源自周易
+  <strong>《象传》[xiàng zhuàn]</strong>
+  ，用来解释卦辞爻辞，取观测万象，预测趋势之意。
+</Notice>
 
 ## 使用方式
 
@@ -169,14 +177,6 @@ yao run models.pet.Get '::{}'
 | xiang.env.Set      | 设置环境变量     | [查看](../e.处理器参考/z.应用引擎#Find) |
 | xiang.env.MultiSet | 批量设置环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
 | xiang.env.MultiGet | 批量读取环境变量 | [查看](../e.处理器参考/z.应用引擎#Find) |
-
-<Notice type="warning">
-  注意：应用引擎内建处理器命名空间为 <strong>xiang</strong> ,
-  防止在命令行使用时与
-  <strong>yao</strong> 混淆。 <strong>xiang</strong> 是应用引擎的内部研发代号, 名称源自周易
-  <strong>《象传》[xiàng zhuàn]</strong>
-  ，用来解释卦辞爻辞，取观测万象，预测趋势之意。
-</Notice>
 
 ### 数据模型
 
