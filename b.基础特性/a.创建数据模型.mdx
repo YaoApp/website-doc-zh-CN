@@ -32,9 +32,17 @@
   "values": [
     { "sn": "100001", "name": "Cookie", "kind": "猫", "desc": "一只猫" },
     { "sn": "100002", "name": "Beibei", "kind": "狗", "desc": "一只狗" }
-  ]
+  ],
+  "option": { "timestamps": true, "soft_deletes": true }
 }
 ```
+
+<Notice type="success">
+  提示：<strong>option.timestamps</strong> 为 true, 自动创建
+  <strong>created_at</strong> 和 <strong>updated_at</strong> 字段, 用于保存数据记录的创建时间和更新时间。
+  <strong>option.soft_deletes</strong> 为 true, 自动创建
+  <strong>deleted_at</strong> 字段, 用于标记删除记录。详细说明参考数据模型文档。
+</Notice>
 
 应用目录结构:
 
@@ -49,8 +57,8 @@
 扩展阅读:
 
 <Extend
-  title="模型文档"
-  desc="数据模型完整文档"
+  title="数据模型文档"
+  desc="了解字段类型、联合索引模型关联关系等定义方式。"
   link="e.API参考/a.数据模型"
 ></Extend>
 
@@ -71,7 +79,7 @@ yao migrate -n pet
 
 <Extend
   title="命令行工具"
-  desc="命令行工具完整文档"
+  desc="了解 Yao 都有哪些命令，以及这些命令如何使用。"
   link="e.API参考/a.命令行工具"
 ></Extend>
 
