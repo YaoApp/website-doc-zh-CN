@@ -1,0 +1,76 @@
+# 部署
+
+<blockquote>
+  本章节介绍了几种将 Yao 部署到生产环境的方式，以及如何进行分布式部署。
+</blockquote>
+
+## 系统要求
+
+| CPU   | 操作系统 |
+| ----- | -------- |
+| x86   | Linux    |
+| Arm64 | Linux    |
+
+## 一键部署
+
+准备一台 Linux 操作系统 ( 推荐使用 ubuntu server 20.04 LTS ), 开启 SSH 服务。
+
+```bash
+
+```
+
+运行部署命令:
+
+```bash
+yao deploy root@202.101.110.198 -i id_rsa
+```
+
+## 手动部署
+
+### 第一步: 安装 Yao
+
+在终端下运行脚本:
+
+```bash
+curl -fsSL https://download.yaoapps.com/releases/latest/install.sh | bash
+```
+
+### 第二步: 配置启动服务
+
+安装 `supervisor`：
+
+```bash
+
+```
+
+服务配置：
+
+```bash
+
+```
+
+### 第三步: 安装配置代理服务器
+
+推荐使用 `Nginx`, `traefik` 等代理服务器。
+
+安装 `traefik`
+
+```bash
+
+```
+
+代理配置：
+
+```bash
+
+```
+
+启用 HTTPS
+
+```bash
+
+```
+
+## 分布式部署
+
+## CI/CD
