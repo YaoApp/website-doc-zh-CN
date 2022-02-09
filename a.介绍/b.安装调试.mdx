@@ -110,14 +110,14 @@ yao start
 可以通过声明环境变量，指定服务端口，配置数据库连接 例如：
 
 ```bash
-export YAO_ENV=production # development | production 运行模式
+export YAO_ENV="production" # development | production 运行模式
 export YAO_ROOT="/data/app"  # 应用目录
 export YAO_HOST="127.0.0.1" # 服务 HOST
 export YAO_PORT="5099"  # 监听端口
 export YAO_LOG="/data/app/logs/application.log"
 export YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
 export YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
-export YAO_DB_DRIVER=mysql # 数据库类型 mysql | sqlite3
+export YAO_DB_DRIVER="mysql" # 数据库类型 mysql | sqlite3
 export YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
 export YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
 export YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
@@ -128,14 +128,14 @@ export YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Onl
 `/data/customer/.env` 文件内容
 
 ```bash
-YAO_ENV=production # development | production 运行模式
+YAO_ENV="production" # development | production 运行模式
 YAO_ROOT="/data/app"  # 应用目录
 YAO_HOST="127.0.0.1" # 服务 HOST
 YAO_PORT="5099"  # 监听端口
 YAO_LOG="/data/app/logs/application.log"
 YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
 YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
-YAO_DB_DRIVER=mysql # 数据库类型 mysql | sqlite3
+YAO_DB_DRIVER="mysql" # 数据库类型 mysql | sqlite3
 YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
 YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
 YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
