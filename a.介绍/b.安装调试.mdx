@@ -89,7 +89,7 @@ yao run xiang.main.Inspect
 
 ### Start 启动服务
 
-`yao start [alpha]`
+`yao start`
 
 进入项目目录，使用 `start` 命令，启动服务。默认服务端口为 `5099`， 可通过声明环境变量，指定服务端口。 [环境变量](#环境变量)
 
@@ -100,19 +100,27 @@ yao start
 
 参数表:
 
-| 参数  | 必填 | 说明                                                             |
-| ----- | ---- | ---------------------------------------------------------------- |
-| alpha | 否   | 如果希望试用 Yao 的一些内测功能，使用 `yao start alpha` 命令启动 |
+| 参数    | 必填 | 说明                                                               |
+| ------- | ---- | ------------------------------------------------------------------ |
+| --alpha | 否   | 如果希望试用 Yao 的一些内测功能，使用 `yao start --alpha` 命令启动 |
+| --debug | 否   | 强制开启开发模式 `yao start --debug` 命令启动                      |
 
 ## 环境变量
 
 可以通过声明环境变量，指定服务端口，配置数据库连接 例如：
 
 ```bash
-export XIANG_MODE="debug"
-export XIANG_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"
-export XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"
-export XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
+export YAO_ENV=production # development | production 运行模式
+export YAO_ROOT="/data/app"  # 应用目录
+export YAO_HOST="127.0.0.1" # 服务 HOST
+export YAO_PORT="5099"  # 监听端口
+export YAO_LOG="/data/app/logs/application.log"
+export YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
+export YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
+export YAO_DB_DRIVER=mysql # 数据库类型 mysql | sqlite3
+export YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
+export YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
+export YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
 ```
 
 可以在项目目录根目录下添加 `.env`，服务启动时将优先使用 .env 声明的环境变量；或将以上命令追加到 `~/.bashrc` 文件（macos `~/.bash_profile` )
@@ -120,17 +128,19 @@ export XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
 `/data/customer/.env` 文件内容
 
 ```bash
-XIANG_MODE="debug" # 开启调试模式
-XIANG_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 数据源
-XIANG_DB_AESKEY="ZLX=T&f6refeCh-ro*r@"   # 加密存储字段 AES KEY
-XIANG_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"  # JWT SECRET
-```
+YAO_ENV=production # development | production 运行模式
+YAO_ROOT="/data/app"  # 应用目录
+YAO_HOST="127.0.0.1" # 服务 HOST
+YAO_PORT="5099"  # 监听端口
+YAO_LOG="/data/app/logs/application.log"
+YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
+YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
+YAO_DB_DRIVER=mysql # 数据库类型 mysql | sqlite3
+YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
+YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
+YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
 
-<Extend
-  title="环境变量文档"
-  desc="查阅全部环境变量参考文档"
-  link="d.API参考/l.环境变量"
-></Extend>
+```
 
 <!--
 ## 视频讲解
