@@ -25,6 +25,19 @@ curl -fsSL https://release.yaoapps.com/install.sh | bash
 
 2. 启动运行容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.9.0`
 
+进入容器:
+
+```bash
+docker exec -it yao /bin/bash
+
+```
+
+在容器内使用 yao 命令
+
+```bash
+yao version
+```
+
 </TabPane>
 
 <TabPane tab='Docker (推荐)' key='3'>
@@ -33,22 +46,22 @@ curl -fsSL https://release.yaoapps.com/install.sh | bash
 
 2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.9.0`
 
-</TabPane>
-
-</Tabs>
-
-进入容器使用 yao 命令:
+进入容器:
 
 ```bash
-docker exec -it <name> /bin/bash
+docker exec -it yao /bin/bash
 
 ```
 
-在容器内运行
+在容器内使用 yao 命令
 
 ```bash
 yao version
 ```
+
+</TabPane>
+
+</Tabs>
 
 <Notice type="success">
   Yao 默认使用 Sqlite 存储数据，如果您需要使用
