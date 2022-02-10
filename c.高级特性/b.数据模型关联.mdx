@@ -115,7 +115,7 @@ yao migrate
 
 ## 关联关系声明
 
-关联关系通过 `relations` 中声明, 一个数据模型支持多个映射关系声明, 数据结构为`[ ObjectRelation, ObjectRelation ,...]`
+关联关系通过 `relations` 中声明, 一个数据模型支持多个映射关系声明, 数据结构为`{"relation_name":ObjectRelation, "relation_name":ObjectRelation ,...}`
 
 Object Relation 数据结构:
 
@@ -155,8 +155,8 @@ Object Relation 数据结构:
       "comment": "用户姓名"
     }
   ],
-  "relations": [
-    {
+  "relations": {
+    "supplier": {
       "name": "supplier",
       "type": "hasOne",
       "model": "supplier",
@@ -164,7 +164,7 @@ Object Relation 数据结构:
       "foreign": "supplier_id",
       "query": { "select": ["id", "name"] }
     }
-  ],
+  },
   "values": [
     { "id": 1, "supplier_id": 1, "name": "张无忌" },
     { "id": 2, "supplier_id": 1, "name": "李光富" },
@@ -217,8 +217,8 @@ yao run models.user.Get '::{"withs":{ "supplier": {} }, "wheres":[{"rel":"suppli
       "comment": "供应商名称"
     }
   ],
-  "relations": [
-    {
+  "relations": {
+    "users": {
       "name": "users",
       "type": "hasMany",
       "model": "user",
@@ -226,7 +226,7 @@ yao run models.user.Get '::{"withs":{ "supplier": {} }, "wheres":[{"rel":"suppli
       "foreign": "id",
       "query": { "select": ["id", "name"] }
     }
-  ],
+  },
   "values": [
     { "id": 1, "name": "象传智慧" },
     { "id": 2, "name": "Yao App Engine" }
