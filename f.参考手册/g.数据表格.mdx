@@ -146,25 +146,19 @@
 
 #### 接口列表
 
-| 管理接口(`key`)       | 请求方式 | 路由(相对)                | 说明                                                                                                         |
-| --------------------- | -------- | ------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| search                | `GET`    | `/search`                 | 按条件查询, 分页。 [查看完整说明](apis/search.md)                                                            |
-| find                  | `GET`    | `/find`                   | 按主键查询单条记录。 [查看完整说明](apis/find.md)                                                            |
-| save                  | `POST`   | `/save`                   | 保存单条记录，存在更新，不存在创建。 [查看完整说明](apis/save.md)                                            |
-| delete                | `POST`   | `/delete`                 | 按主键删除单条记录。 [查看完整说明](apis/delete.md)                                                          |
-| insert                | `POST`   | `/insert`                 | 批量新增记录。 [查看完整说明](apis/insert.md)                                                                |
-| delete-where          | `POST`   | `/delete/where`           | 批量删除符合条件的记录。 [查看完整说明](apis/delete-where.md)                                                |
-| delete-in             | `POST`   | `/delete/in`              | 批量删除指定一组主键的的数据记录。 [查看完整说明](apis/delete-in.md)                                         |
-| update-where          | `POST`   | `/update/where`           | 批量更新符合条件的记录。 [查看完整说明](apis/update-where.md)                                                |
-| update-in             | `POST`   | `/update/in`              | 批量更新指定一组主键的的数据记录。 [查看完整说明](apis/update-in.md)                                         |
-| import-upload         | `POST`   | `/import/upload`          | 上传文件 `csv`, `xls`, `xlsx` 格式文件，支持大文件分段上传。 [查看完整说明](apis/import-upload.md)           |
-| import-preview        | `GET`    | `/import/preview`         | 预览已上传的 `csv` 或 `Excel` 文档结构，用于在 WEB 界面设置字段映射表 [查看完整说明](apis/import-preview.md) |
-| import-sync           | `POST`   | `/import/sync`            | 根据字段映射表，同步导入 `csv` 或 `Excel` 数据 [查看完整说明](apis/import-sync.md)                           |
-| import-async          | `POST`   | `/import/async`           | 根据字段映射表，异步导入 `csv` 或 `Excel` 数据 [查看完整说明](apis/import-async.md)                          |
-| import-async-tasks    | `GET`    | `/import/async/tasks`     | 异步导入任务列表 [查看完整说明](apis/import-async-tasks.md)                                                  |
-| import-async-tasks-id | `GET`    | `/import/async/tasks/:id` | 异步导入任务详情 [查看完整说明](apis/import-async-tasks-id.md)                                               |
-| quicksave             | `POST`   | `/quicksave`              | 保存多条记录，存在更新，不存在创建。 [查看完整说明](apis/quicksave.md)                                       |
-| setting               | `GET`    | `/setting`                | 读取数据表格配置信息, 用于前端界面渲染 [查看完整说明](apis/setting.md)                                       |
+| 管理接口(`key`) | 请求方式 | 路由(相对)      | 说明                                                                   |
+| --------------- | -------- | --------------- | ---------------------------------------------------------------------- |
+| search          | `GET`    | `/search`       | 按条件查询, 分页。 [查看完整说明](apis/search.md)                      |
+| find            | `GET`    | `/find`         | 按主键查询单条记录。 [查看完整说明](apis/find.md)                      |
+| save            | `POST`   | `/save`         | 保存单条记录，存在更新，不存在创建。 [查看完整说明](apis/save.md)      |
+| delete          | `POST`   | `/delete`       | 按主键删除单条记录。 [查看完整说明](apis/delete.md)                    |
+| insert          | `POST`   | `/insert`       | 批量新增记录。 [查看完整说明](apis/insert.md)                          |
+| delete-where    | `POST`   | `/delete/where` | 批量删除符合条件的记录。 [查看完整说明](apis/delete-where.md)          |
+| delete-in       | `POST`   | `/delete/in`    | 批量删除指定一组主键的的数据记录。 [查看完整说明](apis/delete-in.md)   |
+| update-where    | `POST`   | `/update/where` | 批量更新符合条件的记录。 [查看完整说明](apis/update-where.md)          |
+| update-in       | `POST`   | `/update/in`    | 批量更新指定一组主键的的数据记录。 [查看完整说明](apis/update-in.md)   |
+| quicksave       | `POST`   | `/quicksave`    | 保存多条记录，存在更新，不存在创建。 [查看完整说明](apis/quicksave.md) |
+| setting         | `GET`    | `/setting`      | 读取数据表格配置信息, 用于前端界面渲染 [查看完整说明](apis/setting.md) |
 
 ### 2.4 字段呈现方式 `columns`
 
