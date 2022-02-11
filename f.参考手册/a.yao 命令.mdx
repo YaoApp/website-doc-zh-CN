@@ -61,11 +61,18 @@ yao migrate -n pet
 
 # yao run
 
-运行处理器, 第一个参数为处理器名称，其余参数为处理器参数表
+运行处理器, 第一个参数为处理器名称，其余参数为处理器参数表。
+
+如果需要输入复杂数据结构可以使用 `::` 前缀，声明参数为 JSON 格式， 例如: `'::{"foo":"bar"}'`
 
 ```bash
 cd /path/app
-yao run scripts.day 2020-01-02
+yao run scripts.day.NextDay 2020-01-02
+```
+
+```bash
+cd /path/app
+yao run xiang.flow.Return hello '::{"foo":"bar"}'
 ```
 
 # yao start
