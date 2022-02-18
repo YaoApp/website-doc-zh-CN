@@ -1,31 +1,19 @@
 # 部署
 
-<blockquote>本章节介绍了如何将 Yao 部署到生产环境。</blockquote>
+<blockquote>本章节介绍如何将 Yao 部署到生产环境。</blockquote>
 
-<!-- 
-## 系统要求
+## 使用 Docker
 
-| 资源 | 最低配置          |
-| ---- | ----------------- |
-| CPU  | 1 核 Amd64/ Arm64 |
-| 内存 | 512M              |
-| 磁盘 | 512M              |
-| 磁盘 | 512M              |
+- 安装 Docker 下载安装 Docker
 
-## 一键部署
+- 创建并启动容器: `docker run -d --name yao -v <app root>:/data/app -p <port>:5099 yaoapp/yao:0.9.1-amd64`
 
-准备一台 Linux 操作系统 ( 推荐使用 ubuntu server 20.04 LTS ), 开启 SSH 服务。
+**Yao Docker Images**
 
-```bash
-
-```
-
-运行部署命令:
-
-```bash
-yao deploy root@202.101.110.198 -i id_rsa
-```
- -->
+| 镜像                   | 环境     | 使用场景                 |
+| ---------------------- | -------- | ------------------------ |
+| yaoapp/yao:0.9.1-amd64 | 生产环境 | 适用于云端部署           |
+| yaoapp/yao:0.9.1-arm64 | 生产环境 | 适用于物联网边缘设备部署 |
 
 ## 手动部署
 
@@ -97,19 +85,6 @@ supervisor start
 ```bash
 curl http://127.0.0.1:<端口号>/api/xiang/ping
 ```
-
-## 使用 Docker
-
-- 安装 Docker 下载安装 Docker
-
-- 创建并启动容器: `docker run -d --name yao -v <app root>:/data/app -p <port>:5099 yaoapp/yao:0.9.1-amd64`
-
-**Yao Docker Images**
-
-| 镜像                   | 环境     | 使用场景                 |
-| ---------------------- | -------- | ------------------------ |
-| yaoapp/yao:0.9.1-amd64 | 生产环境 | 适用于云端部署           |
-| yaoapp/yao:0.9.1-arm64 | 生产环境 | 适用于物联网边缘设备部署 |
 
 ## 代理服务器
 
