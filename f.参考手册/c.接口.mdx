@@ -68,7 +68,7 @@ Yao 当前支持 RESTFul API 描述 MQTT、Socket、WEB Socket API 描述内测�
 
 ### `Object Path` 数据结构
 
-API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定义的状态码、Content-Type 和处理器(`process`)返回值， 请求失败响应异常状态码和 JSON 格式的错误消息 [查看异常规范](#4-异常规范)。
+API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定义的状态码、Content-Type 和处理器(`process`)返回值， 请求失败响应异常状态码和 JSON 格式的错误消息 [查看异常规范](#异常规范)。
 
 | 字段    | 类型            | 说明                                                                                                                                   | 必填项 |
 | ------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -76,7 +76,7 @@ API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定
 | method  | String          | 请求类型。许可值 `GET`、`POST`、`PUT`、`DELETE`、 `HEAD`、`OPTIONS`、`Any`. 其中 `Any` 将响应任何类型的请求                            | 是     |
 | guard   | String          | API 中间件. 如不设置，默认使用全局中间件。如不希望使用全局中间件，可将数值设置为 `-` 。                                                | 否     |
 | process | String          | 调用处理器 `process`                                                                                                                   | 是     |
-| in      | Array\<String\> | 请求参数表，将作为 `process` 的输入参数(`args`)。可以引用传入参数，可以为空数组 [查看输入参数](#3-输入参数)                            | 是     |
+| in      | Array\<String\> | 请求参数表，将作为 `process` 的输入参数(`args`)。可以引用传入参数，可以为空数组 [查看输入参数](#输入参数)                            | 是     |
 | out     | Object Out      | 请求响应结果定义。 具体查看 `Object Out` 数据结构                                                                                      | 是     |
 | err     | Object Out      | 自定义调用失败时的响应结果。 **尚未实现**                                                                                              | 否     |
 
@@ -191,7 +191,7 @@ API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定
 
 ### 完整示例
 
-完整示例可以查阅 [examples](examples)
+完整示例可以查阅 [examples](#完整示例)
 
 ```json
 {
