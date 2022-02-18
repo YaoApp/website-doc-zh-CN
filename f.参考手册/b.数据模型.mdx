@@ -14,7 +14,7 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 
 ## 2 文档结构
 
-数据模型定义文档，由基础信息、数据表、字段定义、索引定义、关系映射、默认数据和配置部分构成。[查看完整示例](#5-完整示例)
+数据模型定义文档，由基础信息、数据表、字段定义、索引定义、关系映射、默认数据和配置部分构成。[查看完整示例](#5.%20完整示例)
 
 ```json
 {
@@ -30,13 +30,13 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 
 | 字段      | 类型                  | 说明                                            | 必填项 |
 | --------- | --------------------- | ----------------------------------------------- | ------ |
-| name      | String                | 模型中文名称 [查看完整说明](#2.1%20基础信息)       | 是     |
-| table     | Object                | 数据表定义 [查看完整说明](#2.2%20数据表%20table)     | 是     |
-| columns   | Array\<Object\>       | 字段定义 [查看完整说明](#23-字段定义-columns)   | 是     |
-| indexes   | Array\<Object\>       | 索引定义 [查看完整说明](#24-索引定义-indexes)   | 是     |
-| relations | \[key:String\]:Object | 关系映射 [查看完整说明](#25-关系映射-relations) | 否     |
-| values    | Array\<Object\>       | 默认数据 [查看完整说明](#26-默认数据-values)    | 否     |
-| option    | Object                | 配置选型 [查看完整说明](#27-配置选项-option)    | 否     |
+| name      | String                | 模型中文名称 [查看完整说明](#5.%20完整示例)       | 是     |
+| table     | Object                | 数据表定义 [查看完整说明](#5.%20完整示例)     | 是     |
+| columns   | Array\<Object\>       | 字段定义 [查看完整说明](#5.%20完整示例)   | 是     |
+| indexes   | Array\<Object\>       | 索引定义 [查看完整说明](#5.%20完整示例)   | 是     |
+| relations | \[key:String\]:Object | 关系映射 [查看完整说明](#5.%20完整示例) | 否     |
+| values    | Array\<Object\>       | 默认数据 [查看完整说明](#5.%20完整示例)    | 否     |
+| option    | Object                | 配置选型 [查看完整说明](#5.%20完整示例)    | 否     |
 
 ### 2.1 基础信息
 
@@ -141,23 +141,23 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 | 字段        | 类型                   | 说明                                                                                        | 必填项 |
 | ----------- | ---------------------- | ------------------------------------------------------------------------------------------- | ------ |
 | name        | String                 | 字段名称，对应数据表中字段名称                                                              | 是     |
-| type        | String                 | 字段类型， [查看完整说明](#字段类型)                                                        | 是     |
+| type        | String                 | 字段类型， [查看完整说明](#5.%20完整示例)                                                        | 是     |
 | label       | String                 | 字段显示名称，用于在管理表单，开发平台等成场景下呈现                                        | 是     |
 | comment     | String                 | 字段注释，对应数据表中字段注释                                                              | 否     |
 | title       | String                 | 字段标题，可用于开发平台中呈现                                                              | 否     |
 | description | String                 | 字段介绍，可用于开发平台中呈现                                                              | 否     |
-| length      | Integer                | 字段长度，对 `string` 等类型字段有效 [查看完整说明](#字段类型)                              | 否     |
-| precision   | Integer                | 字段位数(含小数位)，对 `float`、`decimal` 等类型字段有效 [查看完整说明](#字段类型)          | 否     |
-| scale       | Integer                | 字段小数位位数，对 `float`、`decimal` 等类型字段有效 [查看完整说明](#字段类型)              | 否     |
-| option      | Array\<String\>        | 字段许可值，对 `enum` 类型字段有效 [查看完整说明](#字段类型)                                | 否     |
+| length      | Integer                | 字段长度，对 `string` 等类型字段有效 [查看完整说明](#5.%20完整示例)                              | 否     |
+| precision   | Integer                | 字段位数(含小数位)，对 `float`、`decimal` 等类型字段有效 [查看完整说明](#5.%20完整示例)          | 否     |
+| scale       | Integer                | 字段小数位位数，对 `float`、`decimal` 等类型字段有效 [查看完整说明](#5.%20完整示例)              | 否     |
+| option      | Array\<String\>        | 字段许可值，对 `enum` 类型字段有效 [查看完整说明](#5.%20完整示例)                                | 否     |
 | default     | String\|Integer\|Float | 字段默认值                                                                                  | 否     |
 | default_raw | String                 | 字段默认值，支持数据库函数，如 `NOW()` default 和 default_raw 同时存在 default_raw 优先级高 | 否     |
-| crypt       | String                 | 字段加密存储方式(MySQL Only)。许可值 `AES`, `PASSWORD` [查看完整说明](#加密方式)            | 否     |
+| crypt       | String                 | 字段加密存储方式(MySQL Only)。许可值 `AES`, `PASSWORD` [查看完整说明](#5.%20完整示例)            | 否     |
 | nullable    | Bool                   | 字段是否可以为空，默认为 false                                                              | 否     |
 | index       | Bool                   | 字段是否为索引，默认为 false                                                                | 否     |
 | unique      | Bool                   | 字段是否为唯一索引，默认为 false , 如为 true 无需同时将 `index` 设置为 true                 | 否     |
 | primary     | Bool                   | 字段是否为主键，每张表至多一个主键字段。默认为 false                                        | 否     |
-| validations | Array\<Object\>        | 字段校验规则 [查看完整说明](#校验方法)                                                      | 否     |
+| validations | Array\<Object\>        | 字段校验规则 [查看完整说明](#5.%20完整示例)                                                      | 否     |
 
 #### 字段类型
 
@@ -319,8 +319,8 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 
 | 映射关系名称 | 关系   | 说明                                                               |
 | ------------ | ------ | ------------------------------------------------------------------ |
-| `hasOne`     | 一对一 | 模型 A 与模型 B 通过一对一关联 [查看完整说明](#251-hasone-一对一)  |
-| `hasMany`    | 一对多 | 模型 A 与模型 B 通过一对多关联 [查看完整说明](#253-hasmany-一对多) |
+| `hasOne`     | 一对一 | 模型 A 与模型 B 通过一对一关联 [查看完整说明](#5.%20完整示例)  |
+| `hasMany`    | 一对多 | 模型 A 与模型 B 通过一对多关联 [查看完整说明](#5.%20完整示例) |
 
 关联关系使用 `[key:String]:Object Relation` 数据结构定义 ( `{"关联名称1":{}, "关联名称2":{}}`, 关联名称为 **小写英文字母** )
 
@@ -416,7 +416,7 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 | key     | String                   | 关联模型的关联字段名称                                                                                                  | 否     |
 | model   | String                   | 关联模型名称                                                                                                            | 否     |
 | foreign | String                   | 当前模型的关联字段名称                                                                                                  | 否     |
-| query   | Object QueryParam        | 关系查询参数默认值。如在查询时未指定关联查询参数，则替使用在模型中定义的查询参数 [查看完整说明](#3-查询参数-queryparam) | 否     |
+| query   | Object QueryParam        | 关系查询参数默认值。如在查询时未指定关联查询参数，则替使用在模型中定义的查询参数 [查看完整说明](#5.%20完整示例) | 否     |
 | links   | Array\<Object Relation\> | `hasOneThrough` 或 `hasManyThrough` 多表关联关系定义                                                                    | 否     |
 
 #### 2.5.1 `hasOne` 一对一
@@ -699,7 +699,7 @@ LIMIT 2
 
 ### 3.2 URL Query String 与 QueryParam 对照表
 
-查询条件可以通过 URL Query String 传入，[详见对照表](../api/protocol/http.md#url-query-string-与-queryparam-对照表)
+查询条件可以通过 URL Query String 传入，[详见对照表](#5.%20完整示例)
 
 ## 4 处理器(`process`)
 
@@ -707,7 +707,7 @@ LIMIT 2
 
 | 处理器              | 引用方式                            | 说明                                                                                                                          |
 | ------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| find                | models.模型名称.Find                | 查询单条记录 [详情](process/Find.md)                                                                                          |
+| find                | models.模型名称.Find                | 查询单条记录 [详情](#d.处理器/b.数据模型)                                                                                          |
 | get                 | models.模型名称.Get                 | 按条件查询, 不分页 [详情](process/Get.md)                                                                                     |
 | paginate            | models.模型名称.Paginate            | 按条件查询, 分页 [详情](process/Paginate.md)                                                                                  |
 | create              | models.模型名称.Create              | 创建单条记录, 返回新创建记录 ID [详情](process/Create.md)                                                                     |
@@ -724,7 +724,7 @@ LIMIT 2
 
 ## 5. 完整示例
 
-完整示例保存在 examples 目录，[查看完整示例](examples)
+完整示例保存在 examples 目录，[查看完整示例](#5.%20完整示例)
 
 ```json
 {
