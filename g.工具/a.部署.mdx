@@ -6,7 +6,7 @@
 
 - 安装 Docker 下载安装 Docker
 
-- 创建并启动容器: `docker run -d --name yao -v <app root>:/data/app -p <port>:5099 yaoapp/yao:0.9.1-amd64`
+- 创建并启动容器: `docker run -d --restart unless-stopped --name yao -v <app root>:/data/app -p <Port>:5099 yaoapp/yao:0.9.1-amd64`
 
 **Yao Docker Images**
 
@@ -15,6 +15,12 @@
 | yaoapp/yao:0.9.1-amd64 | 生产环境 | 适用于云端部署           |
 | yaoapp/yao:0.9.1-arm64 | 生产环境 | 适用于物联网边缘设备部署 |
 
+检查服务状态:
+
+```bash
+curl http://127.0.0.1:<Port>/api/xiang/ping
+```
+
 ## 手动部署
 
 ### 第一步: 安装 Yao
@@ -22,7 +28,7 @@
 运行安装脚本:
 
 ```bash
-curl -fsSL https://download.yaoapps.com/releases/latest/install.sh | bash
+curl -fsSL https://website.yaoapps.com/install.sh | bash
 ```
 
 ### 第二步: 添加用户
@@ -30,7 +36,7 @@ curl -fsSL https://download.yaoapps.com/releases/latest/install.sh | bash
 添加用户
 
 ```bash
-useradd -d yao
+useradd yao
 ```
 
 创建应用文件夹
@@ -83,7 +89,7 @@ supervisor start
 检查服务状态:
 
 ```bash
-curl http://127.0.0.1:<端口号>/api/xiang/ping
+curl http://127.0.0.1:<Port>/api/xiang/ping
 ```
 
 ## 代理服务器
