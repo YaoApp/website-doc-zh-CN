@@ -20,3 +20,15 @@ jobs:
                           script: |
                                 cd /app/website/website-doc-zh-CN
                                 git pull
+
+                  - name: CN - Sync
+                    uses: appleboy/ssh-action@master
+                    with:
+                          host: ${{ secrets.HOST_CN }}
+                          username: ${{ secrets.USERNAME }}
+                          key: ${{ secrets.KEY_CN }}
+                          port: ${{ secrets.PORT }}
+                          command_timeout: 20m
+                          script: |
+                                cd /app/website/website-doc-zh-CN
+                                git pull
