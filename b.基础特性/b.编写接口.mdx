@@ -24,7 +24,7 @@
       "method": "GET",
       "guard": "-",
       "process": "models.pet.Paginate",
-      "query": [":query-param", "$query.page", "$quey.pagesize"],
+      "in": [":query-param", "$query.page", "$query.pagesize"],
       "out": {
         "status": 200,
         "type": "application/json"
