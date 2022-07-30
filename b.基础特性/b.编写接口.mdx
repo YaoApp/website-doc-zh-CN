@@ -77,13 +77,13 @@ yao start
 分页查询接口
 
 ```bash
- curl 'http://127.0.0.1:5099/xiang/api/pet/search?where.name.match=Cookie&page=1&pagesize=1'
+ curl 'http://127.0.0.1:5099/api/pet/search?where.name.match=Cookie&page=1&pagesize=1'
 ```
 
 保存数据接口
 
 ```bash
-curl -X POST http://127.0.0.1:5099/xiang/api/pet/save
+curl -X POST http://127.0.0.1:5099/api/pet/save
    -H 'Content-Type: application/json'
    -d '{"sn":"300001", "name":"旺旺", "type":"狗", "desc":"新成员"}'
 ```
