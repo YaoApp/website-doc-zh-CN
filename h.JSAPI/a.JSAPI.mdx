@@ -1,0 +1,117 @@
+# JSAPI
+
+<blockquote>
+
+本章节介绍 Yao 内置的一些 JSAPI,可以打印出对应的调试信息 。
+
+</blockquote>
+
+<Tabs defaultActiveKey='1'>
+<TabPane tab='Linux & MacOS' key='1'>
+
+console.log 控制台打印，示例代码，以下代码可以在任意 JS 文件中使用：
+
+```javascript
+console.log("foo and bar!");
+```
+
+</TabPane>
+
+<TabPane tab='Windows' key='2'>
+
+log 打印位置 `logs/application.log` 打印日志:
+
+```javascript
+log.Error("%v", foo);
+log.Info("foo");
+```
+
+Exception 抛出异常：
+
+```javascript
+throw new Exception("页面未找到", 404);
+```
+
+Query 使用 SQL 构造查询，更多查询<a href="../b.基础特性/f.查询数据">查询数据</a> 文档。
+
+```javascript
+var query = new Query();
+
+var result = query.Get({
+  select: [":COUNT(id) as number"],
+  wheres: [{ ":status": "状态", "=": 2 }],
+  from: "foo_table",
+});
+```
+
+Store 使用缓存，新增文件`stores/cache.lru.json`：
+
+````
+
+应用目录结构:
+
+```bash
+├── apis        # 用于存放接口描述文件
+│
+├── models        # 用于存放数据模型描述文件
+│
+├── db
+└── stores    #用于存放缓存目录
+|
+└── app.json
+````
+
+编写代码`cache.lru.json`：
+
+```javascript
+{
+  "name": "LRU Cache",
+  "description": "LRU缓存",
+  "type": "lru",
+  "option": { "size": 102400 }
+}
+
+```
+
+在任意 JS 文件中使用缓存，Set 设置缓存，Get 获取缓存数据
+
+```javascript
+var cache = new Store("cache");
+
+cache.Set("key", "for bar .....");
+
+var cache_info = cache.Get("key");
+```
+
+扩展阅读:
+
+<Extend
+  title="复杂数据查询"
+  desc="了解更多复杂数据查询方式。"
+  link="c.高级特性/c.复杂数据查询"
+></Extend>
+
+<Extend
+  title="Gou Query DSL 文档"
+  desc="Gou Query DSL 使用文档"
+  link="f.参考手册/e.Query%20DSL"
+></Extend>
+
+## 推荐阅读
+
+接下来，建议学习以下章节:
+
+<Extend
+  title="数据流使用JS"
+  desc="了解如何在数据流中使用JS脚本处理查询结果。"
+  link="c.高级特性/a.数据流使用JS"
+></Extend>
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link type="prev" title="编写数据流" link="b.基础特性/e.编写数据流"></Link>
+  <Link
+    type="next"
+    title="使用JS编写处理器"
+    link="c.高级特性/d.使用JS编写处理器"
+  ></Link>
+</Div>

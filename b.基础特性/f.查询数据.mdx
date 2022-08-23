@@ -23,8 +23,8 @@
       "process": "models.pet.Get",
       "args": [
         {
-          "select": ["id", "name", "kind"],
-          "wheres": [{ "column": "kind", "value": "猫" }],
+          "select": ["id", "name", "remark"],
+          "wheres": [{ "column": "name", "value": "猫" }],
           "limit": 3
         }
       ]
@@ -34,8 +34,8 @@
       "process": "models.pet.Paginate",
       "args": [
         {
-          "select": ["id", "name", "kind"],
-          "wheres": [{ "column": "kind", "value": "猫" }],
+          "select": ["id", "name", "remark"],
+          "wheres": [{ "column": "name", "value": "猫" }],
           "limit": 1
         },
         1,
@@ -45,7 +45,7 @@
     {
       "name": "一条记录",
       "process": "models.pet.Find",
-      "args": [1, { "select": ["id", "name", "kind"] }]
+      "args": [1, { "select": ["id", "name", "remark"] }]
     },
     {
       "name": "更新记录",
@@ -54,10 +54,8 @@
     },
     {
       "name": "插入记录",
-      "process": "models.pet.Create",
-      "args": [
-        { "sn": "300004", "name": "哮天犬", "type": "狗", "desc": "新成员" }
-      ]
+      "process": "models.pet.Save",
+      "args": [{ "name": "哮天犬", "amount": "2000", "remark": "新成员" }]
     },
     {
       "name": "删除记录",
@@ -99,10 +97,10 @@ yao run flows.query
 
 Yao 提供以下 Query DSL, 可以在数据流节点中使用:
 
-| DSL           | 说明                                                                 |
-| ------------- | -------------------------------------------------------------------- |
-| Gou Query DSL | 适用基于 SQL 的查询数据引擎。 <a href="https://yaoapps.com/doc/f.%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/e.Query%20DSL"> 查看文档 </a>             |
-| Tai Query DSL | 适用基于 ElasticSearch 的数据引擎。<strong>(内测中暂未开放)</strong> |
+| DSL           | 说明                                                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Gou Query DSL | 适用基于 SQL 的查询数据引擎。 <a href="https://yaoapps.com/doc/f.%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/e.Query%20DSL"> 查看文档 </a> |
+| Tai Query DSL | 适用基于 ElasticSearch 的数据引擎。<strong>(内测中暂未开放)</strong>                                                                |
 
 编写数据流描述文件 `stat.flow.json`，并放置在应用的 `flows` 目录中。
 
@@ -116,8 +114,8 @@ Yao 提供以下 Query DSL, 可以在数据流节点中使用:
       "name": "类型统计S1",
       "engine": "xiang",
       "query": {
-        "select": [":COUNT(id) as 数量", "kind as 类型"],
-        "groups": "类型",
+        "select": [":COUNT(id) as 数量", "name as 名字"],
+        "groups": "名字",
         "from": "$pet"
       }
     },
@@ -125,8 +123,8 @@ Yao 提供以下 Query DSL, 可以在数据流节点中使用:
       "name": "类型统计S2",
       "engine": "xiang",
       "query": {
-        "select": [":COUNT(id) as 数量", "kind as 类型"],
-        "groups": "类型 ROLLUP 总计",
+        "select": [":SUM(amount) as 金额", "name as 名字"],
+        "groups": "名字",
         "from": "$pet"
       }
     }

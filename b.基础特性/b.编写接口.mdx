@@ -35,7 +35,29 @@
       "method": "POST",
       "guard": "-",
       "process": "models.pet.Save",
-      "query": [":payload"],
+      "in": [":payload"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    },
+    {
+      "path": "/update/:id",
+      "method": "PATCH",
+      "guard": "-",
+      "process": "models.pet.Update",
+      "in": ["$params.id", ":payload"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    },
+    {
+      "path": "/delete/:id",
+      "method": "DELETE",
+      "guard": "-",
+      "process": "models.pet.Delete",
+      "in": ["$params.id"],
       "out": {
         "status": 200,
         "type": "application/json"
