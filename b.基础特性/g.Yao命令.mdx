@@ -42,7 +42,7 @@ yao run models.pet.Get '::{}'
 
 ### 在 API 中使用
 
-在 API 中指定 `process` 设置处理器。 `query` 设置处理器的参数表。
+在 API 中指定 `process` 设置处理器。 `query` 设置处理器的参数表,当请求方式为 POST 时，使用`payload`参数，`headers`用来获取请求头部。
 
 ```json
 {
@@ -53,6 +53,16 @@ yao run models.pet.Get '::{}'
       "method": "GET",
       "process": "models.pet.Paginate",
       "query": [":query-param", "$query.page", "$quey.pagesize"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    },
+    {
+      "path": "/save",
+      "method": "POST",
+      "process": "models.pet.Save",
+      "query": [":payload",":headers"],
       "out": {
         "status": 200,
         "type": "application/json"
@@ -99,6 +109,14 @@ yao run models.pet.Get '::{}'
     }
   ]
   ...
+}
+```
+
+使用`yao run scripts.test.test 1`运行 JS 函数，打印 id 为 1 的值，在`/scripts/test.js`写入以下代码
+
+```javascript
+function test(id) {
+  console.log(id);
 }
 ```
 

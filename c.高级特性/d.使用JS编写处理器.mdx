@@ -19,15 +19,15 @@ function Tomorrow(today) {
 }
 ```
 
-**运行处理器:**
+**在命令行中运行处理器:**
 
 ```bash
 yao run scripts.day.Tomorrow '2022-01-24'
 ```
 
-## 调用其他处理器
+## 在其他 JS 中调用其他处理器
 
-可以使用 `Process` 函数调用其他处理器。
+可以使用 `Process` 函数调用其他处理器，相当于调用其他函数，以便于代码的复用。
 
 创建一个 `format.js` 脚本，放置在应用 `scripts/pet/` 目录下。
 
@@ -35,22 +35,10 @@ format.js :
 
 ```javascript
 /**
- * 根据类型设置颜色
- */
-const color = (kind) => {
-  if (kind == "猫") {
-    return "#FEFEFE";
-  } else if (kind == "狗") {
-    return "#55555";
-  }
-};
-
-/**
  * 添加用户信息
  */
-function WithUsers(record) {
-  let data = record || {};
-  data["color"] = color(data.kind);
+function WithUsers() {
+  var data = {};
   data["tommorrow"] = Process("scripts.day.Tomorrow", new Date());
   data["users"] = Process("models.xiang.user.Get", {
     limit: 2,
@@ -63,8 +51,7 @@ function WithUsers(record) {
 **运行处理器:**
 
 ```bash
-yao run scripts.pet.format.WithUsers '::{"kind":"猫"}'
-yao run scripts.pet.format.WithUsers '::{"kind":"狗"}'
+yao run scripts.pet.format.WithUsers
 ```
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>

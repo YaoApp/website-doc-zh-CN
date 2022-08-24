@@ -206,12 +206,12 @@ token.flow.json:
     {
       "name": "设置会话数据",
       "process": "session.set",
-      "args": ["user", "{{$in.0}}"]
+      "args": ["user", "{{$in.0}}", 3600]
     },
     {
       "name": "设置会话用户ID",
       "process": "session.set",
-      "args": ["user_id", "{{$in.0.id}}"]
+      "args": ["user_id", "{{$in.0.id}}", 3600]
     }
   ],
   "output": {

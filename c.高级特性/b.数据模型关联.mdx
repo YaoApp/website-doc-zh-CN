@@ -197,6 +197,25 @@ yao run models.user.Find 1 '::{"withs":{ "supplier": { "select":["name"] } }}'
 yao run models.user.Get '::{"withs":{ "supplier": {} }, "wheres":[{"rel":"supplier", "column":"name", "value":"Yao App Engine" }]}'
 ```
 
+在 JS 中使用任意关联关系：
+
+```javascript
+function test() {
+  var user = Process("models.user.get", {
+    withs: {
+      supplier: {
+        query: {
+          select: ["name", "id"],
+        },
+      },
+    },
+    wheres: [{ column: "user_id", value: 1, op: "=" }],
+    orders: [{ column: "id", option: "desc" }],
+    limit: 1,
+  });
+}
+```
+
 ## hasMany
 
 查询供应商时，同时返回该供应商的用户信息。修改用户模型描述文件 `supplier.mod.json`，添加 `hasMany` 关联关系声明。

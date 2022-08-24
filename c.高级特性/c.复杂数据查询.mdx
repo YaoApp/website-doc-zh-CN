@@ -111,6 +111,7 @@ LIMIT 2
 | null     | 为空 WHERE 字段 IS NULL          |
 | notnull  | 不为空 WHERE 字段 IS NOT NULL    |
 | in       | 列表包含 WHERE 字段 IN (数值...) |
+| ne       | 不等于匹配值                     |
 
 **Object Order**
 
@@ -263,6 +264,25 @@ ORDER BY `high_score` DESC
     }
   ],
   "output": "{{$res.宠物}}"
+}
+```
+
+### 在 JS 文件中使用
+
+```javascript
+function test(id) {
+  var query = new Query();
+  var data = query.Get({
+    name: "宠物",
+    engine: "xiang",
+    query: {
+      select: ["id", "name", "kind", "created_at"],
+      from: "$pet",
+      wheres: [{ ":kind": "类型", "=": id }],
+      orders: "created_at desc",
+      limit: 10,
+    },
+  });
 }
 ```
 

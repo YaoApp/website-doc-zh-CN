@@ -1,0 +1,293 @@
+# 数据导入
+
+新增 models 目录文件`/models/ticket.mod.json`：
+
+```json
+{
+  "name": "工单表",
+  "table": {
+    "name": "ticket",
+    "comment": "工单表"
+  },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID" },
+    {
+      "label": "昵称",
+      "name": "name",
+      "type": "string",
+      "length": 20,
+      "comment": "昵称",
+      "index": true
+    },
+    {
+      "label": "电话号码",
+      "name": "phone",
+      "type": "string",
+      "comment": "电话号码",
+      "nullable": true
+    },
+    {
+      "label": "用户性别",
+      "comment": "用户性别",
+      "name": "gender",
+      "type": "string",
+      "default": ""
+    },
+
+    {
+      "label": "区域",
+      "name": "area",
+      "type": "string",
+      "nullable": true,
+      "comment": "区域"
+    }
+  ],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": []
+}
+```
+
+新增 table 目录文件`/tables/ticket.tab.json`：
+
+```json
+{
+  "name": "工单列表",
+  "version": "1.0.0",
+  "decription": "工单列表",
+  "bind": {
+    "model": "ticket"
+  },
+  "apis": {},
+  "actions": {
+    "create": {
+      "type": "button",
+      "props": { "label": "添加工单", "icon": "fas fa-plus" }
+    },
+    "import": {
+      "props": {
+        "api": {
+          "setting": "/api/xiang/import/ticket/setting",
+          "mapping": "/api/xiang/import/ticket/mapping",
+          "mapping_setting": "/api/xiang/import/ticket/mapping/setting",
+          "preview": "/api/xiang/import/ticket/data",
+          "preview_setting": "/api/xiang/import/ticket/data/setting",
+          "import": "/api/xiang/import/ticket"
+        }
+      }
+    },
+    "pagination": {}
+  },
+  "columns": {},
+  "filters": {},
+  "list": {},
+  "edit": {},
+  "view": {}
+}
+```
+
+导入 Excel 文件，新增目录文件`/imports/ticket.imp.json`：
+
+````
+
+应用目录结构:
+
+```bash
+├── apis        # 用于存放接口描述文件
+│
+├──tables
+|  └──ticket.tab.json #导入excel的table
+|
+├── models        # 用于存放数据模型描述文件
+│
+├── db
+└── imports           #用于导入数据的映射文件
+| └── ticket.imp.json
+|
+|──scripts
+|  └──imports
+|       └──ticket.js
+|
+|
+└── app.json
+````
+
+编写代码`ticket.imp.json`：
+
+```json
+{
+  "title": "导入工单",
+  "process": "scripts.imports.ticket.Import",
+  "output": "scripts.imports.ticket.Output",
+  "columns": [
+    {
+      "label": "昵称",
+      "name": "name",
+      "match": ["昵称", "昵称", "name"],
+      "rules": []
+    },
+    {
+      "label": "手机",
+      "name": "phone",
+      "match": ["手机", "手机", "phone"],
+      "rules": []
+    },
+    {
+      "label": "性别",
+      "name": "gender",
+      "match": ["性别", "性别", "gender"],
+      "rules": []
+    },
+    {
+      "label": "地区",
+      "name": "area",
+      "match": ["地区", "地区", "area"],
+      "rules": []
+    }
+  ],
+  "option": {
+    "autoMatching": true,
+    "chunkSize": 200,
+    "logging": "error",
+    "mappingPreview": "auto",
+    "dataPreview": "auto",
+    "templateLink": "/somelinke/download/xxx"
+  },
+  "rules": {}
+}
+```
+
+编写代码`/scripts/imports/ticket.js`：
+
+```javascript
+function Import(columns, data) {
+  // todo 处理导入逻辑
+
+  // 打印隐射关系
+  console.log(columns);
+
+  // 打印获取的数据
+  console.log(data);
+
+  var success = 0;
+  var fail = 0;
+
+  return [success, fail];
+}
+function Output(data) {
+  // todo 处理导入后的逻辑，导入后会自动调用这个函数："output": "scripts.imports.ticket.Output",
+  return data;
+}
+```
+
+导入方法分为三步骤：
+
+- 第一步：获取文件 url
+
+##### 请求 URL ，请求方式：POST
+
+- `/api/xiang/storage/upload`
+
+##### 参数
+
+| 参数名 | 必选 | 类型 | 说明     |
+| :----- | :--- | :--- | -------- |
+| file   | 是   | file | 文件名称 |
+
+##### 返回示例
+
+```
+ "20220411/0C3A5E7FCA0FE897710DE2CA00240FFE.xlsx"
+```
+
+- 第二步：获取映射关系
+
+##### 请求 URL，请求方式 GET
+
+- `/api/xiang/import/ticket/mapping `
+
+##### 参数
+
+| 参数名 | 必选 | 类型   | 说明         |
+| :----- | :--- | :----- | ------------ |
+| file   | 是   | string | 文件名称 url |
+
+- 第三步：传递所有的数据
+
+##### 请求 URL，请求方法 POST
+
+- `/api/xiang/import/ticket`
+
+##### 参数
+
+| 参数名  | 必选 | 类型   | 说明                   |
+| :------ | :--- | :----- | ---------------------- |
+| file    | 是   | string | 文件名称               |
+| mapping | 是   | string | 映射关系返回额全部数据 |
+
+#### 请求参数示例
+
+```
+{
+	"file":"20220407/BB9DDF196D0B5DF9319EA8ADB5C914D3.xlsx",
+	"mapping":{
+    "sheet": "sheet1",
+    "colStart": 1,
+    "rowStart": 1,
+    "data": [
+        {
+            "label": "昵称",
+            "field": "name",
+            "name": "昵称",
+            "axis": "B1",
+            "value": "张三",
+            "rules": null
+        },
+        {
+            "label": "手机",
+            "field": "phone",
+            "name": "手机",
+            "axis": "C1",
+            "value": "15000000000",
+            "rules": null
+        },
+        {
+            "label": "性别",
+            "field": "gender",
+            "name": "性别",
+            "axis": "D1",
+            "value": "男",
+            "rules": null
+        },
+        {
+            "label": "地区",
+            "field": "area",
+            "name": "地区",
+            "axis": "A1",
+            "value": "北京市",
+            "rules": null
+        }
+
+    ],
+    "autoMatching": true,
+    "templateMatching": false
+}
+}
+```
+
+## 推荐阅读
+
+<Extend
+  title="Gou Framework"
+  desc="一个基于 Golang 低代码平台开发框架"
+  link="https://github.com/YaoApp/gou"
+></Extend>
+
+<Extend
+  title="Xun Database"
+  desc="Xun Database is an object-relational mapper (ORM), can change the table structure at run time, especially suitable for use in Low-Code application. "
+  link="https://github.com/YaoApp/xun"
+></Extend>
+```

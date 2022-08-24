@@ -142,6 +142,32 @@ yao run models.pet.Get '::{}'
 }
 ```
 
+用作表格 `Guard` ，处理验证逻辑，在 table 的`apis`中写入以下内容：
+
+```json
+{
+  ...
+  "apis": {
+    "save": {
+      "guard": "bearer-jwt,scripts.user.login"
+    },
+    "delete": {
+      "guard": "bearer-jwt"
+    }
+  },
+  ...
+}
+```
+
+`scripts/user.js`内容,能够打印出请求的 url 路径，参数，以及请求头部，配合`Exception` 能够做到验证某些数据或者权限
+
+```javascript
+function login(path, params, query, payload, headers) {
+  console.log([path, params, query, payload, headers]);
+  throw new Exception("未登录", 403);
+}
+```
+
 扩展阅读:
 
 <Extend

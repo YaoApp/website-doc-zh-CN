@@ -73,6 +73,39 @@
 yao run flows.query
 ```
 
+**在 JS 文件中使用**
+
+获取多条
+
+```json
+  Process("models.pet.Get", {
+    wheres: [{ column: "name", value: "cat", op: "=" }],
+    limit: 1,
+  });
+```
+
+获取 1 条，id 为 1 的数据
+
+```json
+  Process("models.pet.find", 1,{});
+```
+
+保存数据
+
+```json
+  Process("models.pet.save",{
+    id:1,
+    name:"cats foo bar"
+  });
+```
+
+删除数据
+
+```json
+  Process("models.pet.delete",1,{});
+
+```
+
 扩展阅读:
 
 <Extend
