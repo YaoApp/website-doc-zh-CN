@@ -1,1 +1,109 @@
 # 流程控制
+
+`flows`处理器为我们提供完整的数据流处理,可以提供数据处理器一套流程
+
+#### 示例代码:
+
+新建`models/category.mod.json`写入以下代码:
+
+```json
+{
+  "name": "物料分类",
+  "table": {
+    "name": "category",
+    "comment": "物料分类"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID",
+      "primary": true
+    },
+    {
+      "label": "父级id",
+      "name": "parent_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "label": "分类名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    }
+  ],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "parent_id": null,
+      "name": "一级分类"
+    },
+    {
+      "id": 2,
+      "parent_id": 1,
+      "name": "二级分类"
+    }
+  ]
+}
+```
+
+执行命令 `yao migrate -n category`在数据库中可以看到生成了对应的数据表和数据
+
+编写`flows/category.flow.json`写入以下代码:
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    },
+    {
+      "name": "类目树",
+      "process": "xiang.helper.ArrayTree",
+      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+    }
+  ],
+  "output": "{{$res.类目树}}"
+}
+```
+
+执行`yao run flows.category`可以看到控制台有以下输出:
+
+```json
+[
+  {
+    "children": [
+      {
+        "children": [],
+        "id": 2,
+        "label": "二级分类",
+        "name": "二级分类",
+        "parent_id": 1,
+        "value": 2
+      }
+    ],
+    "id": 1,
+    "label": "一级分类",
+    "name": "一级分类",
+    "parent_id": null,
+    "value": 1
+  }
+]
+```
