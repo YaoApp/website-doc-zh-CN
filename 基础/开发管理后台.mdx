@@ -1,8 +1,10 @@
-#### 本章节开发一个图书管理系统
+# 本章节开发一个图书管理系统
 
-- 讲在前面:在学习本教程之前,默认您已经搭建好开发环境的
+## 讲在前面:在学习本教程之前,默认您已经搭建好开发环境的
 
-- 初始化项目 `yao init`此时的目录结构为:
+## 开始项目
+
+初始化项目 `yao init`此时的目录结构为:
 
 ```
 
@@ -20,6 +22,8 @@
     └─icons
 ```
 
+## 项目配置
+
 - 配置数据库文件 `.env`文件:
 
 ```
@@ -35,6 +39,8 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 数据库字段含义:`YAO_DB_PRIMARY=用户名:密码@tcp(数据库ip:端口)/数据库名??charset=utf8mb4&parseTime=True&loc=Local`
 
 配置修改完成后执行 `yao migrate`看看是否报错,要是没有报错说明连接成功!
+
+## 新建模型
 
 - 新增`models/ccategory.mod.json`文件,写入以下内容:
 
@@ -233,6 +239,8 @@ Update schema model: book (book)
 
 ```
 
+## 菜单配置
+
 - 接下来初始化一下菜单,新建`/flows/menu.flow.json`:
 
 ```json
@@ -327,6 +335,8 @@ flows.menu Response
   }
 }
 ```
+
+## 新建表格
 
 - 新建 `tables/book.tab.json`代码如下:
 
@@ -611,3 +621,140 @@ Watching: /mnt/shared/test/tables
 ![分类](assets/overview-category.png)
 
 - 思考:书籍分类和分类的父类如何做成下拉列表?
+
+## 改进问题
+
+- 把书籍分类改为下拉列表树形组件[TreeSelect](https://yaoapps.com/components/%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5/TreeSelect)搜索,新增一个`apis/select.http.json`:
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "guard": "bearer-jwt",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+新建`flows/category.flow.json`文件:
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    },
+    {
+      "name": "类目树",
+      "process": "xiang.helper.ArrayTree",
+      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+    }
+  ],
+  "output": "{{$res.类目树}}"
+}
+```
+
+修改 `tables/book.tab.json`的 columns 分类组件，并且调整一下表单和添加页面的布局:
+
+```json
+...
+
+    "分类": {
+      "label": "分类",
+      "view": {
+        "name": "label",
+        "props": {
+          "value": ":category.name"
+        }
+      },
+      "edit": {
+        "type": "treeSelect",
+        "props": {
+          "value": ":category_id",
+          "allowClear": true,
+          "remote": {
+            "api": "/api/select/category",
+            "query": { "select": ["id", "name"] }
+          }
+        }
+      }
+    },
+
+ ...
+
+
+   "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "分类", "width": 200 },
+        { "name": "书籍名称", "width": 200 },
+        { "name": "出版社", "width": 200 },
+        { "name": "作者", "width": 200 },
+        { "name": "价格", "width": 200 }
+      ],
+      "filters": [{ "name": "书籍名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } },
+      "create": {
+        "props": { "label": "添加书籍" }
+      }
+    },
+    "option": { "operation": { "unfold": true } }
+  },
+    "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "分类", "width": 8 },
+            { "name": "书籍名称", "width": 8 },
+            { "name": "出版社", "width": 8 },
+            { "name": "价格", "width": 8 },
+            { "name": "作者", "width": 8 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": {},
+      "delete": { "type": "button", "props": { "label": "Delete" } }
+    },
+    "option": { "dev": false }
+  }
+
+```
+
+停止服务,然后重启服务,刷新一下页面,可以看到如下效果图：
+
+![分类](assets/overview-category-select.png)
+
+## 作业
+
+- 把分类下来也改成树形下拉结构
