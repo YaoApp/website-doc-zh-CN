@@ -21,13 +21,13 @@ YAO 采用 golang 开发，可以在 Mac 或 Linux 环境中建立开发环境�
 
 YAO 相关的代码仓库
 
-| 仓库                            | 说明                          |
-| ------------------------------- | ----------------------------- |
-| https://github.com/yaoapp/yao   | Yao                           |
-| https://github.com/yaoapp/gou   | Gou 应用引擎框架              |
-| https://github.com/yaoapp/xun   | ORM                           |
-| https://github.com/yaoapp/kun   | 基本数据接口                  |
-| https://github.com/rogchap/v8go | V8 Execute JavaScript from Go |
+| 仓库                            | 说明               |
+| ------------------------------- | ------------------ |
+| https://github.com/yaoapp/yao   | Yao                |
+| https://github.com/yaoapp/gou   | 引擎框架           |
+| https://github.com/yaoapp/xun   | ORM                |
+| https://github.com/yaoapp/kun   | 常用数据处理包     |
+| https://github.com/rogchap/v8go | V8 JavaScirpt 引擎 |
 
 下载源码到项目目录
 
@@ -104,7 +104,7 @@ make tools
 编译过程中会从 https://github.com/YaoApp/xgen.git 仓库拉取代码并构建
 需提前安装 nodejs 16+
 
-MacOS
+### MacOS
 
 ```bash
 cd /your-project/root/yao
@@ -113,7 +113,7 @@ make release
 
 制品为 `dist/release/yao`
 
-Linux
+### Linux
 
 ```bash
 cd /your-project/root/yao
@@ -122,6 +122,8 @@ make linux-release
 
 制品为 `dist/release/yao`
 
+### Debug 调试
+
 不集成 XGen 界面引擎
 
 ```bash
@@ -129,3 +131,8 @@ make debug
 ```
 
 制品为 `dist/release/yao-debug`
+
+### Workflows
+
+https://github.com/YaoApp/yao/blob/main/.github/workflows/release-linux.yml
+https://github.com/YaoApp/yao/blob/main/.github/workflows/release-macos.yml
