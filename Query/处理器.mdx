@@ -1,0 +1,22 @@
+# 处理器
+
+## 4 处理器(`process`)
+
+数据模型提供一组原子操作处理器 `process` , 这些处理器可用于服务接口(`API`)和数据流(`Flow`)编排。
+
+| 处理器              | 引用方式                            | 说明                                                                                                                                                                                                     |
+| ------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| find                | models.模型名称.Find                | 查询单条记录 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                           |
+| get                 | models.模型名称.Get                 | 按条件查询, 不分页 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                     |
+| paginate            | models.模型名称.Paginate            | 按条件查询, 分页 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                       |
+| create              | models.模型名称.Create              | 创建单条记录, 返回新创建记录 ID <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                        |
+| update              | models.模型名称.Update              | 更新单条记录 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                           |
+| save                | models.模型名称.Save                | 保存单条记录, 不存在创建记录, 存在更新记录, 返回记录 ID <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                |
+| delete              | models.模型名称.Delete              | 删除单条记录(标记删除) <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                 |
+| destroy             | models.模型名称.Destroy             | 删除单条记录(真删除) <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                                   |
+| insert              | models.模型名称.Insert              | 插入多条记录, 返回插入行数 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                             |
+| updatewhere         | models.模型名称.UpdateWhere         | 按条件更新记录, 返回更新行数 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                           |
+| deletewhere         | models.模型名称.DeleteWhere         | 按条件删除数据, 返回删除行数(标记删除) <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                 |
+| destroywhere        | models.模型名称.DestroyWhere        | 按条件删除数据, 返回删除行数(真删除) <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                                                   |
+| eachsave            | models.模型名称.EachSave            | 保存多条记录, 不存在创建记录, 存在更新记录, 返回记录 ID 集合 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a>                           |
+| eachsaveAfterDelete | models.模型名称.EachSaveAfterDelete | 删除一组给定 ID 的记录后，保存多条记录, 不存在创建记录, 存在更新记录, 返回记录 ID 集合 <a href="https://yaoapps.com/doc/d.%E5%A4%84%E7%90%86%E5%99%A8/b.%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"> 详情 </a> |

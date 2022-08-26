@@ -1,0 +1,173 @@
+# 应用引擎
+
+应用引擎相关处理器。
+
+| 处理器             | 说明             | 文档                        |
+| ------------------ | ---------------- | --------------------------- |
+| xiang.sys.Ping     | 返回版本信息     | [查看](#xiang.sys.Ping)     |
+| xiang.sys.Inspect  | 返回应用系统信息 | [查看](#xiang.sys.Inspect)  |
+| xiang.sys.Print    | 在控制台打印数据 | [查看](#xiang.sys.Print)    |
+| xiang.env.Get      | 读取环境变量     | [查看](#xiang.env.Get)      |
+| xiang.env.Set      | 设置环境变量     | [查看](#xiang.env.Set)      |
+| xiang.env.MultiGet | 批量读取环境变量 | [查看](#xiang.env.MultiGet) |
+| xiang.env.MultiSet | 批量设置环境变量 | [查看](#xiang.env.MultiSet) |
+| xiang.sys.Sleep    | 延时睡眠 x 毫秒  | [查看](#xiang.env.Sleep)    |
+
+## xiang.sys.Ping
+
+返回版本信息
+
+`yao run xiang.sys.Ping`
+
+**参数表**
+
+无
+
+**返回值**
+
+```json
+{
+  "engine": "yao",
+  "version": "0.9.0"
+}
+```
+
+## xiang.sys.Inspect
+
+返回应用配置信息
+
+`yao run xiang.sys.Inspect`
+
+**参数表**
+
+无
+
+**返回值**
+
+```json
+{
+  "name": "Yao",
+  "description": "Another yao app",
+  "option": {
+    "hide_menu": false,
+    "hide_user": false,
+    "login": {
+      "entry": {
+        "admin": "/table/pet"
+      }
+    },
+    "nav_menu": "xiang.menu",
+    "nav_user": "xiang.user"
+  }
+}
+```
+
+## xiang.sys.Print
+
+在控制台打印数据
+
+`yao run xiang.sys.Print hello '::{"foo":"bar"}' world`
+
+**参数表**
+
+| 参数      | 类型 | 必填项 | 说明         |
+| --------- | ---- | ------ | ------------ |
+| args[0]   | any  | 是     | 打印的变量   |
+| args[...] | any  | 否     | 打印的变量 n |
+
+**返回值**
+
+无
+
+## xiang.env.Get
+
+读取环境变量
+
+`yao run xiang.env.Get PATH`
+
+**参数表**
+
+| 参数    | 类型   | 必填项 | 说明         |
+| ------- | ------ | ------ | ------------ |
+| args[0] | string | 是     | 环境变量名称 |
+
+**返回值**
+
+string
+
+```json
+"/usr/data/opt/bin"
+```
+
+## xiang.env.Set
+
+设置环境变量
+
+`yao run xiang.env.Set FOO BAR`
+
+**参数表**
+
+| 参数    | 类型   | 必填项 | 说明         |
+| ------- | ------ | ------ | ------------ |
+| args[0] | string | 是     | 环境变量名称 |
+| args[1] | string | 是     | 环境变量数值 |
+
+**返回值**
+
+无
+
+## xiang.env.MultiGet
+
+读取多个环境变量
+
+`yao run xiang.env.MultiGet PATH USER SHELL`
+
+**参数表**
+
+| 参数    | 类型   | 必填项 | 说明         |
+| ------- | ------ | ------ | ------------ |
+| args[0] | string | 是     | 环境变量名称 |
+
+**返回值**
+
+[key:string]string
+
+```json
+{
+  "PATH": "/usr/local/opt/bin",
+  "SHELL": "/bin/bash",
+  "USER": "max"
+}
+```
+
+## xiang.env.MultiSet
+
+设置多个环境变量
+
+`yao run xiang.env.MultiSet '::{"FOO":"BAR", "HELLO":"WORLD"}'`
+
+**参数表**
+
+| 参数    | 类型   | 必填项 | 说明         |
+| ------- | ------ | ------ | ------------ |
+| args[0] | string | 是     | 环境变量名称 |
+
+**返回值**
+
+无
+
+## xiang.sys.Sleep
+
+让程序 sleep 指定毫秒数
+
+`yao run xiang.sys.Sleep 2000`
+
+**参数表**
+
+| 参数    | 类型 | 必填项 | 说明   |
+| ------- | ---- | ------ | ------ |
+| args[0] | int  | 是     | 毫秒数 |
+
+**返回值**
+
+无

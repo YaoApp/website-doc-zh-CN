@@ -1,0 +1,23 @@
+# 数据结构
+
+## Object QueryDSL 数据结构
+
+| 字段      | 类型                      | 说明                                                                                                                                                                                                       | 必填项 |
+| --------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| select    | Array\<Field Expression\> | 选择字段列表 [查看文档](#11-选择字段-select) [Field Expression 文档](#2-字段表达式-Field-Expression)                                                                                                       | 是     |
+| from      | String                    | 查询数据表名称或数据模型 [查看文档](#12-选择数据表-from)                                                                                                                                                   | 否     |
+| wheres    | Array\<Object Where\>     | 数据查询条件 [查看文档](#13-查询条件-wheres)                                                                                                                                                               | 否     |
+| orders    | Array\<Object Order\>     | 排序条件 [查看文档](#14-排序条件-orders)                                                                                                                                                                   | 否     |
+| offset    | Int                       | 记录开始位置 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                                 | 否     |
+| limit     | Int                       | 读取数据的数量 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                               | 否     |
+| page      | Int                       | 分页查询当前页面页码 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                         | 否     |
+| pagesize  | Int                       | 每页读取记录数量 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                             | 否     |
+| data-only | Bool                      | 设定为 `true`, 查询结果为 Array\<Object Record\>; 默认为 `false`, 查询结果为 Array\<Object Paginate\>, 仅在设定 `page` 或 `pagesize`时有效。 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only) | 否     |
+| groups    | Array\<Object Group\>     | 聚合字段和统计层级设置。 [查看文档](#16-数据聚合-groups-havings)                                                                                                                                           | 否     |
+| havings   | Array\<Object Having\>    | 聚合查询结果筛选, 仅在设定 `groups` 时有效。 [查看文档](#16-数据聚合-groups-havings)                                                                                                                       | 否     |
+| unions    | Array\<Object QueryDSL\>  | 联合查询。多个查询将结果合并为一张表 [查看文档](#17-联合查询-unions)                                                                                                                                       | 否     |
+| query     | Object QueryDSL           | 子查询。按 QueryDSL 描述查询逻辑，生成一张二维数据表或数值。 [查看文档](#18-子查询-query)                                                                                                                  | 否     |
+| joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [查看文档](#19-表连接不推荐-joins)                                                                                                                       | 否     |
+| sql       | Object SQL                | SQL 语句。**非必要，勿使用**。 [查看文档](#110-sql-语句谨慎使用-sql)                                                                                                                                       | 否     |
+| comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                                                                                 | 否     |
+| withs     | Object                    | 关联关系现。                                                                                                                                                                                               | 否     |
