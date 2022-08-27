@@ -1,0 +1,128 @@
+# Task
+
+## 命名规范
+
+- 新建文件目录 `/tasks/task.js`:
+
+```json
+{
+  "name": "测试task",
+  "worker_nums": 10,
+  "attempts": 3,
+  "attempt_after": 200,
+  "timeout": 2,
+  "size": 1000,
+  "process": "scripts.task.Send",
+  "event": {
+    "next": "scripts.task.NextID",
+    "add": "scripts.task.OnAdd",
+    "success": "scripts.task.OnSuccess",
+    "error": "scripts.task.OnError",
+    "progress": "scripts.task.OnProgress"
+  }
+}
+```
+
+## DSL 结构
+
+| 参数          | 含义                   | 说明 |
+| ------------- | ---------------------- | ---- |
+| name          | 任务名称               |      |
+| worker_nums   | 指定进程数             |      |
+| attempts      | 失败重试次数           |      |
+| attempt_after | 重试间隔               |      |
+| timeout       | 超时时间               |      |
+| process       | 该 task 绑定的处理器   |      |
+| next          | 生成任务唯一 id        |      |
+| add           | 添加任务时触发的方法   |      |
+| success       | 任务处理成功后触发方法 |      |
+| error         | 任务失败后触发方法     |      |
+| progress      | 任务处理中调用         |      |
+
+新建 `scripts/task.js`
+
+```javascript
+var id = 1024;
+
+/**
+ * Generate job id
+ * @returns
+ */
+function NextID() {
+  id = id + 1;
+  console.log(`NextID: ${id}`);
+  return id;
+}
+
+function Send(id, message) {
+  console.log(message);
+}
+
+/**
+ * OnAdd add event
+ * @param {*} id
+ */
+function OnAdd(id) {
+  log.Error("进入add");
+  console.log(`OnAdd: #${id}`);
+}
+
+/**
+ * OnProgress
+ * @param {*} id
+ * @param {*} current
+ * @param {*} total
+ * @param {*} message
+ */
+function OnProgress(id, current, total, message) {
+  console.log(`OnProgress: #${id} ${message} ${current}/${total} `);
+}
+
+function OnSuccess(id, res) {
+  console.log(`OnSuccess: #${id} ${JSON.stringify(res)}`);
+}
+
+function OnError(id, err) {
+  console.log(`OnError: #${id} ${err}`);
+}
+```
+
+新建路由`apis/task.http.json`
+
+```json
+{
+  "name": "任务",
+  "version": "1.0.0",
+  "description": "任务",
+  "guard": "",
+  "group": "task",
+  "paths": [
+    {
+      "path": "/task",
+      "method": "GET",
+      "process": "scripts.test.task",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+新建测试函数 `scripts/test.js`
+
+```javascript
+function task() {
+  for (i = 1; i < 100; i++) {
+    Process("tasks.test.Add", "进入任务" + i);
+  }
+}
+```
+
+运行项目 `yao start` 访问 url `127.0.0.1:5099/api/task/task`可以看到打印信息
+
+## 处理器清单
+
+### 调用 Task 处理器`tasks.xxx.Add`

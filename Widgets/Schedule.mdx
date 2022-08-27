@@ -1,0 +1,45 @@
+# Schedule
+
+## 示例
+
+### 新建计划任务
+
+- 新建 `/schedules/test.sch.json`，定时任务的写法和 Linux 的 crontab 是一样的，代码：
+
+```json
+{
+  "name": "每分钟调用一次",
+  "schedule": "*/1 * * * *",
+  "process": "scripts.schedules.Send",
+  "args": []
+}
+```
+
+- 新建 `scripts/schedules.js`代码：
+
+```javascript
+function Send() {
+  console.log("进入定时任务！");
+}
+```
+
+执行 `yao start`等待 1 分钟后可以看到打印信息
+
+## 命名规范
+
+```json
+{
+  "name": "计划任务描述",
+  "schedule": "计划任务时间设置",
+  "process": "指定的处理器",
+  "args": []
+}
+```
+
+## DSL 结构
+
+| 字段     | 说明             |
+| -------- | ---------------- |
+| name     | 名称             |
+| schedule | 计划任务时间设置 |
+| process  | 指定的处理器     |

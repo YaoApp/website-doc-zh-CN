@@ -1,0 +1,95 @@
+# API
+
+## 示例：
+
+### 新增 `apis/select.http.json`
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "guard": "-",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+新建`flows/category.flow.json`文件:
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    },
+    {
+      "name": "类目树",
+      "process": "xiang.helper.ArrayTree",
+      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+    }
+  ],
+  "output": "{{$res.类目树}}"
+}
+```
+
+调用 `127.0.0.1/api/select/category`
+
+## 命名规范
+
+```json
+{
+  "name": "api名称",
+  "version": "1.0.0",
+  "description": "描述",
+  "guard": "-",
+  "group": "路由分组",
+  "paths": [
+    {
+      "path": "请求path",
+      "method": "请求方法",
+      "process": "指定处理器",
+      "in": ["输入参数"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+## DSL 结构
+
+| 字段          | 说明                       |
+| ------------- | -------------------------- |
+| name          | 名称                       |
+| description   | 描述                       |
+| guard         | 守卫验证，（例：是否登录） |
+| paths         | 路由列表                   |
+| paths. path   | 请求路径                   |
+| paths.method  | 请求方法                   |
+| paths.process | 请求处理器                 |
+| in            | 输入参数                   |
+| out           | 输出参数                   |
