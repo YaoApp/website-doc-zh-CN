@@ -1,1 +1,138 @@
 # 源码编译
+
+在开始前，建议首先阅读 [YAO 架构解析](../%E4%BB%8B%E7%BB%8D/YAO%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.mdx)， 了解 YAO 的源码结构。
+
+## 开发环境
+
+YAO 采用 golang 开发，可以在 Mac 或 Linux 环境中建立开发环境。
+
+| 工具   | 版本  | 说明   |
+| ------ | ----- | ------ |
+| Golang | 1.18+ | Golang |
+| MySQL  | 8.0+  | 可选   |
+
+[Golang](https://go.dev/learn/)
+
+推荐使用 Docker 安装服务
+
+[MySQL Docker 镜像](https://hub.docker.com/layers/mysql/library/mysql/8.0.26/images/sha256-882e55f40d61034a2bb8a1abab1353571ad2a33866f382350788eb34740528b5?context=explore)
+
+## 源码下载
+
+YAO 相关的代码仓库
+
+| 仓库                            | 说明               |
+| ------------------------------- | ------------------ |
+| https://github.com/yaoapp/yao   | Yao                |
+| https://github.com/yaoapp/gou   | 引擎框架           |
+| https://github.com/yaoapp/xun   | ORM                |
+| https://github.com/yaoapp/kun   | 常用数据处理包     |
+| https://github.com/rogchap/v8go | V8 JavaScirpt 引擎 |
+
+下载源码到项目目录
+
+```bash
+mkdir /your-project/root
+git clone https://github.com/yaoapp/yao
+git clone https://github.com/yaoapp/gou
+git clone https://github.com/yaoapp/xun
+git clone https://github.com/yaoapp/kun
+git clone https://github.com/rogchap/v8go
+cd v8go && chekout 5e91d3d9dcabd2986f901b6b31590e49fc3c4dd8
+```
+
+## 环境变量
+
+设置环境变量用于源码调试
+
+| 变量           | 说明                                       | 示例                              |
+| -------------- | ------------------------------------------ | --------------------------------- |
+| YAO_DEV        | 源码路径                                   | /your-project/root/yao            |
+| YAO_ENV        | 测试应用启动方式 development \| production | development                       |
+| YAO_ROOT       | 测试应用目录                               | /your-project/root/yao/tests      |
+| YAO_HOST       | 监听主机                                   | 0.0.0.0                           |
+| YAO_PORT       | 监听端口                                   | 5099                              |
+| YAO_LOG        | 测试应用日志文件                           | /your-project/root/yao/tests/logs |
+| YAO_JWT_SECRET | JWT 密钥                                   | qo-2U+hoTRU                       |
+| YAO_DB_AESKEY  | 数据库 AES KEY                             | LX=T&f6refe                       |
+
+```bash
+export YAO_DEV="/your-project/root/yao"
+export YAO_ENV="development"
+export YAO_ROOT="/your-project/root/yao/tests"
+export YAO_HOST="0.0.0.0"
+export YAO_PORT="5099"
+export YAO_LOG="/your-project/root/yao/tests/logs"
+export YAO_JWT_SECRET="qo-2U+hoTRU"
+
+# 启用 MySQL 数据库
+export YAO_DB_DRIVER=mysql
+export YAO_DB_PRIMARY="root:db-password@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"
+export YAO_DB_AESKEY="LX=T&f6refe"
+
+```
+
+## 单元测试
+
+进入 Yao 项目目录运行单元测试
+
+```bash
+cd /your-project/root/yao
+make test
+```
+
+## 运行调试
+
+使用 Go 命令调试
+
+```bash
+cd /your-project/root/yao
+go run .
+go run . run xiang.sys.ping
+go run . start
+```
+
+## 编译制品
+
+首次编译需安装相关工具
+
+```bash
+cd /your-project/root/yao
+make tools
+```
+
+编译过程中会从 https://github.com/YaoApp/xgen.git 仓库拉取代码并构建
+需提前安装 nodejs 16+
+
+### MacOS
+
+```bash
+cd /your-project/root/yao
+make release
+```
+
+制品为 `dist/release/yao`
+
+### Linux
+
+```bash
+cd /your-project/root/yao
+make linux-release
+```
+
+制品为 `dist/release/yao`
+
+### Debug 调试
+
+不集成 XGen 界面引擎
+
+```bash
+make debug
+```
+
+制品为 `dist/release/yao-debug`
+
+### Workflows
+
+https://github.com/YaoApp/yao/blob/main/.github/workflows/release-linux.yml
+https://github.com/YaoApp/yao/blob/main/.github/workflows/release-macos.yml
