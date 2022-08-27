@@ -1,5 +1,100 @@
 # 数据图表
 
+## 示例：
+
+编写一个数据看板描述文件 pet.kan.json，放置在应用的 kanban 目录中。
+
+**描述文件内容:**
+
+<Detail title="查看源码">
+
+```json
+{
+  "label": "宠物统计",
+  "version": "1.0.0",
+  "description": "宠物统计",
+  "nodes": [
+    {
+      "name": "类型汇总",
+      "engine": "xiang",
+      "query": {
+        "select": [":COUNT(id) as 数量", "kind as 类型"],
+        "groups": "类型",
+        "from": "$pet"
+      }
+    }
+  ],
+  "output": {
+    "data": {
+      "宠物类型分布": "{{$res.类型汇总}}"
+    }
+  },
+  "page": {
+    "primary": "kind",
+    "layout": {
+      "filters": [],
+      "charts": [
+        {
+          "name": "宠物类型分布",
+          "width": 24,
+          "type": "bar",
+          "props": {
+            "height": 240,
+            "x_key": "类型",
+            "axisLabel": {
+              "interval": 0,
+              "rotate": 45,
+              "textStyle": { "fontSize": 10 }
+            },
+            "tooltip": {
+              "textStyle": { "color": "#a2a5b9", "fontSize": 12 },
+              "backgroundColor": "#232326",
+              "borderRadius": 6
+            },
+            "series": [
+              {
+                "name": "数量",
+                "type": "bar",
+                "colorBy": "data",
+                "splitLine": { "show": false },
+                "label": { "show": true, "position": "top" },
+                "axisLabel": { "show": true }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+</Detail>
+
+**应用目录结构:**
+
+```bash
+├── apis        # 用于存放接口描述文件
+│   └── pet.http.json
+├── models        # 用于存放数据模型描述文件
+│   └── pet.mod.json
+├── tables        # 用于存放数据表格描述文件
+│   └── pet.tab.json
+├── kanban        # 用于存放数据看板描述文件
+│   └── pet.kan.json
+├── db
+└── ui
+└── app.json
+```
+
+**访问看板界面:**
+
+页面路由: `/xiang/kanban/<Kanban Name>`
+
+1. 在地址栏输入 `https://127.0.0.1:5099/xiang/kanban/pet`
+
+2. 建议将 `/xiang/kanban/pet` 路由添加为菜单项。
+
 ## 处理器
 
 数据看板、分析图表、数据大屏相关处理器。

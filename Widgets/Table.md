@@ -1,7 +1,15 @@
 # 数据表格
 
-编写 JSON 页面描述，将其放置在 `tables`
-目录中，即可实现一套数据列表、数据展示和数据编辑的界面。
+<blockquote>
+  编写 JSON 页面描述，将其放置在 `tables`
+  目录中，即可实现一套数据列表、数据展示和数据编辑的界面。
+</blockquote>
+
+通过类似的方式，还可以描述分析图表界面 (`charts`目录)、 数据看板界面 (
+`kanban` 目录) 和 数据大屏界面 (`screens` 目录) 。
+
+对于特殊页面，可以编写 HTML
+页面，放置在 `ui` 目录，可作为独立界面展示，亦可通过 `iframe` 嵌入管理系统。
 
 ## 示例
 
@@ -18,6 +26,7 @@
       "parent": {}
     }
   },
+  "hooks": {},
   "apis": {},
   "columns": {
     "ID": {
@@ -119,6 +128,7 @@
     "model": "绑定模型",
     "withs": {}
   },
+  "hooks": {},
   "apis": {},
   "columns": {},
   "filters": {},
@@ -171,8 +181,34 @@
 
 ## 处理器清单
 
-### 列表搜索：`xiang/table/表格名称/search`
+## 数据表格 RESTFul API
 
-### 保存/新增搜索：`xiang/table/表格名称/save`
+数据表格提供了一组 RESTFul API, 数据管理界面调用这些 API，实现数据表单增删改查等功能交互。
 
-### 删除`xiang/table/表格名称/delete`
+| API          | 请求方式 | 路由                                       | 说明                                         |
+| ------------ | -------- | ------------------------------------------ | -------------------------------------------- |
+| search       | `GET`    | `/api/xiang/table/<表格名称>/search`       | 按条件查询, 分页。                           |
+| select       | `GET`    | `/api/xiang/table/<表格名称>/select`       | 列表查询，返回 select 组件约定的数据格式。   |
+| find         | `GET`    | `/api/xiang/table/<表格名称>/find/:id`     | 按主键查询单条记录。                         |
+| save         | `POST`   | `/api/xiang/table/<表格名称>/save`         | 保存单条记录，存在主键更新，不存在主键创建。 |
+| delete       | `POST`   | `/api/xiang/table/<表格名称>/delete/:id`   | 按主键删除单条记录。                         |
+| insert       | `POST`   | `/api/xiang/table/<表格名称>/insert`       | 批量新增记录。                               |
+| delete-where | `POST`   | `/api/xiang/table/<表格名称>/delete/where` | 批量删除符合条件的记录。                     |
+| delete-in    | `POST`   | `/api/xiang/table/<表格名称>/delete/in`    | 批量删除指定一组主键的的数据记录。           |
+| update-where | `POST`   | `/api/xiang/table/<表格名称>/update/where` | 批量更新符合条件的记录。                     |
+| update-in    | `POST`   | `/api/xiang/table/<表格名称>/update/in`    | 批量更新指定一组主键的的数据记录。           |
+| quicksave    | `POST`   | `/api/xiang/table/<表格名称>/quicksave`    | 保存多条记录，存在主键更新，不存在主键创建。 |
+| setting      | `GET`    | `/api/xiang/table/<表格名称>/setting`      | 读取数据表格配置信息, 用于前端界面渲染       |
+
+## 表格还设置预处理事件，在 Hooks 对象中可加入以下预处理器
+
+### Hooks 一览表
+
+| Hook          | 说明                     | 输入                          | 输出规范                                      |
+| ------------- | ------------------------ | ----------------------------- | --------------------------------------------- |
+| before:find   | 在 Find 处理器之前调用   | Find 接口传入数据             | 输出结果作为 Find 关联处理器输入参数          |
+| after:find    | 在 Find 处理器之后调用   | Find 接口关联处理器执行结果   | 自定义(输出结果作为 Find 处理器的最终输出)    |
+| before:search | 在 Search 处理器之前调用 | Search 接口传入数据           | 输出结果作为 Search 关联处理器输入参数        |
+| after:search  | 在 Search 处理器之后调用 | Search 接口关联处理器执行结果 | 自定义 (输出结果作为 Search 处理器的最终输出) |
+| before:save   | 在 Save 处理器之前调用   | Save 接口传入数据             | 输出结果作为 Save 关联处理器输入参数          |
+| after:save    | 在 Save 处理器之后调用   | Save 接口关联处理器执行结果   | 自定义 (输出结果作为 Save 接口的最终输出)     |

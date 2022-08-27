@@ -1,8 +1,11 @@
 # API
 
+编写 API 接口 JSON 描述文件，将其放置在应用 `apis` 目录中，运行 yao start
+命令启动服务时，引擎将按接口描述的定义，生成 RESTFul API 接口。
+
 ## 示例：
 
-### 新增 `apis/select.http.json`
+### 编写一个接口描述文件 `apis/select.http.json`，指定接口路径、请求方式以及绑定的处理器，放置在应用的 `apis` 目录中。
 
 ```json
 {
@@ -82,14 +85,14 @@
 
 ## DSL 结构
 
-| 字段          | 说明                       |
-| ------------- | -------------------------- |
-| name          | 名称                       |
-| description   | 描述                       |
-| guard         | 守卫验证，（例：是否登录） |
-| paths         | 路由列表                   |
-| paths. path   | 请求路径                   |
-| paths.method  | 请求方法                   |
-| paths.process | 请求处理器                 |
-| in            | 输入参数                   |
-| out           | 输出参数                   |
+| 字段          | 说明                              |
+| ------------- | --------------------------------- |
+| name          | 名称                              |
+| description   | 描述                              |
+| guard         | 守卫验证，（例：是否登录）        |
+| paths         | 路由列表                          |
+| paths. path   | 请求路径                          |
+| paths.method  | 请求方法，GET,POST,PATCH,DELETE   |
+| paths.process | 请求处理器 JS 文件或者 flows 文件 |
+| in            | 输入参数                          |
+| out           | 输出参数                          |

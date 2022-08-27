@@ -1,5 +1,20 @@
 # Import 数据导入
 
+<blockquote>
+  <p>
+    文件导入功能，通常用于Excel表格导入。
+  </p>
+  <p>
+    使用Tables里面的数据导入组件作为处理器使用。
+  </p>
+  <p>
+    本章节介绍Excel导入功能。
+  </p>
+
+</blockquote>
+
+## 示例代码
+
 新增 models 目录文件`/models/ticket.mod.json`：
 
 ```json
@@ -275,3 +290,24 @@ function Output(data) {
   }
 }
 ```
+
+```
+
+"setting": "/api/xiang/import/ticket/setting",
+          "mapping": "/api/xiang/import/ticket/mapping",
+          "mapping_setting": "/api/xiang/import/ticket/mapping/setting",
+          "preview": "/api/xiang/import/ticket/data",
+          "preview_setting": "/api/xiang/import/ticket/data/setting",
+          "import": "/api/xiang/import/ticket"
+```
+
+## API 列表：
+
+| 接口                                         | 说明                       |
+| -------------------------------------------- | -------------------------- |
+| /api/xiang/import/<表格名称>/setting         | 获取表格的 Setting         |
+| /api/xiang/import/<表格名称>/mapping         | 获取表格的映射字段         |
+| /api/xiang/import/<表格名称>/mapping/setting | 获取表格的映射字段 setting |
+| /api/xiang/import/<表格名称>/data            | 获取数据                   |
+| /api/xiang/import/<表格名称>/data/setting    | 获取数据的 setting         |
+| /api/xiang/import/<表格名称>                 | 导入数据接口               |
