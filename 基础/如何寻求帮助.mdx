@@ -3,15 +3,102 @@
 如果您在使用中遇到问题，建议按照以下顺序寻求帮助:
 
 1. 文档搜索
-2. 在 Issues 搜索
-3. 在 Issues 提问
-4. 开发者微信交流群
+2. 查看引擎源码
+3. 在 Issues 搜索
+4. 在 Issues 提问
+5. 开发者微信交流群
 
 ## 文档搜索
 
 进入官方文档页面，点击搜索框，输入问题关键词，按回车键
 
 ![搜索图](assets/search.png)
+
+## 查看引擎源码
+
+我们尽最大可能完善相关文档，但文档中也难免有疏漏错误，一些新增加功能文档也会有所遗漏。
+
+可以通过阅读源码 [Yao](https://github.com/YaoApp/yao) 或 [Gou](https://github.com/YaoApp/gou) 的源码，查看对应使用方法。
+
+例如, 查询处理器 `xiang.helper.PasswordValidate` 的参数，可以通过阅读单元测试源码，查看参数表和返回值.
+
+[源码地址](https://github.com/YaoApp/yao/blob/main/helper/password_test.go)
+
+```go
+func TestProcessPassword(t *testing.T) {
+	pwd := "U123456p+"
+	hash := "$2a$04$TS/rWBs66jADjQl8fa.w..ivkNAjH8d4sI1OPGvEB9Leed6EpzIF2"
+	args := []interface{}{pwd, hash}
+	process := gou.NewProcess("xiang.helper.PasswordValidate", args...)
+	res := process.Run()
+	assert.True(t, res.(bool))
+
+	args = []interface{}{pwd, "123456"}
+	process = gou.NewProcess("xiang.helper.PasswordValidate", args...)
+	assert.Panics(t, func() {
+		process.Run()
+	})
+}
+```
+
+通过测试代码，可以看出处理器 `xiang.helper.PasswordValidate`
+
+参数表：
+
+| 参数    | 类型   | 示例                                                           |
+| ------- | ------ | -------------------------------------------------------------- |
+| args[0] | string | `U123456p+`                                                    |
+| args[1] | string | `$2a$04$TS/rWBs66jADjQl8fa.w..ivkNAjH8d4sI1OPGvEB9Leed6EpzIF2` |
+
+返回值:
+
+`bool` 密码正确返回 `true` , 密码错误返回 `false`
+
+### 在数据流中使用:
+
+建立一个测试数据流 `flows/validate.flow.json`
+
+```json
+{
+  "label": "Validate Test",
+  "version": "1.0.0",
+  "description": "Test",
+  "nodes": [
+    {
+      "name": "test",
+      "process": "xiang.helper.PasswordValidate",
+      "args": [
+        "{{$in.0}}",
+        "$2a$04$TS/rWBs66jADjQl8fa.w..ivkNAjH8d4sI1OPGvEB9Leed6EpzIF2"
+      ]
+    }
+  ],
+  "output": "{{$res.test}}"
+}
+```
+
+测试:
+
+```bash
+yao run flows.validate "U123456p+"
+```
+
+### 在脚本中使用
+
+建立一个测试脚本 `scripts/test.js`
+
+```javascript
+function Validate(password) {
+  let hash = "$2a$04$TS/rWBs66jADjQl8fa.w..ivkNAjH8d4sI1OPGvEB9Leed6EpzIF2";
+  return Process("xiang.helper.PasswordValidate", password, hash);
+}
+```
+
+测试:
+
+```bash
+yao run scripts.test.Validate "U123456p+"
+```
 
 ## 在 Issues 搜索
 
