@@ -38,7 +38,7 @@ function GetNow() {
 function AddMin(second) {
   var timestamp = parseInt(Date.now() / 1000) + parseInt(second);
 
-  var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  var date = new Date(timestamp * 1000);
   var Y = date.getFullYear() + "-";
   var M =
     (date.getMonth() + 1 < 10
@@ -69,7 +69,7 @@ function AddMin(second) {
  * @returns
  */
 function TimeToString(timestamp) {
-  var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  var date = new Date(timestamp * 1000);
   var Y = date.getFullYear() + "-";
   var M =
     (date.getMonth() + 1 < 10
@@ -103,11 +103,7 @@ function StringTotime(timeString) {
   return parseInt(Date.parse(timeString) / 1000);
 }
 
-/**
- * 判断是否过期:大于0说明过期,小于0说明没有过期
- * @param {*} start_time
- * @returns
- */
+
 function TimeDiff(start_time) {
   var now = parseInt(Date.now() / 1000);
   var target = parseInt(Date.parse(start_time) / 1000);
