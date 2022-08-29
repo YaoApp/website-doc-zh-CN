@@ -49,6 +49,8 @@
 
 ### 新建书籍分类表格 `tables/category.tab.json`代码:
 
+<Detail title="查看源码">
+
 ```json
 {
   "name": "分类列表",
@@ -149,55 +151,7 @@
 }
 ```
 
-## 命名规范
-
-### 每一个表格应当都包含以下结构
-
-```json
-{
-  "name": "表格标题",
-  "version": "1.0.0",
-  "decription": "表格描述",
-  "bind": {
-    "model": "绑定模型",
-    "withs": {}
-  },
-  "hooks": {},
-  "apis": {},
-  "columns": {},
-  "filters": {},
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [],
-      "filters": []
-    },
-    "actions": {
-      "pagination": { "props": { "showTotal": true } },
-      "create": {
-        "props": { "label": "添加分类" }
-      }
-    },
-    "option": { "operation": { "unfold": true } }
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": []
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": {},
-      "delete": { "type": "button", "props": { "label": "Delete" } }
-    },
-    "option": { "dev": false }
-  }
-}
-```
+</Detail>
 
 ## DSL 结构
 

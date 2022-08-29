@@ -5,26 +5,28 @@ models 目录中。使用 yao migrate 命令创建/更新数据表结构设计�
 
 ## 处理器清单
 
-| 处理器                                 | 说明                                                                       | 文档                                                                                      |
-| -------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| models.<模型名称\>.Find                | 查询单条记录                                                               | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Find.md)                |
-| models.<模型名称\>.Get                 | 按条件查询, 不分页                                                         | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Get.md)                 |
-| models.<模型名称\>.Paginate            | 按条件查询, 分页                                                           | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Paginate.md)            |
-| models.<模型名称\>.Create              | 创建单条记录, 返回新创建记录 ID                                            | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Create.md)              |
-| models.<模型名称\>.Update              | 更新单条记录                                                               | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Update.md)              |
-| models.<模型名称\>.Save                | 保存单条记录, 不存在创建记录, 存在更新记录, 返回记录 ID                    | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Save.md)                |
-| models.<模型名称\>.Delete              | 删除单条记录(标记删除)                                                     | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Delete.md)              |
-| models.<模型名称\>.Destroy             | 删除单条记录(真删除)                                                       | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Destroy.md)             |
-| models.<模型名称\>.Insert              | 插入多条记录, 返回插入行数                                                 | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/Insert.md)              |
-| models.<模型名称\>.UpdateWhere         | 按条件更新记录, 返回更新行数                                               | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/UpdateWhere.md)         |
-| models.<模型名称\>.DeleteWhere         | 按条件删除数据, 返回删除行数(标记删除)                                     | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/DeleteWhere.md)         |
-| models.<模型名称\>.DestroyWhere        | 按条件删除数据, 返回删除行数(真删除)                                       | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/DestroyWhere.md)        |
-| models.<模型名称\>.EachSave            | 保存多条记录, 不存在创建记录, 存在更新记录, 返回记录 ID 集合               | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/EachSave.md)            |
-| models.<模型名称\>.EachSaveAfterDelete | 删除一组给定 ID 的记录后，保存多条记录, 不存在创建, 存在更新, 返回 ID 集合 | [查看](https://github.com/YaoApp/docs-yao/blob/main/model/process/EachSaveAfterDelete.md) |
+| 处理器                                 | 说明                                                                       | 文档                                             |
+| -------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------ |
+| models.<模型名称\>.Find                | 查询单条记录                                                               | [查看](../处理器/process/Find.md)                |
+| models.<模型名称\>.Get                 | 按条件查询, 不分页                                                         | [查看](../处理器/process/Get.md)                 |
+| models.<模型名称\>.Paginate            | 按条件查询, 分页                                                           | [查看](../处理器/process/Paginate.md)            |
+| models.<模型名称\>.Create              | 创建单条记录, 返回新创建记录 ID                                            | [查看](../处理器/process/Create.md)              |
+| models.<模型名称\>.Update              | 更新单条记录                                                               | [查看](../处理器/process/Update.md)              |
+| models.<模型名称\>.Save                | 保存单条记录, 不存在创建记录, 存在更新记录, 返回记录 ID                    | [查看](../处理器/process/Save.md)                |
+| models.<模型名称\>.Delete              | 删除单条记录(标记删除)                                                     | [查看](../处理器/process/Delete.md)              |
+| models.<模型名称\>.Destroy             | 删除单条记录(真删除)                                                       | [查看](../处理器/process/Destroy.md)             |
+| models.<模型名称\>.Insert              | 插入多条记录, 返回插入行数                                                 | [查看](../处理器/process/Insert.md)              |
+| models.<模型名称\>.UpdateWhere         | 按条件更新记录, 返回更新行数                                               | [查看](../处理器/process/UpdateWhere.md)         |
+| models.<模型名称\>.DeleteWhere         | 按条件删除数据, 返回删除行数(标记删除)                                     | [查看](../处理器/process/DeleteWhere.md)         |
+| models.<模型名称\>.DestroyWhere        | 按条件删除数据, 返回删除行数(真删除)                                       | [查看](../处理器/process/DestroyWhere.md)        |
+| models.<模型名称\>.EachSave            | 保存多条记录, 不存在创建记录, 存在更新记录, 返回记录 ID 集合               | [查看](../处理器/process/EachSave.md)            |
+| models.<模型名称\>.EachSaveAfterDelete | 删除一组给定 ID 的记录后，保存多条记录, 不存在创建, 存在更新, 返回 ID 集合 | [查看](../处理器/process/EachSaveAfterDelete.md) |
 
 ## Widgets 为我们提供了数据模型创建 JSON 描述来创建数据库表格
 
 ### 示例，新增 `models/ccategory.mod.json`文件
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -110,31 +112,14 @@ models 目录中。使用 yao migrate 命令创建/更新数据表结构设计�
 }
 ```
 
+</Detail>
+
 <Notice type="success">
   提示：<strong>option.timestamps</strong> 为 true, 自动创建
   <strong>created_at</strong> 和 <strong>updated_at</strong> 字段, 用于保存数据记录的创建时间和更新时间。
   <strong>option.soft_deletes</strong> 为 true, 自动创建
   <strong>deleted_at</strong> 字段, 用于标记删除记录。
 </Notice>
-
-## 命名规范
-
-```json
-{
-  "name": "数据表名称",
-  "table": {
-    "name": "数据库表名",
-    "comment": "备注"
-  },
-  "columns": [],
-  "relations": {},
-  "option": {
-    "timestamps": true,
-    "soft_deletes": true
-  },
-  "values": []
-}
-```
 
 数据迁移执行 `yao migrate -n XXX`，比如这个模型应该执行 `yao migrate -n category`
 
