@@ -2,7 +2,7 @@
 
 YAO 集成了众多的 Http 请求，通过 network 处理器，快速请求各种 URL。
 
-## 处理器列表
+## 网络请求包含处理器列表
 
 | 处理器                 | 说明                                          |
 | ---------------------- | --------------------------------------------- |
@@ -18,36 +18,36 @@ YAO 集成了众多的 Http 请求，通过 network 处理器，快速请求各�
 
 发送 GET 请求示例：`xiang.network.Get`
 
-```json
-  var response = Process("xiang.network.Get", url, params, {
-    "Content-Type": "application/json",
-    "Auth": "token",
-  });
+```javascript
+var response = Process("xiang.network.Get", url, params, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
 ```
 
 发送 POST 请求示例：`xiang.network.PostJSON`
 
-```json
-    let response = Process("xiang.network.PostJSON", url, data, {
-    "Content-Type": "application/json",
-    "Auth": "token",
-  });
+```javascript
+let response = Process("xiang.network.PostJSON", url, data, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
 ```
 
 发送 PATCH 请求示例：`xiang.network.Send`
 
-```json
-   let response = Process("xiang.network.Send", "PATCH", url, {}, body, {
-     "Content-Type": "application/json",
-    "Auth": "token",
-  });
+```javascript
+let response = Process("xiang.network.Send", "PATCH", url, {}, body, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
 ```
 
 发送 DELETTE 请求示例：`xiang.network.Send`
 
-```json
-    let response = Process("xiang.network.Send", "DELETE", url, {}, body, {
-    "Content-Type": "application/json",
-    "Auth": "token",
-  });
+```javascript
+let response = Process("xiang.network.Send", "DELETE", url, {}, body, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
 ```

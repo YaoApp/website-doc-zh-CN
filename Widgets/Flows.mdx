@@ -18,6 +18,8 @@
 
 新建`models/category.mod.json`写入以下代码:
 
+<Detail title="查看源码">
+
 ```json
 {
   "name": "物料分类",
@@ -66,9 +68,13 @@
 }
 ```
 
+</Detail>
+
 执行命令 `yao migrate -n category`在数据库中可以看到生成了对应的数据表和数据
 
 编写`flows/category.flow.json`写入以下代码:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -95,6 +101,8 @@
   "output": "{{$res.类目树}}"
 }
 ```
+
+</Detail>
 
 执行`yao run flows.category`可以看到控制台有以下输出:
 

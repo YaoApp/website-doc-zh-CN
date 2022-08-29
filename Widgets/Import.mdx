@@ -13,9 +13,33 @@
 
 </blockquote>
 
+## API 列表：
+
+| 接口                                         | 说明                       |
+| -------------------------------------------- | -------------------------- |
+| /api/xiang/import/<表格名称>/setting         | 获取表格的 Setting         |
+| /api/xiang/import/<表格名称>/mapping         | 获取表格的映射字段         |
+| /api/xiang/import/<表格名称>/mapping/setting | 获取表格的映射字段 setting |
+| /api/xiang/import/<表格名称>/data            | 获取数据                   |
+| /api/xiang/import/<表格名称>/data/setting    | 获取数据的 setting         |
+| /api/xiang/import/<表格名称>                 | 导入数据接口               |
+
+```json
+{
+  "setting": "/api/xiang/import/ticket/setting",
+  "mapping": "/api/xiang/import/ticket/mapping",
+  "mapping_setting": "/api/xiang/import/ticket/mapping/setting",
+  "preview": "/api/xiang/import/ticket/data",
+  "preview_setting": "/api/xiang/import/ticket/data/setting",
+  "import": "/api/xiang/import/ticket"
+}
+```
+
 ## 示例代码
 
 新增 models 目录文件`/models/ticket.mod.json`：
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -65,7 +89,11 @@
 }
 ```
 
+</Detail>
+
 新增 table 目录文件`/tables/ticket.tab.json`：
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -103,6 +131,8 @@
 }
 ```
 
+</Detail>
+
 导入 Excel 文件，新增目录文件`/imports/ticket.imp.json`：
 
 ````
@@ -130,6 +160,8 @@
 ````
 
 编写代码`ticket.imp.json`：
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -173,6 +205,8 @@
   "rules": {}
 }
 ```
+
+</Detail>
 
 编写代码`/scripts/imports/ticket.js`：
 
@@ -244,6 +278,8 @@ function Output(data) {
 
 #### 请求参数示例
 
+<Detail title="查看源码">
+
 ```json
 {
   "file": "20220407/BB9DDF196D0B5DF9319EA8ADB5C914D3.xlsx",
@@ -291,23 +327,4 @@ function Output(data) {
 }
 ```
 
-```
-
-"setting": "/api/xiang/import/ticket/setting",
-          "mapping": "/api/xiang/import/ticket/mapping",
-          "mapping_setting": "/api/xiang/import/ticket/mapping/setting",
-          "preview": "/api/xiang/import/ticket/data",
-          "preview_setting": "/api/xiang/import/ticket/data/setting",
-          "import": "/api/xiang/import/ticket"
-```
-
-## API 列表：
-
-| 接口                                         | 说明                       |
-| -------------------------------------------- | -------------------------- |
-| /api/xiang/import/<表格名称>/setting         | 获取表格的 Setting         |
-| /api/xiang/import/<表格名称>/mapping         | 获取表格的映射字段         |
-| /api/xiang/import/<表格名称>/mapping/setting | 获取表格的映射字段 setting |
-| /api/xiang/import/<表格名称>/data            | 获取数据                   |
-| /api/xiang/import/<表格名称>/data/setting    | 获取数据的 setting         |
-| /api/xiang/import/<表格名称>                 | 导入数据接口               |
+</Detail>

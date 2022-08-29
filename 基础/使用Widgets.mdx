@@ -18,6 +18,8 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 
 ### 新增`models/ccategory.mod.json`文件,写入以下内容:
 
+<Detail title="查看源码">
+
 ```json
 {
   "name": "书籍分类",
@@ -102,11 +104,15 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 }
 ```
 
+</Detail>
+
 使用 `yao migrate -n category`迁移数据表文件
 
 ## Widget 表格
 
 新建分类表格 `tables/category.tab.json`代码:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -207,6 +213,8 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 }
 ```
 
+</Detail>
+
 ## Widget 处理器
 
 新建`flows/category.flow.json`
@@ -304,6 +312,8 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 
 新建 `scripts/task.js`
 
+<Detail title="查看源码">
+
 ```javascript
 var id = 1024;
 
@@ -349,6 +359,8 @@ function OnError(id, err) {
   console.log(`OnError: #${id} ${err}`);
 }
 ```
+
+</Detail>
 
 新建路由`apis/task.http.json`
 

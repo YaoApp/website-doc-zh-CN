@@ -42,7 +42,9 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 
 ## 新建模型
 
-- 新增`models/ccategory.mod.json`文件,写入以下内容:
+### 新增`models/ccategory.mod.json`文件,写入以下内容:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -128,7 +130,11 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 }
 ```
 
-- 新增 `models/book.mod.json`模型文件,并且关联模型分类`category`:
+</Detail>
+
+### 新增 `models/book.mod.json`模型文件,并且关联模型分类`category`:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -227,7 +233,9 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 }
 ```
 
-- 执行`yao migrate`命令迁移数据表,出现以下结果,并且可以在数据库中看到对应数据表:
+</Detail>
+
+### 执行`yao migrate`命令迁移数据表,出现以下结果,并且可以在数据库中看到对应数据表:
 
 ```json
 Update schema model: category (category)
@@ -241,7 +249,9 @@ Update schema model: book (book)
 
 ## 菜单配置
 
-- 接下来初始化一下菜单,新建`/flows/menu.flow.json`:
+### 接下来初始化一下菜单,新建`/flows/menu.flow.json`:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -302,7 +312,9 @@ Update schema model: book (book)
 }
 ```
 
-- 执行命令 `yao run flows.menu`出现以下结果,并且可以在数据库中看到对应数据表:
+</Detail>
+
+### 执行命令 `yao run flows.menu`出现以下结果,并且可以在数据库中看到对应数据表:
 
 ```json
 Run: flows.menu
@@ -315,7 +327,7 @@ flows.menu Response
 
 ```
 
-- 修改`/app.json`文件中的内容`"admin": "/table/book"`,把登录后第一个显示的菜单改为书籍列表:
+### 修改`/app.json`文件中的内容`"admin": "/table/book"`,把登录后第一个显示的菜单改为书籍列表:
 
 ```json
 {
@@ -338,7 +350,9 @@ flows.menu Response
 
 ## 新建表格
 
-- 新建 `tables/book.tab.json`代码如下:
+### 新建 `tables/book.tab.json`代码如下:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -488,7 +502,9 @@ flows.menu Response
 }
 ```
 
-- 这时候执行 `yao start`可以看到项目已经开始运行:
+</Detail>
+
+### 执行 `yao start`可以看到项目已经开始运行:
 
 ```json
 WebSocket(0)
@@ -511,12 +527,14 @@ Watching: /mnt/shared/test/flows
 Watching: /mnt/shared/test/tables
 ```
 
-- 我们打开浏览器访问:`http://127.0.0.1:5099/xiang/login/admin`
+打开浏览器访问:`http://127.0.0.1:5099/xiang/login/admin`
 
 输入默认账号 `xiang@iqka.com` 和密码`A123456p+`登录到后台可以看到书籍列表效果图:
 ![书籍列表](assets/overview-search.png)
 
-新建书籍分类表格 `tables/category.tab.json`代码:
+### 新建书籍分类表格 `tables/category.tab.json`代码:
+
+<Detail title="查看源码">
 
 ```json
 {
@@ -617,6 +635,8 @@ Watching: /mnt/shared/test/tables
 }
 ```
 
+</Detail>
+
 在命令行使用 `ctrl+C`停止 Yao 的服务,然后执行 `yao start`重启服务,打开浏览器刷新一下页面,点击分类菜单:
 ![分类](assets/overview-category.png)
 
@@ -677,6 +697,8 @@ Watching: /mnt/shared/test/tables
 ```
 
 修改 `tables/book.tab.json`的 columns 分类组件，并且调整一下表单和添加页面的布局:
+
+<Detail title="查看源码">
 
 ```json
 ...
@@ -751,10 +773,12 @@ Watching: /mnt/shared/test/tables
 
 ```
 
+</Detail>
+
 停止服务,然后重启服务,刷新一下页面,可以看到如下效果图：
 
 ![分类](assets/overview-category-select.png)
 
 ## 作业
 
-- 把分类下来也改成树形下拉结构
+### 把分类下来也改成树形下拉结构
