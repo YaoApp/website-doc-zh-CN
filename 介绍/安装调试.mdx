@@ -2,7 +2,11 @@
 
 <blockquote>
 
+<<<<<<< HEAD
+本章节介绍如何在本地建立 Yao 开发调试环境。生产环境使用，请参考 <a href="../部署/介绍">部署</a> 文档。
+=======
 本章节介绍如何在本地建立 Yao 开发调试环境。生产环境使用，请参考 <a href="../g.部署">部署</a> 文档。
+>>>>>>> origin/v0.10.1
 
 </blockquote>
 
@@ -23,7 +27,11 @@ curl -fsSL https://website.yaoapps.com/install.sh | bash
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
 
+<<<<<<< HEAD
 2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.9.2-amd64-dev`
+=======
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.1-amd64-dev`
+>>>>>>> origin/v0.10.1
 
 进入容器:
 
@@ -39,12 +47,21 @@ yao version
 
 **Yao Docker Images**
 
+<<<<<<< HEAD
 | 镜像                       | 环境     | 使用场景                                                   |
 | -------------------------- | -------- | ---------------------------------------------------------- |
 | yaoapp/yao:0.9.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 | yaoapp/yao:0.9.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
 | yaoapp/yao:0.9.2-amd64     | 生产环境 | 适用于云端部署                                             |
 | yaoapp/yao:0.9.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+=======
+| 镜像                        | 环境     | 使用场景                                                   |
+| --------------------------- | -------- | ---------------------------------------------------------- |
+| yaoapp/yao:0.10.1-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| yaoapp/yao:0.10.1-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.1-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.1-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+>>>>>>> origin/v0.10.1
 
 </TabPane>
 
@@ -52,7 +69,11 @@ yao version
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
 
+<<<<<<< HEAD
 2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.9.2-amd64-dev`
+=======
+2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.1-amd64-dev`
+>>>>>>> origin/v0.10.1
 
 进入容器:
 
@@ -68,12 +89,21 @@ yao version
 
 **Yao Docker Images**
 
+<<<<<<< HEAD
 | 镜像                       | 环境     | 使用场景                                                   |
 | -------------------------- | -------- | ---------------------------------------------------------- |
 | yaoapp/yao:0.9.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 | yaoapp/yao:0.9.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
 | yaoapp/yao:0.9.2-amd64     | 生产环境 | 适用于云端部署                                             |
 | yaoapp/yao:0.9.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+=======
+| 镜像                        | 环境     | 使用场景                                                   |
+| --------------------------- | -------- | ---------------------------------------------------------- |
+| yaoapp/yao:0.10.1-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| yaoapp/yao:0.10.1-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.1-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.1-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+>>>>>>> origin/v0.10.1
 
 </TabPane>
 
@@ -174,10 +204,19 @@ YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
 <Extend
   title="创建数据模型"
   desc="了解如何创建模型，存储数据到数据库"
+<<<<<<< HEAD
   link="b.基础特性/a.创建数据模型"
 ></Extend>
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="入门指南" link="a.介绍/a.入门指南"></Link>
   <Link type="next" title="为什么选择Yao" link="a.介绍/c.为什么选择Yao"></Link>
+=======
+  link="../基础/数据模型"
+></Extend>
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link type="prev" title="入门指南" link="入门指南"></Link>
+  <Link type="next" title="为什么选择Yao" link="为什么选择Yao"></Link>
+>>>>>>> origin/v0.10.1
 </Div>

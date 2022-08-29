@@ -1,10 +1,9 @@
 # 入门指南
 
 <blockquote>
-  Yao 是一款 <strong>Go</strong> 语言驱动的低代码应用引擎，通过编写 JSON
-  描述即可快速制作 <strong>API 接口</strong>，<strong>数据管理系统</strong> ，
-  <strong>命令行工具</strong>
-  等应用程序，应用可以运行在本地、云端和物联网设备上。
+  YAO 是一款开源应用引擎，使用 Golang
+  编写，仅一个命令行工具,下载即用。适合用于开发业务系统、网站/APP API
+  接口、管理后台、自建低代码平台等。
 </blockquote>
 
 ## 介绍
@@ -30,11 +29,9 @@ Yao 的名字源于汉字**爻(yáo)**，是构成八卦的基本符号。八卦
   </a>
 </Button>
 
-<Button>
-  <a href="https://github.com/yaoapp/demo-crm" target="_blank">
-    源码
-  </a>
-</Button>
+GitHub: https://github.com/YaoApp/demo-crm
+
+Infra 一键部署: https://letsinfra.com/openapp/crm
 
 ### 智能仓库管理系统
 
@@ -49,11 +46,9 @@ Yao 的名字源于汉字**爻(yáo)**，是构成八卦的基本符号。八卦
   </a>
 </Button>
 
-<Button>
-  <a href="https://github.com/yaoapp/demo-wms" target="_blank">
-    源码
-  </a>
-</Button>
+GitHub: https://github.com/YaoApp/yao-wms
+
+Infra 一键部署: https://letsinfra.com/openapp/wms
 
 ## 起步
 
@@ -62,6 +57,8 @@ Yao 的名字源于汉字**爻(yáo)**，是构成八卦的基本符号。八卦
   API、关系型数据库的基本概念和常识，并可以使用常见终端命令。
   如需处理非常复杂的业务逻辑，则需要掌握 JavaScript 语言。
 </Notice>
+
+参考文档: [YAO 编程基础](../基础/YAO%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80.mdx)
 
 ### 准备: 安装 Yao
 
@@ -76,7 +73,7 @@ windows 用户请参考安装调试章节:
 <Extend
   title="安装调试"
   desc="了解如何在本地建立Yao开发调试环境"
-  link="a.介绍/b.安装调试"
+  link="安装调试"
 ></Extend>
 
 ### 第一步: 创建项目
@@ -116,9 +113,13 @@ yao run flows.setmenu
 扩展阅读:
 
 <Extend
-  title="创建数据模型"
-  desc="了解如何使用 Yao 创建数据表存储数据"
-  link="b.基础特性/a.创建数据模型"
+  title="使用Widgets"
+  desc="了解如何使用 Yao Model Widget 创建数据表存储数据"
+<<<<<<< HEAD
+  link="基础/使用Widgets"
+=======
+  link="../基础/使用Widgets"
+>>>>>>> origin/v0.10.1
 ></Extend>
 
 ### 第三步: 启动服务
@@ -138,17 +139,11 @@ yao start
 接下来，建议学习以下章节:
 
 <Extend
-  title="创建数据模型"
-  desc="了解如何使用 Yao 创建数据表存储数据"
-  link="b.基础特性/a.创建数据模型"
-></Extend>
-
-<Extend
   title="为什么选择Yao"
   desc="了解 Yao 的一些特性和对比其他开发方式的优势"
-  link="a.介绍/c.为什么选择Yao"
+  link="为什么选择Yao"
 ></Extend>
 
 <Div style={{ display: "flex", justifyContent: "right" }}>
-  <Link type="next" title="安装调试" link="a.介绍/b.安装调试"></Link>
+  <Link type="next" title="安装调试" link="安装调试"></Link>
 </Div>

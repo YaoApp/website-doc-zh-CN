@@ -1,0 +1,169 @@
+# 编写处理器
+
+## 处理器分为两种:`flows` 处理器和 `scripts` 处理器
+
+#### 编写`flows`处理器示例代码:
+
+新建`models/category.mod.json`写入以下代码:
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "物料分类",
+  "table": {
+    "name": "category",
+    "comment": "物料分类"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID",
+      "primary": true
+    },
+    {
+      "label": "父级id",
+      "name": "parent_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "label": "分类名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    }
+  ],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "parent_id": null,
+      "name": "一级分类"
+    },
+    {
+      "id": 2,
+      "parent_id": 1,
+      "name": "二级分类"
+    }
+  ]
+}
+```
+
+</Detail>
+
+执行命令 `yao migrate -n category`在数据库中可以看到生成了对应的数据表和数据
+
+编写`flows/category.flow.json`写入以下代码:
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    },
+    {
+      "name": "类目树",
+      "process": "xiang.helper.ArrayTree",
+      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+    }
+  ],
+  "output": "{{$res.类目树}}"
+}
+```
+
+执行`yao run flows.category`可以看到控制台有以下输出:
+
+```json
+[
+  {
+    "children": [
+      {
+        "children": [],
+        "id": 2,
+        "label": "二级分类",
+        "name": "二级分类",
+        "parent_id": 1,
+        "value": 2
+      }
+    ],
+    "id": 1,
+    "label": "一级分类",
+    "name": "一级分类",
+    "parent_id": null,
+    "value": 1
+  }
+]
+```
+
+#### 编写`scripts`处理器示例代码:
+
+新建 `scripts/category.js`:
+
+```javascript
+function category() {
+  var data = Process("models.category.get", {
+    wheres: [{ column: "parent_id", value: null }],
+  });
+  return data;
+}
+
+// 在JS中调用其他的处理器,调用上面的category方法
+function getData() {
+  return Process("scripts.category.category");
+}
+```
+
+运行命令行调用 `yao run scripts.category.category`等价于 `yao run scripts.category.getData`
+
+#### 编写表格预处理器，使用 Hooks
+
+可以使用 Hooks 处理表格 API 输入输出数据。Hook 分为 `before` 和 `after` 两类， before hook，在 API 调用前运行，可以用来处理传入参数，after hook，在 API 调用后运行，可用来处理查询结果。
+
+在描述数据表格时，在 `hooks` 字段，声明 **Hook 关联的处理器**，例如：
+
+```json
+{
+  "name": "类目",
+  "version": "1.0.0",
+  "decription": "类目",
+  "bind": { "model": "category" },
+  "hooks": {
+    "before:find": "flows.hooks.before_find",
+    "after:find": "flows.hooks.after_find",
+    "before:search": "flows.hooks.before_search",
+    "after:search": "flows.hooks.after_search",
+    "before:save": "flows.hooks.before_save",
+    "after:save": "flows.hooks.after_save"
+  },
+  "apis": {},
+  "columns": {}
+}
+```
+
+### Hooks 一览表
+
+| Hook          | 说明                     | 输入                          | 输出规范                                      |
+| ------------- | ------------------------ | ----------------------------- | --------------------------------------------- |
+| before:find   | 在 Find 处理器之前调用   | Find 接口传入数据             | 输出结果作为 Find 关联处理器输入参数          |
+| after:find    | 在 Find 处理器之后调用   | Find 接口关联处理器执行结果   | 自定义(输出结果作为 Find 处理器的最终输出)    |
+| before:search | 在 Search 处理器之前调用 | Search 接口传入数据           | 输出结果作为 Search 关联处理器输入参数        |
+| after:search  | 在 Search 处理器之后调用 | Search 接口关联处理器执行结果 | 自定义 (输出结果作为 Search 处理器的最终输出) |
+| before:save   | 在 Save 处理器之前调用   | Save 接口传入数据             | 输出结果作为 Save 关联处理器输入参数          |
+| after:save    | 在 Save 处理器之后调用   | Save 接口关联处理器执行结果   | 自定义 (输出结果作为 Save 接口的最终输出)     |
