@@ -1,0 +1,54 @@
+# 数据导出
+
+导出 Excel 操作，新建路由文件：`/apis/utils.http.json`代码如下：
+
+```json
+{
+  "name": "下载Excel",
+  "version": "1.0.0",
+  "description": "下载Excel",
+  "group": "utils",
+  "guard": "-",
+  "paths": [
+    {
+      "guard": "-",
+      "path": "/export/:name",
+      "method": "GET",
+      "process": "flows.utils.export",
+      "in": ["$param.name"],
+      "out": {
+        "status": 200,
+        "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "headers": {
+          "Content-Disposition": "attachment;filename=导出数据.xlsx"
+        }
+      }
+    }
+  ]
+}
+```
+
+新建文件：`/flows/utils/export.flow.json`代码如下：
+
+```json
+{
+  "label": "下载",
+  "version": "1.0.0",
+  "description": "下载",
+  "nodes": [
+    {
+      "name": "文件",
+      "process": "xiang.table.Export",
+      "args": ["{{$in.0}}", {}, 20]
+    },
+    {
+      "name": "数据",
+      "process": "xiang.fs.ReadFile",
+      "args": ["{{$res.文件}}", false]
+    }
+  ],
+  "output": "{{$res.数据.content}}"
+}
+```
+
+假如有一个表格名字叫：`/tables/pet.tab.json`，导出表格的列表数据只需要请求：`/utils/export/pet`

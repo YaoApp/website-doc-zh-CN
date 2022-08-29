@@ -1,0 +1,237 @@
+# 编写第三方插件
+
+<blockquote>
+  Yao 支持多种语言编写插件，本章节以 Golang 为例，介绍插件编写和使用方法。
+</blockquote>
+
+## 编写插件
+
+新建一个 `feishu.go`，实现飞书登录逻辑。
+
+<Detail title="查看源码">
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"os"
+
+	jsoniter "github.com/json-iterator/go"
+	"github.com/yaoapp/kun/any"
+	"github.com/yaoapp/kun/grpc"
+)
+
+// Feishu
+type Feishu struct{ grpc.Plugin }
+
+const appid = "cli_a107a"
+const secret = "uRzTSIxWXuA3MqX"
+
+// Exec 读取
+func (feishu *Feishu) Exec(name string, args ...interface{}) (*grpc.Response, error) {
+	var v interface{}
+
+	switch name {
+	case "authurl":
+		if len(args) < 1 {
+			v = map[string]interface{}{"code": 400, "message": "缺少回调地址参数", "args": args}
+			break
+		}
+		if len(args) < 2 {
+			v = map[string]interface{}{"code": 400, "message": "缺少回调状态参数", "args": args}
+			break
+		}
+		url, ok := args[0].(string)
+		if !ok {
+			v = map[string]interface{}{"code": 400, "message": "回调地址数据类型错误", "args": args}
+		}
+
+		state, ok := args[1].(string)
+		if !ok {
+			v = map[string]interface{}{"code": 400, "message": "状态参数数据类型错误", "args": args}
+		}
+		v = AuthURL(url, state)
+		break
+
+	case "authback":
+		if len(args) < 1 {
+			v = map[string]interface{}{"code": 400, "message": "缺少预授权码参数", "args": args}
+			break
+		}
+		if len(args) < 2 {
+			v = map[string]interface{}{"code": 400, "message": "缺少回调状态参数", "args": args}
+			break
+		}
+
+		code, ok := args[0].(string)
+		if !ok {
+			v = map[string]interface{}{"code": 400, "message": "预授权码数据类型错误", "args": args}
+		}
+
+		state, ok := args[1].(string)
+		if !ok {
+			v = map[string]interface{}{"code": 400, "message": "状态参数数据类型错误", "args": args}
+		}
+
+		v = AuthBack(code, state)
+		break
+
+	default:
+		v = map[string]interface{}{"name": name, "args": args}
+	}
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	return &grpc.Response{Bytes: bytes, Type: "map"}, nil
+}
+
+func main() {
+	var output io.Writer = os.Stdout
+	plugin := &Feishu{}
+	plugin.SetLogger(output, grpc.Trace)
+	grpc.Serve(plugin)
+}
+
+// AuthURL 登录地址
+func AuthURL(redirect string, state string) map[string]interface{} {
+	api := fmt.Sprintf(
+		"https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=%s&app_id=%s&state=%s",
+		url.QueryEscape(redirect),
+		appid,
+		state,
+	)
+	return map[string]interface{}{"url": api}
+}
+
+// AuthBack 请求回调
+func AuthBack(code string, state string) map[string]interface{} {
+	data, err := userToken(code)
+	if err != nil {
+		return map[string]interface{}{"code": 400, "message": err.Error()}
+	}
+	return data
+}
+
+func appToken() (string, error) {
+	body, err := jsoniter.Marshal(map[string]interface{}{
+		"app_id":     appid,
+		"app_secret": secret,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	url := "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+
+	resp, err := (&http.Client{}).Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body) // response body is []byte
+	if err != nil {
+		return "", err
+	}
+
+	res := map[string]interface{}{}
+	err = jsoniter.Unmarshal(body, &res)
+	if err != nil {
+		return "", err
+	}
+
+	if res["msg"] != "ok" {
+		return "", fmt.Errorf("tenant_access_token 接口返回失败 %s", res["msg"])
+	}
+
+	return res["tenant_access_token"].(string), nil
+
+}
+
+// Post 发起请求
+func userToken(code string) (map[string]interface{}, error) {
+
+	content, err := jsoniter.Marshal(map[string]interface{}{
+		"grant_type": "authorization_code",
+		"code":       code,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	url := "https://open.feishu.cn/open-apis/authen/v1/access_token"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(content))
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := appToken()
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+
+	resp, err := (&http.Client{}).Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body) // response body is []byte
+
+	res := map[string]interface{}{}
+	err = jsoniter.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	if res["msg"] != "success" {
+		return nil, fmt.Errorf("access_token 接口返回失败 %s", res["msg"])
+	}
+
+	return any.Of(res["data"]).MapStr(), nil
+}
+```
+
+</Detail>
+
+**编译制品**
+
+```bash
+go build -o ./feishu.so .
+chmod +x ./feishu.so
+```
+
+## 使用插件
+
+将插件制品 `feishu.so` 复制到应用 `plugins` 目录
+
+**运行调试**
+
+```bash
+yao run plugins.feishu.AuthURL "https://127.0.0.1:5099/xiang/login/user?from=feishu" "login"
+```
+
+## 推荐阅读
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link
+    type="prev"
+    title="复用JSON描述"
+    link="c.高级特性/h.复用JSON描述"
+  ></Link>
+  <Link type="next" title="使用缓存" link="c.高级特性/j.使用缓存"></Link>
+</Div>

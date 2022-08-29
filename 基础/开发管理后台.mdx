@@ -1,0 +1,784 @@
+# 本章节开发一个图书管理系统
+
+## 讲在前面:在学习本教程之前,默认您已经搭建好开发环境的
+
+## 开始项目
+
+初始化项目 `yao init`此时的目录结构为:
+
+```
+
+├─apis
+├─data
+├─db
+├─flows
+├─libs
+├─logs
+├─models
+├─scripts
+├─tables
+├─ui
+└─yao
+    └─icons
+```
+
+## 项目配置
+
+- 配置数据库文件 `.env`文件:
+
+```
+# 数据库配置
+
+YAO_DB_AESKEY="KBPdcRn44LzykphsVM\*y"
+YAO_DB_DRIVER=mysql
+YAO_DB_PRIMARY="root:123456@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local" # 主库连接
+YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parseTime=True&loc=Local" # 主库连接
+
+```
+
+数据库字段含义:`YAO_DB_PRIMARY=用户名:密码@tcp(数据库ip:端口)/数据库名??charset=utf8mb4&parseTime=True&loc=Local`
+
+配置修改完成后执行 `yao migrate`看看是否报错,要是没有报错说明连接成功!
+
+## 新建模型
+
+### 新增`models/ccategory.mod.json`文件,写入以下内容:
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "书籍分类",
+  "table": {
+    "name": "category",
+    "comment": "书籍分类"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID",
+      "primary": true
+    },
+    {
+      "label": "父级id",
+      "name": "parent_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "label": "分类名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    }
+  ],
+  "relations": {
+    "book": {
+      "type": "hasMany",
+      "model": "book",
+      "key": "category_id",
+      "foreign": "id",
+      "query": {}
+    },
+    "parent": {
+      "type": "hasOne",
+      "model": "category",
+      "key": "id",
+      "foreign": "parent_id",
+      "query": {}
+    }
+  },
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "parent_id": null,
+      "name": "文史类"
+    },
+    {
+      "id": 2,
+      "parent_id": 1,
+      "name": "历史"
+    },
+    {
+      "id": 3,
+      "parent_id": 1,
+      "name": "古诗"
+    },
+    {
+      "id": 4,
+      "parent_id": null,
+      "name": "理工类"
+    },
+    {
+      "id": 5,
+      "parent_id": 4,
+      "name": "数学"
+    },
+    {
+      "id": 6,
+      "parent_id": 4,
+      "name": "物理"
+    }
+  ]
+}
+```
+
+</Detail>
+
+### 新增 `models/book.mod.json`模型文件,并且关联模型分类`category`:
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "书籍",
+  "table": {
+    "name": "book",
+    "comment": "书籍"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID",
+      "primary": true
+    },
+    {
+      "label": "分类id",
+      "name": "category_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "label": "书籍名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    },
+    {
+      "label": "作者",
+      "name": "author",
+      "type": "string",
+      "index": true
+    },
+    {
+      "label": "出版社",
+      "name": "press",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "label": "价格",
+      "name": "price",
+      "type": "decimal",
+      "default": 0
+    }
+  ],
+  "relations": {
+    "category": {
+      "type": "hasOne",
+      "model": "category",
+      "key": "id",
+      "foreign": "category_id",
+      "query": {}
+    }
+  },
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "category_id": 2,
+      "name": "《世界历史》",
+      "author": "张XX,李XX",
+      "press": "XXX出版社",
+      "price": 79
+    },
+    {
+      "id": 2,
+      "category_id": 2,
+      "name": "《时间简史》",
+      "author": "斯蒂芬·威廉·霍金",
+      "press": "XXX出版社",
+      "price": 99
+    },
+    {
+      "id": 3,
+      "category_id": 5,
+      "name": "《小学数学》",
+      "author": "王XX",
+      "press": "XXX出版社",
+      "price": 39
+    },
+    {
+      "id": 4,
+      "category_id": 5,
+      "name": "《高中必修一》",
+      "author": "王XX",
+      "press": "XXX出版社",
+      "price": 60
+    }
+  ]
+}
+```
+
+</Detail>
+
+### 执行`yao migrate`命令迁移数据表,出现以下结果,并且可以在数据库中看到对应数据表:
+
+```json
+Update schema model: category (category)
+Update schema model: xiang.user (xiang_user)
+Update schema model: xiang.menu (xiang_menu)
+Update schema model: xiang.workflow (xiang_workflow)
+Update schema model: book (book)
+✨DONE✨
+
+```
+
+## 菜单配置
+
+### 接下来初始化一下菜单,新建`/flows/menu.flow.json`:
+
+<Detail title="查看源码">
+
+```json
+{
+  "label": "System Menu",
+  "version": "1.0.0",
+  "description": "Initialize system menu",
+  "nodes": [
+    {
+      "name": "Clean menu data",
+      "engine": "xiang",
+      "query": {
+        "sql": { "stmt": "delete from xiang_menu" }
+      }
+    },
+    {
+      "name": "Add new menu",
+      "process": "models.xiang.menu.Insert",
+      "args": [
+        [
+          "id",
+          "name",
+          "path",
+          "icon",
+          "rank",
+          "status",
+          "parent",
+          "visible_menu",
+          "blocks"
+        ],
+        [
+          [
+            1,
+            "分类管理",
+            "/table/category",
+            "icon-grid",
+            1,
+            "enabled",
+            null,
+            0,
+            0
+          ],
+          [
+            2,
+            "书籍列表",
+            "/table/book",
+            "icon-database",
+            1,
+            "enabled",
+            null,
+            1,
+            0
+          ]
+        ]
+      ]
+    }
+  ],
+  "output": "done"
+}
+```
+
+</Detail>
+
+### 执行命令 `yao run flows.menu`出现以下结果,并且可以在数据库中看到对应数据表:
+
+```json
+Run: flows.menu
+--------------------------------------
+flows.menu Response
+--------------------------------------
+"done"
+--------------------------------------
+✨DONE✨
+
+```
+
+### 修改`/app.json`文件中的内容`"admin": "/table/book"`,把登录后第一个显示的菜单改为书籍列表:
+
+```json
+{
+  "name": "Yao",
+  "short": "Yao",
+  "description": "Another yao app",
+  "option": {
+    "nav_user": "xiang.user",
+    "nav_menu": "xiang.menu",
+    "hide_user": false,
+    "hide_menu": false,
+    "login": {
+      "entry": {
+        "admin": "/table/book"
+      }
+    }
+  }
+}
+```
+
+## 新建表格
+
+### 新建 `tables/book.tab.json`代码如下:
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "书籍列表",
+  "version": "1.0.0",
+  "decription": "书籍列表",
+  "bind": {
+    "model": "book",
+    "withs": {
+      "category": {}
+    }
+  },
+  "apis": {},
+  "columns": {
+    "ID": {
+      "label": "ID",
+      "view": { "type": "label", "props": { "value": ":id" } }
+    },
+
+    "分类": {
+      "label": "分类",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":category.name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":category_id"
+        }
+      }
+    },
+    "书籍名称": {
+      "label": "书籍名称",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":name"
+        }
+      }
+    },
+    "作者": {
+      "label": "作者",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":author"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":author"
+        }
+      }
+    },
+    "出版社": {
+      "label": "出版社",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":press"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":press"
+        }
+      }
+    },
+    "价格": {
+      "label": "价格",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":price"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":price"
+        }
+      }
+    }
+  },
+  "filters": {
+    "书籍名称": {
+      "label": "书籍名称",
+      "bind": "where.name.match",
+      "input": {
+        "type": "input",
+        "props": { "placeholder": "书籍名称" }
+      }
+    }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "分类", "width": 200 },
+        { "name": "书籍名称", "width": 200 },
+        { "name": "出版社", "width": 200 },
+        { "name": "价格", "width": 200 }
+      ],
+      "filters": [{ "name": "书籍名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } },
+      "create": {
+        "props": { "label": "添加书籍" }
+      }
+    },
+    "option": { "operation": { "unfold": true } }
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "分类", "width": 200 },
+            { "name": "书籍名称", "width": 200 },
+            { "name": "出版社", "width": 200 },
+            { "name": "价格", "width": 200 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": {},
+      "delete": { "type": "button", "props": { "label": "Delete" } }
+    },
+    "option": { "dev": false }
+  }
+}
+```
+
+</Detail>
+
+### 执行 `yao start`可以看到项目已经开始运行:
+
+```json
+WebSocket(0)
+
+---------------------------------
+Yao  development
+---------------------------------
+Root  /mnt/shared/test
+Frontend  http://127.0.0.1:5099/
+Dashboard  http://127.0.0.1:5099/xiang/login/admin
+API  http://127.0.0.1:5099/api
+Listening  127.0.0.1:5099
+
+Watching: /mnt/shared/test/models
+Watching: /mnt/shared/test/scripts
+Watching: /mnt/shared/test/apis
+Watching: /mnt/shared/test/libs
+✨LISTENING✨
+Watching: /mnt/shared/test/flows
+Watching: /mnt/shared/test/tables
+```
+
+打开浏览器访问:`http://127.0.0.1:5099/xiang/login/admin`
+
+输入默认账号 `xiang@iqka.com` 和密码`A123456p+`登录到后台可以看到书籍列表效果图:
+![书籍列表](assets/overview-search.png)
+
+### 新建书籍分类表格 `tables/category.tab.json`代码:
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "分类列表",
+  "version": "1.0.0",
+  "decription": "分类列表",
+  "bind": {
+    "model": "category",
+    "withs": {
+      "parent": {}
+    }
+  },
+  "apis": {},
+  "columns": {
+    "ID": {
+      "label": "ID",
+      "view": { "type": "label", "props": { "value": ":id" } }
+    },
+
+    "父类": {
+      "label": "父类",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":parent.name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":parent_id"
+        }
+      }
+    },
+    "分类名称": {
+      "label": "分类名称",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":name"
+        }
+      }
+    }
+  },
+  "filters": {
+    "分类名称": {
+      "label": "分类名称",
+      "bind": "where.name.match",
+      "input": {
+        "type": "input",
+        "props": { "placeholder": "分类名称" }
+      }
+    }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "父类", "width": 200 },
+        { "name": "分类名称", "width": 200 }
+      ],
+      "filters": [{ "name": "分类名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } },
+      "create": {
+        "props": { "label": "添加分类" }
+      }
+    },
+    "option": { "operation": { "unfold": true } }
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "父类", "width": 200 },
+            { "name": "分类名称", "width": 200 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": {},
+      "delete": { "type": "button", "props": { "label": "Delete" } }
+    },
+    "option": { "dev": false }
+  }
+}
+```
+
+</Detail>
+
+在命令行使用 `ctrl+C`停止 Yao 的服务,然后执行 `yao start`重启服务,打开浏览器刷新一下页面,点击分类菜单:
+![分类](assets/overview-category.png)
+
+- 思考:书籍分类和分类的父类如何做成下拉列表?
+
+## 改进问题
+
+- 把书籍分类改为下拉列表树形组件[TreeSelect](https://yaoapps.com/components/%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5/TreeSelect)搜索,新增一个`apis/select.http.json`:
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "guard": "bearer-jwt",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+新建`flows/category.flow.json`文件:
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    },
+    {
+      "name": "类目树",
+      "process": "xiang.helper.ArrayTree",
+      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+    }
+  ],
+  "output": "{{$res.类目树}}"
+}
+```
+
+修改 `tables/book.tab.json`的 columns 分类组件，并且调整一下表单和添加页面的布局:
+
+<Detail title="查看源码">
+
+```json
+...
+
+    "分类": {
+      "label": "分类",
+      "view": {
+        "name": "label",
+        "props": {
+          "value": ":category.name"
+        }
+      },
+      "edit": {
+        "type": "treeSelect",
+        "props": {
+          "value": ":category_id",
+          "allowClear": true,
+          "remote": {
+            "api": "/api/select/category",
+            "query": { "select": ["id", "name"] }
+          }
+        }
+      }
+    },
+
+ ...
+
+
+   "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "分类", "width": 200 },
+        { "name": "书籍名称", "width": 200 },
+        { "name": "出版社", "width": 200 },
+        { "name": "作者", "width": 200 },
+        { "name": "价格", "width": 200 }
+      ],
+      "filters": [{ "name": "书籍名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } },
+      "create": {
+        "props": { "label": "添加书籍" }
+      }
+    },
+    "option": { "operation": { "unfold": true } }
+  },
+    "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "分类", "width": 8 },
+            { "name": "书籍名称", "width": 8 },
+            { "name": "出版社", "width": 8 },
+            { "name": "价格", "width": 8 },
+            { "name": "作者", "width": 8 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": {},
+      "delete": { "type": "button", "props": { "label": "Delete" } }
+    },
+    "option": { "dev": false }
+  }
+
+```
+
+</Detail>
+
+停止服务,然后重启服务,刷新一下页面,可以看到如下效果图：
+
+![分类](assets/overview-category-select.png)
+
+## 作业
+
+### 把分类下来也改成树形下拉结构
