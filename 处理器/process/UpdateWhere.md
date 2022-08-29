@@ -1,0 +1,214 @@
+# UpdateWhere
+
+按条件更新数据记录, 返回更新行数
+
+## `updateWhere` 按条件更新记录, 返回更新行数
+
+### 处理器
+
+`models.模型名称.UpdateWhere`
+
+### 参数表
+
+| 参数    | 类型              | 说明     | 示例                                             |
+| ------- | ----------------- | -------- | ------------------------------------------------ |
+| args[0] | Object QueryParam | 查询条件 | `{"wheres":[{"column":"name", "value":"张三"}]}` |
+| args[1] | Object Row        | 数据记录 | `{"balance": 200}`                               |
+
+### 返回值
+
+`Integer` 更新行数
+
+## 示例一
+
+### 数据模型
+
+| 模型 | 模型定义                              |
+| ---- | ------------------------------------- |
+| user | [模型描述文件](../examples/user.json) |
+
+### 处理器
+
+```json
+models.user.UpdateWhere
+```
+
+### 参数表
+
+```json
+[
+  {
+    "wheres": [{ "column": "status", "value": "enabled" }]
+  },
+  {
+    "balance": 200
+  }
+]
+```
+
+### 返回值
+
+```json
+4
+```
+
+## 外部引用
+
+### 在业务逻辑(`Flow`) 中调用:
+
+```json
+{
+  "nodes": [
+    {
+      "name": "users",
+      "process": "models.user.UpdateWhere",
+      "args": [
+        {
+          "wheres": [{ "column": "status", "value": "enabled" }]
+        },
+        {
+          "balance": 200
+        }
+      ],
+      "outs": ["{{$out}}"]
+    }
+  ]
+}
+```
+
+### 在服务接口(`API`) 中调用:
+
+```json
+{
+  "paths": [
+    {
+      "path": "/updatewhere",
+      "method": "POST",
+      "process": "models.user.UpdateWhere",
+      "in": [":params", ":payload"],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+```bash
+POST /api/user/updatewhere?where.status.eq=enabled
+```
+
+`REQUEST PAYLOAD`
+
+```json
+{
+  "balance": 200
+}
+```
+
+## 示例二
+
+### 新建模型，新增`models/category.mod.json`文件，写入以下内容：
+
+```json
+{
+  "name": "书籍分类",
+  "table": {
+    "name": "category",
+    "comment": "书籍分类"
+  },
+  "columns": [
+    {
+      "label": "ID",
+      "name": "id",
+      "type": "ID",
+      "comment": "ID",
+      "primary": true
+    },
+    {
+      "label": "父级id",
+      "name": "parent_id",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "label": "分类名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    }
+  ],
+  "relations": {
+    "book": {
+      "type": "hasMany",
+      "model": "book",
+      "key": "category_id",
+      "foreign": "id",
+      "query": {}
+    },
+    "parent": {
+      "type": "hasOne",
+      "model": "category",
+      "key": "id",
+      "foreign": "parent_id",
+      "query": {}
+    }
+  },
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "parent_id": null,
+      "name": "文史类"
+    },
+    {
+      "id": 2,
+      "parent_id": 1,
+      "name": "历史"
+    },
+    {
+      "id": 3,
+      "parent_id": 1,
+      "name": "古诗"
+    },
+    {
+      "id": 4,
+      "parent_id": null,
+      "name": "理工类"
+    },
+    {
+      "id": 5,
+      "parent_id": 4,
+      "name": "数学"
+    },
+    {
+      "id": 6,
+      "parent_id": 4,
+      "name": "物理"
+    }
+  ]
+}
+```
+
+### UpdateWhere 批量更新
+
+```javascript
+function UpdateWhere() {
+  return Process(
+    "models.category.updatewhere",
+    {
+      wheres: [{ column: "parent_id", value: 1 }],
+    },
+    {
+      name: "数学",
+    }
+  );
+}
+```
+
+执行 `yao run scripts.test.UpdateWhere`

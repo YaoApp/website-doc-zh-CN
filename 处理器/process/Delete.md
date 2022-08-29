@@ -1,12 +1,91 @@
-# 更新数据 delete，destroy，deletewhere，destroywhere
+# Delete
 
-数据模型内置了数据删除处理器， 这些处理器可用于服务接口(`API`)和数据流(`Flow`)数据删除功能。
+标记删除指定主键的单条数据记录. 如模型定义时未开启 `soft_deletes` 则真删除数据记录。
 
-## 示例
+## `delete` 删除单条记录(标记删除)
 
-### 新建模型
+### 处理器
 
-- 新增`models/category.mod.json`文件,写入以下内容:
+`models.模型名称.Delete`
+
+### 参数表
+
+| 参数    | 类型       | 说明     | 示例 |
+| ------- | ---------- | -------- | ---- |
+| args[0] | Object Row | 模型主键 | `1`  |
+
+### 返回值
+
+`null` 无返回值
+
+## 示例一
+
+### 数据模型
+
+| 模型 | 模型定义                              |
+| ---- | ------------------------------------- |
+| user | [模型描述文件](../examples/user.json) |
+
+### 处理器
+
+```json
+models.user.Delete
+```
+
+### 参数表
+
+```json
+[1]
+```
+
+### 返回值
+
+```json
+null
+```
+
+## 外部引用
+
+### 在业务逻辑(`Flow`) 中调用:
+
+```json
+{
+  "nodes": [
+    {
+      "name": "user",
+      "process": "models.user.Delete",
+      "args": [1],
+      "outs": []
+    }
+  ]
+}
+```
+
+### 在服务接口(`API`) 中调用:
+
+```json
+{
+  "paths": [
+    {
+      "path": "/delete/:id",
+      "method": "POST",
+      "process": "models.user.Delete",
+      "in": ["$params.id"],
+      "out": {
+        "status": 200
+      }
+    }
+  ]
+}
+```
+
+```bash
+POST /api/user/delete/1
+```
+
+## 示例二
+
+### 新建模型，新增`models/category.mod.json`文件，写入以下内容：
 
 ```json
 {
@@ -101,37 +180,3 @@ function deletes() {
 ```
 
 运行 `yao run scripts.test.deletes`
-
-### Destroy 直接从数据库中删除:
-
-```javascript
-function Destroy() {
-  return Process("models.category.destroy", 9, {});
-}
-```
-
-运行 `yao run scripts.test.Destroy`
-
-### Deletewhere 批量删除，也是软删除
-
-```javascript
-function Deletewhere() {
-  return Process("models.category.deletewhere", {
-    wheres: [{ column: "parent_id", value: 4 }],
-  });
-}
-```
-
-运行 `yao run scripts.test.Deletewhere`
-
-### Deletewhere 批量删除，也是软删除
-
-```javascript
-function Destroywhere() {
-  return Process("models.category.destroywhere", {
-    wheres: [{ column: "parent_id", value: 4 }],
-  });
-}
-```
-
-运行 `yao run scripts.test.Destroywhere`

@@ -1,6 +1,10 @@
-# 更新数据 save,update,updatewhere
+# 更新数据 save，update，updatewhere
 
-## 新建模型
+数据模型内置了更新处理器， 这些处理器可用于服务接口(`API`)和数据流(`Flow`)数据更新功能。
+
+## 示例：
+
+### 新建模型
 
 - 新增`models/category.mod.json`文件,写入以下内容:
 
@@ -88,7 +92,7 @@
 }
 ```
 
-## Save 传入 id 则为保存`scripts/test.js`
+### Save 传入 id 则为保存`scripts/test.js`
 
 ```javascript
 function Save() {
@@ -100,7 +104,7 @@ function Save() {
 }
 ```
 
-## Update 更新,第一个参数为 id，第二个参数为更新对象:
+### Update 更新,第一个参数为 id，第二个参数为更新对象:
 
 ```javascript
 function Update() {
@@ -111,7 +115,7 @@ function Update() {
 }
 ```
 
-## UpdateWhere 批量更新
+### UpdateWhere 批量更新
 
 ```javascript
 function UpdateWhere() {

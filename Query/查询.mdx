@@ -1,6 +1,10 @@
 # 查询数据 Find,Get
 
-## 新增`models/category.mod.json`文件,写入以下内容:
+数据模型内置了查询处理器， 这些处理器可用于服务接口(`API`)和数据流(`Flow`)数据查询功能。
+
+## 示例：
+
+### 新增`models/category.mod.json`文件,写入以下内容:
 
 ```json
 {
@@ -86,7 +90,7 @@
 }
 ```
 
-## Find 获取已知 id 的数据,新建`scripts/test.js`
+### Find 获取已知 id 的数据,新建`scripts/test.js`
 
 ```javascript
 function Find() {
@@ -94,7 +98,7 @@ function Find() {
 }
 ```
 
-## Get 获取多条匹配条件的数据:
+### Get 获取多条匹配条件的数据:
 
 ```javascript
 function Get() {
