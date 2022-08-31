@@ -1,7 +1,678 @@
 # 数据模型
 
-一个数据模型对应数据库中的一张数据表, 通过 JSON 文件描述数据表结构，放置在
-models 目录中。使用 yao migrate 命令创建/更新数据表结构设计。
+Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作、元数据输入校验和元数据管理后台。元数据原子操作方法被映射为处理器(`process`)，支持模型间数据关系映射，可在数据流（`Flow`）和接口(`API`)中访问查询。如采用`golang`语言开发业务插件(`Plugin`)，可以使用 Package `Gou` 访问模型的各个方法, 后续将提供 `NodeJS` 等语言 SDK。一个数据模型对应数据库中的一张数据表, 通过 JSON 文件描述数据表结构，放置在`models` 目录中。使用 `yao migrate` 命令创建/更新数据表结构设计。
+
+## 命名规范
+
+数据模型描述文件是以 **小写英文字母** 命名的 JSON 文本文件 `<name>.mod.json`
+
+| 文件夹 (相对应用模型根目录) | 文件名        | 模型名称             | Process (在 API /Flow 中引用)         |
+| --------------------------- | ------------- | -------------------- | ------------------------------------- |
+| /                           | name.mod.json | `name`               | `models.name.<process>`               |
+| /group/                     | name.mod.json | `gorup.name`         | `models.gorup.name.<process>`         |
+| /group1/group2/             | name.mod.json | `gorup1.gorup2.name` | `models.gorup1.group2.name.<process>` |
+
+## 文档结构
+
+```json
+{
+  "name": "用户",
+  "table": {},
+  "columns": [],
+  "indexes": [],
+  "relations": {},
+  "values": [],
+  "option": {}
+}
+```
+
+| 字段      | 类型                  | 说明         | 必填项 |
+| --------- | --------------------- | ------------ | ------ |
+| name      | String                | 模型中文名称 | 是     |
+| table     | Object                | 数据表定义   | 是     |
+| columns   | Array\<Object\>       | 字段定义     | 是     |
+| indexes   | Array\<Object\>       | 索引定义     | 是     |
+| relations | \[key:String\]:Object | 关系映射     | 否     |
+| values    | Array\<Object\>       | 默认数据     | 否     |
+| option    | Object                | 配置选型     | 否     |
+
+数据表格包含 `name`、`comment` 等字段，定义模型存储在数据库中的数据表名称、注释等信息。支持 `MySQL`, `PostgreSQL`、`SQLite`等 `Xun Database` 或第三方提供驱动的数据库。
+
+```json
+{
+  "table": {
+    "name": "user",
+    "comment": "用户表",
+    "engine": "InnoDB"
+  }
+}
+```
+
+| 字段    | 类型   | 说明                                              | 必填项 |
+| ------- | ------ | ------------------------------------------------- | ------ |
+| name    | String | 数据表名称                                        | 是     |
+| comment | String | 数据表注释中文名                                  | 否     |
+| engine  | String | 数据表引擎（MySQL ONLY) 许可值 `InnoDB`, `MyISAM` | 否     |
+
+### 2.3 字段定义 `columns`
+
+一个模型可以包含多个字段定义，每个字段定义包含 `label`、`name`、`type`、 `validations` 等信息。
+
+```json
+{
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID" },
+    {
+      "label": "厂商",
+      "name": "manu_id",
+      "type": "bigInteger",
+      "length": 50,
+      "comment": "所属厂商",
+      "nullable": true,
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["integer"],
+          "message": "{{input}}类型错误, {{label}}应为数字"
+        },
+        {
+          "method": "min",
+          "args": [0],
+          "message": "{{label}}应大于0"
+        }
+      ]
+    },
+    {
+      "label": "手机号",
+      "name": "mobile",
+      "type": "string",
+      "length": 50,
+      "comment": "手机号",
+      "index": true,
+      "crypt": "AES",
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^1[3-9]\\d{9}$"],
+          "message": "{{input}}格式错误"
+        }
+      ]
+    }
+  ]
+}
+```
+
+| 字段        | 类型                   | 说明                                                                                        | 必填项 |
+| ----------- | ---------------------- | ------------------------------------------------------------------------------------------- | ------ |
+| name        | String                 | 字段名称，对应数据表中字段名称                                                              | 是     |
+| type        | String                 | 字段类型，                                                                                  | 是     |
+| label       | String                 | 字段显示名称，用于在管理表单，开发平台等成场景下呈现                                        | 是     |
+| comment     | String                 | 字段注释，对应数据表中字段注释                                                              | 否     |
+| title       | String                 | 字段标题，可用于开发平台中呈现                                                              | 否     |
+| description | String                 | 字段介绍，可用于开发平台中呈现                                                              | 否     |
+| length      | Integer                | 字段长度，对 `string` 等类型字段有效                                                        | 否     |
+| precision   | Integer                | 字段位数(含小数位)，对 `float`、`decimal` 等类型字段有效                                    | 否     |
+| scale       | Integer                | 字段小数位位数，对 `float`、`decimal` 等类型字段有效                                        | 否     |
+| option      | Array\<String\>        | 字段许可值，对 `enum` 类型字段有效                                                          | 否     |
+| default     | String\|Integer\|Float | 字段默认值                                                                                  | 否     |
+| default_raw | String                 | 字段默认值，支持数据库函数，如 `NOW()` default 和 default_raw 同时存在 default_raw 优先级高 | 否     |
+| crypt       | String                 | 字段加密存储方式(MySQL Only)。许可值 `AES`, `PASSWORD`                                      | 否     |
+| nullable    | Bool                   | 字段是否可以为空，默认为 false                                                              | 否     |
+| index       | Bool                   | 字段是否为索引，默认为 false                                                                | 否     |
+| unique      | Bool                   | 字段是否为唯一索引，默认为 false , 如为 true 无需同时将 `index` 设置为 true                 | 否     |
+| primary     | Bool                   | 字段是否为主键，每张表至多一个主键字段。默认为 false                                        | 否     |
+| validations | Array\<Object\>        | 字段校验规则                                                                                | 否     |
+
+#### 字段类型
+
+| 类型                 | 说明                           | 可选参数             | MySQL 字段类型                         |
+| -------------------- | ------------------------------ | -------------------- | -------------------------------------- |
+| string               | 字符串                         | `length`             | VARCHAR(`length` )                     |
+| char                 | 字符                           | `length`             | CHAR (`length` )                       |
+| text                 | 文本                           |                      | TEXT                                   |
+| mediumText           | 中文本                         |                      | MEDIUMTEXT                             |
+| longText             | 长文本                         |                      | LONGTEXT                               |
+| binary               | 二进制数据                     |                      | VARBINARY                              |
+| date                 | 日期                           |                      | DATE                                   |
+| datetime             | 日期时间                       | `length`             | DATETIME                               |
+| datetimeTz           | 带时区的日期时间               | `length`             | DATETIME                               |
+| time                 | 时间                           | `length`             | TIME                                   |
+| timeTz               | 带时区的时间                   | `length`             | TIME                                   |
+| timestamp            | 时间戳                         | `length`             | TIMESTAMP                              |
+| timestampTz          | 带时区的时间戳                 | `length`             | TIMESTAMP                              |
+| tinyInteger          | 微整型                         |                      | TINYINT                                |
+| tinyIncrements       | 无符号微整型+自增              |                      | TINYINT UNSIGNED AUTO_INCREMENT        |
+| unsignedTinyInteger  | 无符号微整型                   |                      | TINYINT UNSIGNED                       |
+| smallInteger         | 小整型                         |                      | SMALLINT                               |
+| smallIncrements      | 无符号小整型+自增              |                      | SMALLINT UNSIGNED AUTO_INCREMENT       |
+| unsignedSmallInteger | 无符号小整型                   |                      | SMALLINT UNSIGNED                      |
+| integer              | 整型                           |                      | INT                                    |
+| increments           | 无符号整型+自增                |                      | INT UNSIGNED AUTO_INCREMENT            |
+| unsignedInteger      | 无符号整型                     |                      | INT UNSIGNED                           |
+| bigInteger           | 长整型                         |                      | BIGINT                                 |
+| bigIncrements        | 无符号长整型+自增              |                      | BIGINT UNSIGNED AUTO_INCREMENT         |
+| unsignedBigInteger   | 无符号长整型                   |                      | BIGINT UNSIGNED                        |
+| id                   | 长整型+自增                    |                      | BIGINT UNSIGNED AUTO_INCREMENT         |
+| ID                   | 长整型+自增(同 id)             |                      | BIGINT UNSIGNED AUTO_INCREMENT         |
+| decimal              | 小数(一般用于存储货币)         | `precision`、`scale` | DECIMAL(`precision`,`scale`)           |
+| unsignedDecimal      | 无符号小数 (一般用于存储货币)  | `precision`、`scale` | DECIMAL (`precision`,`scale`) UNSIGNED |
+| float                | 浮点数                         | `precision`、`scale` | FLOAT (`precision`,`scale`)            |
+| unsignedFloat        | 无符号浮点数                   | `precision`、`scale` | FLOAT (`precision`,`scale`) UNSIGNED   |
+| double               | 双精度                         | `precision`、`scale` | DOUBLE (`precision`,`scale`)           |
+| unsignedDouble       | 无符号双精度                   | `precision`、`scale` | DOUBLE (`precision`,`scale`) UNSIGNED  |
+| boolean              | 布尔型                         |                      | BOOLEAN                                |
+| enum                 | 枚举型                         | `option`             | ENUM(`option...`)                      |
+| json                 | JSON 文本                      |                      | JSON                                   |
+| JSON                 | JSON 文本(同 json)             |                      | JSON                                   |
+| jsonb                | JSON (二进制格式存储)          |                      | JSON                                   |
+| JSONB                | JSON (二进制格式存储 同 jsonb) |                      | JSON                                   |
+| uuid                 | UUID 格式字符串                |                      | VARCHAR(36)                            |
+| ipAddress            | IP 地址                        |                      | INT                                    |
+| macAddress           | MAC 地址                       |                      | BIGINT                                 |
+| year                 | 年份                           |                      | SMALLINT                               |
+
+#### 校验方法
+
+一个字段可以包含多条校验规则，每条校验规则可以选用 `min`,`max`, `pattern`, `typeof` 等校验方法。
+
+```json
+{
+  "columns": [
+    {
+      "label": "手机号",
+      "name": "mobile",
+      "type": "string",
+      "length": 50,
+      "comment": "手机号",
+      "index": true,
+      "crypt": "AES",
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^1[3-9]\\d{9}$"],
+          "message": "{{input}}格式错误"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**校验规则定义**
+
+| 字段    | 类型                            | 说明                                                                                                                                                  | 必填项 |
+| ------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| method  | String                          | 校验方法名称，可选值 `typeof`, `pattern` 等                                                                                                           | 是     |
+| args    | Array\<String\|Integer\|Float\> | 校验方法参数，例如 `[20]`, `["^1[3-9]\\d{9}$"]`                                                                                                       | 否     |
+| message | String                          | 如校验不通过，返回的错误提示。支持使用 `{{<name>}}` 引用字段信息, 如`{{label}}`将被替换为字段 `label`中定义的数值; `{{input}}` 被替换为用户输入数值。 | 否     |
+
+#### 校验方法清单
+
+| 校验方法  | 参数                                                                                | 说明     | 示例                                                                  |
+| --------- | ----------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
+| typeof    | `[<String>]` 许可值 `string`, `integer`, `float`, `number`, `datetime`, `timestamp` | 数值类型 | `{"method":"typeof", "args":["integer"]}`                             |
+| min       | `[<Integer\|Float>]`                                                                | 最小值   | `{"method":"min", "args":[20]}`                                       |
+| max       | `[<Integer\|Float>]`                                                                | 最大值   | `{"method":"max", "args":[0.618]}`                                    |
+| enum      | `[String...]`                                                                       | 枚举选项 | `{"method":"enum", "args":["enabled", "disabled"]}`                   |
+| pattern   | `[String]`                                                                          | 正则匹配 | `{"method":"pattern", "args":["^1[3-9]\\d{9}$"]}`                     |
+| minLength | `[<Integer>]`                                                                       | 最小长度 | `{"method":"minLength", "args":[20]}`                                 |
+| maxLength | `[<Integer>]`                                                                       | 最大长度 | `{"method":"maxLength", "args":[100]}`                                |
+| email     | `[]`                                                                                | 邮箱     | `{"method":"email", "args":[]}`                                       |
+| mobile    | `[<String>]` 区域列表(可选), 默认为 `cn` 许可值 `cn`,`us`                           | 手机号   | `{"method":"mobile", "args":[]}` `{"method":"mobile", "args":["us"]}` |
+
+#### 加密方式
+
+当前支持 `AES` 和 `PASSWORD` 两种字段数值加密存储算法，其中 `AES` 仅支持 MySQL 数据库。
+
+| 加密算法   | 说明                               | 是否可逆 |
+| ---------- | ---------------------------------- | -------- |
+| `AES`      | AES 加密，需设定 `XIANG_DB_AESKEY` | 是       |
+| `PASSWORD` | PASSWORD HASH 加密                 | 否       |
+
+#### 保留字
+
+以下名称不能用于字段名称。
+
+| 保留字           | 说明                         |
+| ---------------- | ---------------------------- |
+| created_at       | 用于记录创建时间戳           |
+| updated_at       | 用于记录更新时间戳           |
+| deleted_at       | 用于记录软删除标记           |
+| \_\_restore_data | 用于软删除时备份唯一字段数值 |
+
+### 索引定义 `indexes`
+
+一个数据模型，可以包含多个索引。对于单一索引，推荐在字段定义时，使用 `index` 、 `unique` 和 `primary` 修饰符定义，对于复合索引或全文检索索引，在 `indexes` 中定义。
+
+```json
+{
+  "indexes": [
+    {
+      "comment": "厂商用户",
+      "name": "manu_id_mobile_unique",
+      "columns": ["manu_id", "mobile"],
+      "type": "unique"
+    },
+    {
+      "comment": "简历全文检索",
+      "name": "resume_fulltext",
+      "columns": ["resume"],
+      "type": "fulltext"
+    }
+  ]
+}
+```
+
+| 字段    | 类型            | 说明                                                                                 | 必填项 |
+| ------- | --------------- | ------------------------------------------------------------------------------------ | ------ |
+| name    | String          | 索引名称。**命名规范为 字段 1\_字段 2\_字段 n\_索引类型**                            | 是     |
+| type    | String          | 索引类型 许可值 `index` 索引, `unique` 唯一索引, `primary` 主键, `fulltext` 全文检索 | 是     |
+| columns | Array\<String\> | 关联字段名称列表（顺序有关) `["字段 1","字段 2"]` 与 `["字段 2","字段 1"]` 不同      | 是     |
+| comment | String          | 索引注释                                                                             | 否     |
+
+### 关系映射 `relations`
+
+数据模型支持一对一、一对多两种关系映射，可以通过定义映射关系将多个数据模型关联，查询时使用`with`参数即可同时返回关联模型数据。
+
+| 映射关系名称 | 关系   | 说明                           |
+| ------------ | ------ | ------------------------------ |
+| `hasOne`     | 一对一 | 模型 A 与模型 B 通过一对一关联 |
+| `hasMany`    | 一对多 | 模型 A 与模型 B 通过一对多关联 |
+
+关联关系使用 `[key:String]:Object Relation` 数据结构定义 ( `{"关联名称1":{}, "关联名称2":{}}`, 关联名称为 **小写英文字母** )
+
+在模型文件 `user.json` 中定义
+
+<Detail title="查看源码">
+
+```json
+{
+  "relations": {
+    "manu": {
+      "type": "hasOne",
+      "model": "manu",
+      "key": "id",
+      "foreign": "manu_id",
+      "query": { "select": ["name", "short_name", "type"] }
+    },
+    "addresses": {
+      "type": "hasMany",
+      "model": "address",
+      "key": "user_id",
+      "foreign": "id",
+      "query": {
+        "select": ["province", "city", "location", "status"],
+        "pagesize": 20
+      }
+    },
+    "mother": {
+      "type": "hasOneThrough",
+      "links": [
+        {
+          "type": "hasOne",
+          "model": "friends",
+          "key": "user_id",
+          "foreign": "user.id",
+          "query": {
+            "select": ["status", "type", "friend_id"],
+            "wheres": [
+              {
+                "column": "type",
+                "value": "monther"
+              }
+            ]
+          }
+        },
+        {
+          "type": "hasOne",
+          "model": "user",
+          "key": "id",
+          "foreign": "user_mother_friends.friend_id",
+          "query": {
+            "select": ["name", "id", "status", "type", "secret", "extra"],
+            "withs": {
+              "manu": {},
+              "roles": {},
+              "address": {}
+            }
+          }
+        }
+      ]
+    },
+    "roles": {
+      "type": "hasManyThrough",
+      "links": [
+        {
+          "type": "hasMany",
+          "model": "user_roles",
+          "key": "user_id",
+          "foreign": "id",
+          "query": {
+            "select": ["status"],
+            "pagesize": 20
+          }
+        },
+        {
+          "type": "hasOne",
+          "model": "role",
+          "key": "id",
+          "foreign": "role_id",
+          "query": {
+            "select": ["name", "label", "permission"]
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+</Detail>
+
+**`Object Relation`**
+
+| 字段    | 类型                     | 说明                                                                             | 必填项 |
+| ------- | ------------------------ | -------------------------------------------------------------------------------- | ------ |
+| type    | String                   | 关系类型 许可值 `hasOne`, `hasOneThrough` , `hasMany` , `hasManyThrough`         | 是     |
+| key     | String                   | 关联模型的关联字段名称                                                           | 否     |
+| model   | String                   | 关联模型名称                                                                     | 否     |
+| foreign | String                   | 当前模型的关联字段名称                                                           | 否     |
+| query   | Object QueryParam        | 关系查询参数默认值。如在查询时未指定关联查询参数，则替使用在模型中定义的查询参数 | 否     |
+| links   | Array\<Object Relation\> | `hasOneThrough` 或 `hasManyThrough` 多表关联关系定义                             | 否     |
+
+#### `hasOne` 一对一
+
+数据模型 `user` 数据表结构如下:
+
+| 字段    | 类型       | 说明        |
+| ------- | ---------- | ----------- |
+| id      | ID         | 用户 ID     |
+| manu_id | bigInteger | 所属厂商 ID |
+| name    | string     | 姓名        |
+
+数据模型 `manu` 数据表结构如下:
+
+| 字段    | 类型   | 说明     |
+| ------- | ------ | -------- |
+| id      | ID     | 厂商 ID  |
+| short   | string | 厂商简称 |
+| company | string | 公司名称 |
+
+在查询用户数据时，可以同时列出厂商信息或可以按关联厂商进行查询，则可以在定义 `user` 数据模型时，设定与 `manu` 数据模型关系.
+
+在模型文件 `user.json` 中定义
+
+```json
+{
+  "name": "用户",
+  "relations": {
+    "manu": {
+      "type": "hasOne",
+      "model": "manu",
+      "key": "id",
+      "foreign": "manu_id",
+      "query": { "select": ["short", "company"] }
+    }
+  }
+}
+```
+
+**说明**
+
+1.将关系映射类型指定为 `hasOne`
+
+2.将关联模型 `model` 设置为 `manu`
+
+3.将关联模型 `key` 设置为 `id`, 即：`manu.id` 引擎处理时，自动关联 `manu` 表的 `id` 字段。
+
+4.将 `foreign` 设置为 `manu_id`, 即: `user.manu_id` 引擎处理时，将 `manu.id` 和 `user.manu_id` 关联
+
+5.可以在 `query` 字段中，设置默认的查询条件，如指定读取的字段等。
+
+引擎解析后的 SQL 为:
+
+```sql
+SELECT `user`.*,
+  `manu`.`short` AS `user_manu_short`,
+  `manu`.`company` AS `user_manu_company`,
+  FROM `user` AS `user`
+  LEFT JOIN `manu` as `user_manu` ON `user_manu`.`id` = `user`.`manu_id`
+```
+
+**访问**
+
+在调用 `process` 查询时，传入 `with` 参数，即可同时返回厂商信息
+
+```bash
+GET  /api/user/find/1?with=manu&manu.select=id,short
+```
+
+#### `hasMany` 一对多
+
+数据模型 `user` 数据表结构如下:
+
+| 字段    | 类型       | 说明        |
+| ------- | ---------- | ----------- |
+| id      | ID         | 用户 ID     |
+| manu_id | bigInteger | 所属厂商 ID |
+| name    | string     | 姓名        |
+
+数据模型 `address` 数据表结构如下:
+
+| 字段     | 类型       | 说明                          |
+| -------- | ---------- | ----------------------------- |
+| id       | ID         | 地址 ID                       |
+| user_id  | bigInteger | 所属用户 ID (关联 `user.id` ) |
+| location | string     | 详细地址                      |
+
+对于类似一个用户有多个通信地址的业务场景，可以通过建立一对多的映射关系来实现。
+
+在模型文件 `user.json` 中定义
+
+```json
+{
+  "name": "用户",
+  "relations": {
+    "addresses": {
+      "type": "hasMany",
+      "model": "address",
+      "key": "user_id",
+      "foreign": "id",
+      "query": {
+        "select": ["location"],
+        "limit": 20
+      }
+    }
+  }
+}
+```
+
+**说明**
+
+1.将关系映射类型指定为 `hasMany`
+
+2.将关联模型 `model` 设置为 `address`
+
+3.将关联模型 `key` 设置为 `user_id`, 即：`address.user_id` 引擎处理时，自动关联 `address` 表的 `user_id` 字段。
+
+4.将 `foreign` 设置为 `id`, 即: `user.id` 引擎处理时，将 `user.id` 和 `address.user_id` 关联
+
+5.可以在 `query` 字段中，设置默认的查询条件，如指定读取的字段等。对于 `hasMany` 建议设置默认 `limit` 约束返回数据条目
+
+对于 `hasMany` 类型关系映射，引擎将分两次查询。首次查询出主模型以及关联的 ID 列表，第二次根据 ID 列表，查询关联数据信息。
+
+第一次查询：
+
+```sql
+SELECT `user`.* FROM `user` AS `user`
+```
+
+引擎处理结果，并读取 `user`.`id`
+
+第二次查询:
+
+```sql
+SELECT  `address`.`user_id`, `address`.`location` FROM `address` AS `address`
+  WHERE `address`.`user_id` IN (<user.id...>)
+```
+
+引擎处理结果，关联用户地址信息
+
+**访问**
+
+在调用 `process` 查询时，传入 `with` 参数，即可同时取得 `addresses` 的关联信息
+
+```bash
+GET  /api/user/find/1?with=addresses
+```
+
+### 配置选项 `option`
+
+在 `option` 中设定模型配置参数
+
+```json
+{
+  "name": "地址",
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  }
+}
+```
+
+| 选项         | 类型 | 说明                                                                                                                                  |
+| ------------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| timestamps   | Bool | 为 true 时， 自动创建 `created_at`、`updated_at` 字段，并在插入和更新数据时，标记对应操作时间                                         |
+| soft_deletes | Bool | 为 true 时， 自动创建 `deleted_at` 和 `__restore_data` 字段，数据删除时，备份唯一字段数据，并标记操作时间，查询时忽略已标记删除的数据 |
+
+## 查询参数 `QueryParam`
+
+在模型关联关系定义和调用处理器时，通过 Object `QueryParam` 描述查询条件。
+
+```json
+{
+  "select": ["id", "name", "mobile", "status"],
+  "withs": {
+    "manu": {
+      "query": {
+        "select": ["name", "short_name", "status"]
+      }
+    },
+    "addresses": {}
+  },
+  "wheres": [
+    { "column": "status", "value": "enabled" },
+    { "rel": "manu", "column": "status", "value": "enabled" },
+    {
+      "wheres": [
+        { "column": "name", "value": "%张三%", "op": "like" },
+        {
+          "method": "orwhere",
+          "column": "name",
+          "value": "%李四%",
+          "op": "like"
+        }
+      ]
+    }
+  ],
+  "orders": [
+    { "column": "id", "option": "desc" },
+    { "rel": "manu", "column": "name" }
+  ],
+  "limit": 2
+}
+```
+
+应用引擎将以上查询条件解析为如下 SQL :
+
+```SQL
+SELECT
+  `user`.`id`,`user`.`name`,`user`.`mobile`,`user`.`status`,
+  `user_manu`.`name` AS `user_manu_name`,
+  `user_manu`.`short_name` AS `user_manu_short_name` ,
+  `user_manu`.`status` AS `user_manu_status`
+FROM `user` AS `user`
+LEFT JOIN `manu` AS `user_manu` ON `user_manu`.`id` = `user`.`manu_id`
+WHERE  `user`.`status` = 'enabled'
+AND `user_manu`.`status` = 'enabled'
+AND (
+   `user`.`name` like '%张三%' OR `user`.`name` like '%李四%'
+)
+ORDER BY `user`.`id` desc, `user_manu`.`name` asc
+LIMIT 2
+```
+
+### 数据结构
+
+**`QueryParam`**
+
+| 字段     | 类型                       | 说明             | 必填项 |
+| -------- | -------------------------- | ---------------- | ------ |
+| select   | Array\<String\>            | 选择字段清单     | 否     |
+| wheres   | Array\<Object Where\>      | 查询条件         | 否     |
+| orders   | Array\<Object Order\>      | 排序条件         | 否     |
+| limit    | Integer                    | 返回记录条目     | 否     |
+| page     | Integer                    | 当前页码         | 否     |
+| pagesize | Integer                    | 每页显示记录数量 | 否     |
+| withs    | `[key:String]:Object With` | 读取关联模型     | 否     |
+
+**`Object Where`**
+
+| 字段   | 类型                  | 说明                                       | 必填项 |
+| ------ | --------------------- | ------------------------------------------ | ------ |
+| rel    | String                | 如按关联模型的字段查询，则填写关联模型名称 | 否     |
+| column | String                | 字段名称                                   | 否     |
+| method | String                | 查询方法 `where`,`orwhere`                 | 否     |
+| op     | String                | 匹配关系 `eq`,`like`,`in`,`gt` 等          | 否     |
+| value  | Any                   | 匹配数值                                   | 否     |
+| wheres | Array\<Object Where\> | 分组查询                                   | 否     |
+
+| 查询方法 | 说明                                  |
+| -------- | ------------------------------------- |
+| where    | WHERE 字段 = 数值, WHERE 字段 >= 数值 |
+| orwhere  | ... OR WHERE 字段 = 数值              |
+
+| 匹配关系 | 说明                             |
+| -------- | -------------------------------- |
+| eq       | 默认值 等于 WHERE 字段 = 数值    |
+| like     | 匹配 WHERE 字段 like 数值        |
+| gt       | 大于 WHERE 字段 > 数值           |
+| ge       | 大于等于 WHERE 字段 >= 数值      |
+| lt       | 小于 WHERE 字段 < 数值           |
+| le       | 小于等于 WHERE 字段 <= 数值      |
+| null     | 为空 WHERE 字段 IS NULL          |
+| notnull  | 不为空 WHERE 字段 IS NOT NULL    |
+| in       | 列表包含 WHERE 字段 IN (数值...) |
+
+**`Object Order`**
+
+| 字段   | 类型   | 说明                                       | 必填项 |
+| ------ | ------ | ------------------------------------------ | ------ |
+| rel    | String | 如按关联模型的字段排序，则填写关联模型名称 | 否     |
+| column | String | 字段名称                                   | 否     |
+| option | String | 排序方式，默认为 asc desc, asc             | 否     |
+
+**`Object With`**
+
+| 字段  | 类型              | 说明         | 必填项 |
+| ----- | ----------------- | ------------ | ------ |
+| name  | String            | 关联关系名称 | 否     |
+| query | Object QueryParam | 查询参数     | 否     |
+
+### URL Query String 与 QueryParam 对照表
+
+查询条件可以通过 URL Query String 传入，<a href="https://yaoapps.com/doc/f.%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/c.%E6%8E%A5%E5%8F%A3#URL%20Query%20String%20%E4%B8%8E%20QueryParam%20%E5%AF%B9%E7%85%A7%E8%A1%A8"> 详见对照表 </a>
 
 ## 处理器清单
 
@@ -22,119 +693,410 @@ models 目录中。使用 yao migrate 命令创建/更新数据表结构设计�
 | models.<模型名称\>.EachSave            | 保存多条记录, 不存在创建记录, 存在更新记录, 返回记录 ID 集合               | [查看](../处理器/process/EachSave)            |
 | models.<模型名称\>.EachSaveAfterDelete | 删除一组给定 ID 的记录后，保存多条记录, 不存在创建, 存在更新, 返回 ID 集合 | [查看](../处理器/process/EachSaveAfterDelete) |
 
-## Widgets 为我们提供了数据模型创建 JSON 描述来创建数据库表格
-
-### 示例，新增 `models/ccategory.mod.json`文件
+## 完整示例
 
 <Detail title="查看源码">
 
 ```json
 {
-  "name": "书籍分类",
+  "name": "用户",
   "table": {
-    "name": "category",
-    "comment": "书籍分类"
+    "name": "user",
+    "comment": "用户表",
+    "engine": "InnoDB"
   },
   "columns": [
+    { "label": "ID", "name": "id", "type": "ID" },
     {
-      "label": "ID",
-      "name": "id",
-      "type": "ID",
-      "comment": "ID",
-      "primary": true
+      "label": "厂商",
+      "name": "manu_id",
+      "type": "bigInteger",
+      "length": 50,
+      "comment": "所属厂商",
+      "nullable": true,
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["integer"],
+          "message": "{{input}}类型错误, {{label}}应为数字"
+        },
+        {
+          "method": "min",
+          "args": [0],
+          "message": "{{label}}应大于0"
+        }
+      ]
     },
     {
-      "label": "父级id",
-      "name": "parent_id",
+      "label": "类型",
+      "name": "type",
+      "type": "enum",
+      "option": ["admin", "staff", "user"],
+      "comment": "账号类型 admin 管理员, staff 员工, user 用户",
+      "default": "staff",
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "enum",
+          "args": ["admin", "staff", "user"],
+          "message": "{{input}}不在许可范围, {{label}}应该为 admin/staff/user"
+        }
+      ]
+    },
+    {
+      "label": "手机号",
+      "name": "mobile",
+      "type": "string",
+      "length": 50,
+      "comment": "手机号",
+      "index": true,
+      "crypt": "AES",
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^1[3-9]\\d{9}$"],
+          "message": "{{input}}格式错误"
+        }
+      ]
+    },
+    {
+      "label": "登录密码",
+      "name": "password",
+      "type": "string",
+      "length": 256,
+      "comment": "登录密码",
+      "crypt": "PASSWORD",
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "minLength",
+          "args": [6],
+          "message": "{{label}}应该由6-18位，大小写字母、数字和符号构成"
+        },
+        {
+          "method": "maxLength",
+          "args": [18],
+          "message": "{{label}}应该由6-18位，大小写字母、数字和符号构成"
+        },
+        {
+          "method": "pattern",
+          "args": ["[0-9]+"],
+          "message": "{{label}}应该至少包含一个数字"
+        },
+        {
+          "method": "pattern",
+          "args": ["[A-Z]+"],
+          "message": "{{label}}应该至少包含一个大写字母"
+        },
+        {
+          "method": "pattern",
+          "args": ["[a-z]+"],
+          "message": "{{label}}应该至少包含一个小写字母"
+        },
+        {
+          "method": "pattern",
+          "args": ["[@#$&*]+"],
+          "message": "{{label}}应该至少包含一个符号"
+        }
+      ]
+    },
+    {
+      "label": "姓名",
+      "name": "name",
+      "type": "string",
+      "length": 80,
+      "comment": "姓名",
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "minLength",
+          "args": [2],
+          "message": "{{label}}至少需要2个字"
+        },
+        {
+          "method": "maxLength",
+          "args": [40],
+          "message": "{{label}}不能超过20个字"
+        }
+      ]
+    },
+    {
+      "label": "身份证号码",
+      "name": "idcard",
+      "type": "string",
+      "length": 256,
+      "comment": "身份证号码",
+      "crypt": "AES",
+      "nullable": true,
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^(\\d{18})|(\\d{14}X)$"],
+          "message": "{{label}}格式错误"
+        }
+      ]
+    },
+    {
+      "label": "账户余额",
+      "name": "balance",
       "type": "integer",
+      "length": 20,
+      "comment": "账户余额(冗余)",
+      "default": 0,
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["integer"],
+          "message": "{{input}}类型错误, {{label}}应为数字"
+        },
+        {
+          "method": "min",
+          "args": [0],
+          "message": "{{label}}应大于0"
+        }
+      ]
+    },
+    {
+      "label": "API Key",
+      "name": "key",
+      "type": "string",
+      "length": 256,
+      "comment": "API Key",
+      "nullable": true,
+      "unique": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^[0-9A-Za-z@#$&*]{8}$"],
+          "message": " {{label}}应该由8位，大小写字母、数字和符号构成"
+        }
+      ]
+    },
+    {
+      "label": "API 密钥",
+      "name": "secret",
+      "type": "string",
+      "length": 256,
+      "nullable": true,
+      "crypt": "AES",
+      "comment": "API 密钥",
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "pattern",
+          "args": ["^[0-9A-Za-z@#$&*]{32}$"],
+          "message": "{{label}}应该由32位，大小写字母、数字和符号构成"
+        }
+      ]
+    },
+    {
+      "label": "简历",
+      "name": "resume",
+      "type": "text",
+      "comment": "简历",
       "nullable": true
     },
     {
-      "label": "分类名称",
-      "name": "name",
-      "type": "string",
-      "length": 128,
-      "index": true
+      "label": "扩展信息",
+      "name": "extra",
+      "type": "json",
+      "comment": "扩展信息",
+      "nullable": true
+    },
+    {
+      "label": "状态",
+      "comment": "用户状态 enabled 有效, disabled 无效",
+      "name": "status",
+      "type": "enum",
+      "default": "enabled",
+      "option": ["enabled", "disabled"],
+      "index": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "enum",
+          "args": ["enabled", "disabled"],
+          "message": "{{input}}不在许可范围, {{label}}应该为 enabled/disabled"
+        }
+      ]
     }
   ],
   "relations": {
-    "book": {
-      "type": "hasMany",
-      "model": "book",
-      "key": "category_id",
-      "foreign": "id",
-      "query": {}
-    },
-    "parent": {
+    "manu": {
       "type": "hasOne",
-      "model": "category",
+      "model": "manu",
       "key": "id",
-      "foreign": "parent_id",
-      "query": {}
+      "foreign": "manu_id",
+      "select": ["name", "short_name", "type"]
+    },
+    "addresses": {
+      "type": "hasMany",
+      "model": "address",
+      "key": "user_id",
+      "foreign": "id",
+      "query": {
+        "select": ["province", "city", "location", "status"],
+        "pagesize": 20
+      }
+    },
+    "mother": {
+      "type": "hasOneThrough",
+      "links": [
+        {
+          "type": "hasOne",
+          "model": "friends",
+          "key": "user_id",
+          "foreign": "user.id",
+          "query": {
+            "select": ["status", "type", "friend_id"],
+            "wheres": [
+              {
+                "column": "type",
+                "value": "monther"
+              }
+            ]
+          }
+        },
+        {
+          "type": "hasOne",
+          "model": "user",
+          "key": "id",
+          "foreign": "user_mother_friends.friend_id",
+          "query": {
+            "select": ["name", "id", "status", "type", "secret", "extra"],
+            "withs": {
+              "manu": { "name": "manu" },
+              "roles": { "name": "roles" },
+              "address": { "name": "address" }
+            }
+          }
+        }
+      ]
+    },
+    "roles": {
+      "type": "hasManyThrough",
+      "links": [
+        {
+          "type": "hasMany",
+          "model": "user_roles",
+          "key": "user_id",
+          "foreign": "id",
+          "query": {
+            "select": ["status"],
+            "pagesize": 20
+          }
+        },
+        {
+          "type": "hasOne",
+          "model": "role",
+          "key": "id",
+          "foreign": "role_id",
+          "query": {
+            "select": ["name", "label", "permission"]
+          }
+        }
+      ]
     }
-  },
-  "option": {
-    "timestamps": true,
-    "soft_deletes": true
   },
   "values": [
     {
-      "id": 1,
-      "parent_id": null,
-      "name": "文史类"
+      "name": "管理员",
+      "manu_id": 1,
+      "type": "admin",
+      "idcard": "230624198301170015",
+      "mobile": "13900001111",
+      "password": "cvSK@RY6",
+      "key": "FB3fxCeQ",
+      "secret": "XMTdNRVigbgUiAPdiJCfaWgWcz2PaQXw",
+      "status": "enabled",
+      "extra": { "sex": "男" }
     },
     {
-      "id": 2,
-      "parent_id": 1,
-      "name": "历史"
+      "name": "员工",
+      "manu_id": 1,
+      "type": "staff",
+      "idcard": "23082619820207024X",
+      "mobile": "13900002222",
+      "password": "qV@uT1DI",
+      "key": "JDh2ZiUt",
+      "secret": "wBeYjL7FjbcvpAdBrxtDFfjydsoPKhRN",
+      "status": "enabled",
+      "extra": { "sex": "女" }
     },
     {
-      "id": 3,
-      "parent_id": 1,
-      "name": "古诗"
-    },
-    {
-      "id": 4,
-      "parent_id": null,
-      "name": "理工类"
-    },
-    {
-      "id": 5,
-      "parent_id": 4,
-      "name": "数学"
-    },
-    {
-      "id": 6,
-      "parent_id": 4,
-      "name": "物理"
+      "name": "用户",
+      "manu_id": 2,
+      "type": "user",
+      "idcard": "23082619820207004X",
+      "mobile": "13900003333",
+      "password": "qV@uT1DI",
+      "key": "XZ12MiPz",
+      "secret": "wBeYjL7FjbcvpAdBrxtDFfjydsoPKhRN",
+      "status": "enabled",
+      "extra": { "sex": "女" }
     }
-  ]
+  ],
+  "indexes": [
+    {
+      "comment": "厂商用户",
+      "name": "manu_id_mobile_unique",
+      "columns": ["manu_id", "mobile"],
+      "type": "unique"
+    },
+    {
+      "comment": "简历全文检索",
+      "name": "resume_fulltext",
+      "columns": ["resume"],
+      "type": "fulltext"
+    }
+  ],
+  "option": { "timestamps": true, "soft_deletes": true }
 }
 ```
 
 </Detail>
-
-<Notice type="success">
-  提示：<strong>option.timestamps</strong> 为 true, 自动创建
-  <strong>created_at</strong> 和 <strong>updated_at</strong> 字段, 用于保存数据记录的创建时间和更新时间。
-  <strong>option.soft_deletes</strong> 为 true, 自动创建
-  <strong>deleted_at</strong> 字段, 用于标记删除记录。
-</Notice>
-
-数据迁移执行 `yao migrate -n XXX`，比如这个模型应该执行 `yao migrate -n category`
-
-## DSL 结构
-
-| 字段          | 说明                       |
-| ------------- | -------------------------- |
-| name          | 模型名称                   |
-| table         | 数据库字段设置属性         |
-| table.name    | 数据库表名称               |
-| table.comment | 数据表备注                 |
-| columns       | 每个字段描述               |
-| relations     | 模型与其他数据表的关联关系 |
-| option        | 设置软删除                 |
-| values        | 执行迁移时，默认填充的数据 |
 
 <Div style={{ display: "flex", justifyContent: "right" }}>
 
