@@ -1,10 +1,8 @@
 # 编写处理器
 
-## 处理器分为两种:`flows` 处理器和 `scripts` 处理器
+## 编写`flows`处理器
 
-#### 编写`flows`处理器示例代码:
-
-新建`models/category.mod.json`写入以下代码:
+### 新建`models/category.mod.json`写入以下代码:
 
 <Detail title="查看源码">
 
@@ -60,7 +58,7 @@
 
 执行命令 `yao migrate -n category`在数据库中可以看到生成了对应的数据表和数据
 
-编写`flows/category.flow.json`写入以下代码:
+### 编写`flows/category.flow.json`写入以下代码:
 
 ```json
 {
@@ -112,9 +110,9 @@
 ]
 ```
 
-#### 编写`scripts`处理器示例代码:
+## 编写`scripts`处理器
 
-新建 `scripts/category.js`:
+### 新建 `scripts/category.js`:
 
 ```javascript
 function category() {
@@ -132,7 +130,7 @@ function getData() {
 
 运行命令行调用 `yao run scripts.category.category`等价于 `yao run scripts.category.getData`
 
-#### 编写表格预处理器，使用 Hooks
+### 编写表格预处理器，使用 Hooks
 
 可以使用 Hooks 处理表格 API 输入输出数据。Hook 分为 `before` 和 `after` 两类， before hook，在 API 调用前运行，可以用来处理传入参数，after hook，在 API 调用后运行，可用来处理查询结果。
 

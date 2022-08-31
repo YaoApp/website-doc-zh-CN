@@ -1,0 +1,58 @@
+# 网络请求
+
+YAO 集成了众多的 Http 请求，通过 network 处理器，快速请求各种 URL。
+
+## 网络请求包含处理器列表
+
+| 处理器                 | 说明                                          |
+| ---------------------- | --------------------------------------------- |
+| xiang.network.IP       | 查询服务器 IP 信息                            |
+| xiang.network.Get      | 发送 HTTP GET 请求                            |
+| xiang.network.Post     | 发送 HTTP POST 请求                           |
+| xiang.network.PostJSON | 发送 HTTP POST 请求, payload 为 JSON 格式数据 |
+| xiang.network.Put      | 发送 HTTP PUT 请求                            |
+| xiang.network.PostJSON | 发送 HTTP PUT 请求, payload 为 JSON 格式数据  |
+| xiang.network.Send     | 发送任意请求, payload 为 JSON 格式数据        |
+
+## 示例代码：
+
+发送 GET 请求示例：`xiang.network.Get`
+
+```javascript
+var response = Process("xiang.network.Get", url, params, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
+```
+
+发送 POST 请求示例：`xiang.network.PostJSON`
+
+```javascript
+let response = Process("xiang.network.PostJSON", url, data, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
+```
+
+发送 PATCH 请求示例：`xiang.network.Send`
+
+```javascript
+let response = Process("xiang.network.Send", "PATCH", url, {}, body, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
+```
+
+发送 DELETTE 请求示例：`xiang.network.Send`
+
+```javascript
+let response = Process("xiang.network.Send", "DELETE", url, {}, body, {
+  "Content-Type": "application/json",
+  Auth: "token",
+});
+```
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link type="prev" title="数据模型" link="手册/处理器/数据模型"></Link>
+  <Link type="next" title="文件操作" link="手册/处理器/文件操作"></Link>
+</Div>
