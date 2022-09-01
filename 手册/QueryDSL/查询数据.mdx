@@ -84,7 +84,7 @@ ORDER BY `high_score` DESC
 | sql       | Object SQL                | SQL 语句。**非必要，勿使用**。 [查看文档](#2.1%20表达式)                                                                                                                                                                    | 否     |
 | comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                                                                                                  | 否     |
 
-### 1.1 选择字段 `select`
+### 1.1 选择字段 Select
 
 `select` 用来描述选择字段列表，数据类型为字段表达式字符串数组 `Array<Field Expression>` ，支持数据表字段名称、常量和函数；可以使用 `as` 对字段设置别名，别名视为主表字段名称，可在 `wheres`, `order`, `having` 中直接使用。
 
@@ -110,7 +110,7 @@ ORDER BY `high_score` DESC
 
 [查看字段表达式文档](#2-字段表达式-Field-Expression)
 
-### 1.2 选择数据表 `from`
+### 1.2 选择数据表 From
 
 `form` 用来指定查询数据表名称或数据模型，数据类型为 `String`；
 
@@ -127,7 +127,7 @@ ORDER BY `high_score` DESC
 - 可以使用 `as` 对数据表设置别名，别名支持中文，在表连接、字段引用等场景可以使用别名代替数据表名称。
 - 如设置子查询 `query`([文档](#1.8.1%20用于%20SELECT%20场景))，解释器优先响应子查询逻辑，忽略 `from` 设定。 `query`和`from` 必填其一。
 
-### 1.3 查询条件 `wheres`
+### 1.3 查询条件 Wheres
 
 `wheres` 用于描述数据查询条件，数据结构为 `Array<Object Where>`。
 
@@ -198,7 +198,7 @@ Gou Query DSL:
 | `notnull` | 不为空 WHERE 字段 IS NOT NULL    |
 | `in`      | 列表包含 WHERE 字段 IN (数值...) |
 
-### 1.4 排序条件 `orders`
+### 1.4 排序条件 Orders
 
 `orders` 用于描述数据排序条件，数据结构为 `Array<Object Order>`。
 
@@ -227,7 +227,7 @@ Gou Query DSL:
 | sort    | String           | 排序方式，许可值 `asc`, `desc`, 默认值为 `asc`             | 否     |
 | comment | String           | 排序条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。 | 否     |
 
-#### 1.4.2 排序条件语法糖 `orders syntactic sugar`
+#### 1.4.2 排序条件语法糖 orders syntactic sugar
 
 如果排序条件简单且易于理解，可使用 `Array<Field Expression>` 结构描述； 亦可使用 `Field Expression` 类型描述，多个用 `,` 分割。
 
@@ -244,7 +244,7 @@ Gou Query DSL:
 }
 ```
 
-##### 使用 `Array<String>`
+##### 使用 Array<String>
 
 ```json
 {
@@ -261,7 +261,7 @@ Gou Query DSL:
 }
 ```
 
-##### 多个 `Field Expression` 用 `,` 分割
+##### 多个 Field Expression 用逗号分割
 
 ```json
 {
@@ -275,7 +275,7 @@ Gou Query DSL:
 }
 ```
 
-### 1.5 数量限定 `limit`, `offset`, `page`, `pagesize`, `data-only`
+### 1.5 数量限定
 
 使用 `limit`, `offset` 或 `page`, `pagesize` 限定记录范围。`page` 和 `pagesize` 根据查询条件自动分页。
 
@@ -333,7 +333,7 @@ Gou Query DSL:
 | pagesize  | Int  | 每页读取记录数量。 若仅设定 `page` 数值，`pagesize` 默认为 `15`。                                                                                                    | 否     |
 | data-only | Bool | 仅在设定 `page` 或 `pagesize` 时有效。设定为 `true`, 默认为 `false`, 查询结果为[带分页信息的数据记录数组 Object Paginate](#从第%2020%20条开始，读取%2050%20条数据)。 | 否     |
 
-### 1.6 数据聚合 `groups`, `havings`
+### 1.6 数据聚合
 
 在 `groups` 中定义数据聚合方式，Group 数据结构为 `Array<Object Group>`。
 
@@ -363,7 +363,7 @@ Gou Query DSL:
 | 3   | 北京 | 云存储 | 50     |
 | 4   | 上海 | 云主机 | 200    |
 
-##### 聚合统计 `group`
+##### 聚合统计 group
 
 Gou Query DSL:
 
@@ -397,7 +397,7 @@ Gou Query DSL:
 | 云存储 | 北京 | 50   |
 | 云主机 | 上海 | 200  |
 
-##### 多层级聚合统计 `rollup`
+##### 多层级聚合统计 rollup
 
 Gou Query DSL:
 
@@ -469,7 +469,7 @@ Gou Query DSL:
 | 云存储       | **所有城市** | 50   |
 | **所有类型** | **所有城市** | 350  |
 
-#### 1.6.2 聚合函数 `aggregate functions`
+#### 1.6.2 聚合函数 aggregate functions
 
 聚合函数按特定算法，对一组数据记录统计，返回一个数值，一般用于聚合查询。
 
@@ -498,7 +498,7 @@ Gou Query DSL:
 | JSON_ARRAYAGG()  | [`Field Expression`]                    | 合并为一个 JSON Array  | `:JSON_ARRAYAGG(amount)`                                 | `[50, 50, 50, 200]`         |
 | JSON_OBJECTAGG() | [`Field Expression`,`Field Expression`] | 合并为一个 JSON Object | `:JSON_OBJECTAGG(city,price)`                            | `{"上海": 200, "北京": 50}` |
 
-#### 1.6.3 聚合结果筛选 `havings`
+#### 1.6.3 聚合结果筛选 havings
 
 在 `wheres` 中不能筛选聚合结果数据，如需对聚合查询结果进行筛选，可以使用 `havings` 实现, 数据结构为 `Array<Object Having>`
 
@@ -555,7 +555,7 @@ Gou Query DSL:
 | query   | Object QueryDSL        | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](#1.8.1%20用于%20SELECT%20场景) | 否     |
 | comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                   | 否     |
 
-#### 1.6.4 数据聚合语法糖 `groups syntactic sugar`
+#### 1.6.4 数据聚合语法糖 groups syntactic sugar
 
 ##### 1.6.4.1 Groups 简写
 
@@ -663,7 +663,7 @@ GROUP by `行业`, `计费方式` WITH ROLLUP
 | 艺术     | 所有计费方式 | 100  |
 | 全部行业 | 所有计费方式 | 1000 |
 
-### 1.7 联合查询 `unions`
+### 1.7 联合查询 unions
 
 可以在 `unions` 中将多个查询将结果合并成为一张结构相同数据表进行查询，可用于数据统计、分页展示等场景。
 
@@ -708,7 +708,7 @@ Gou Query DSL:
  LIMIT 10
 ```
 
-### 1.8 子查询 `query`
+### 1.8 子查询 query
 
 可以通过描述 `query` 动态生成一张二维数据表或数值，在该数据表上查询或应用用于 WHERE, HAVING 查询条件。用于 SELECT 子查询场景时，必须设定别名，如设置 `query`, 则 `from` 失效。 `query` 数据结构为 `QueryDSL`。
 
@@ -808,7 +808,7 @@ HAVING `数量` = ( SELECT 1 )
 LIMIT 50
 ```
 
-### 1.9 表连接(不推荐) `joins`
+### 1.9 表连接(不推荐) joins
 
 连接两张数据量较大的数据表，非常消耗服务器资源，且查询低效。对于数据统计分析等场景，应该使用数仓或数据分析引擎，根据业务场景设置业务数据结构、清洗归集逻辑和查询逻辑，最终归集为一张**宽表**，在宽表中进行统计查询。数据量较大的应用，推荐使用[象传智慧](https://www.iqka.com) `Xu` 数据分析引擎。
 
@@ -851,15 +851,15 @@ LEFT JOIN `manu` ON `manu`.`id` = `service`.`manu_id`
 
 #### Object Join 数据结构
 
-| 字段    | 类型   | 说明                                                                    | 必填项 |
-| ------- | ------ | ----------------------------------------------------------------------- | ------ |
-| from    | String | 连接表名称，与 Object QueryDSL `from`相同。 | 是     |
-| key     | String | 关联连接表字段名称                                                      | 是     |
-| foreign | String | 关联目标表字段名称(需指定表名或别名)                                    | 是     |
-| left    | Bool   | `true` 连接方式为 `LEFT JOIN`, 默认为 `false` 连接方式为 `JOIN`         | 否     |
-| right   | Bool   | `true` 连接方式为 `RIGHT JOIN`, 默认为 `false` 连接方式为 `JOIN`        | 否     |
+| 字段    | 类型   | 说明                                                             | 必填项 |
+| ------- | ------ | ---------------------------------------------------------------- | ------ |
+| from    | String | 连接表名称，与 Object QueryDSL `from`相同。                      | 是     |
+| key     | String | 关联连接表字段名称                                               | 是     |
+| foreign | String | 关联目标表字段名称(需指定表名或别名)                             | 是     |
+| left    | Bool   | `true` 连接方式为 `LEFT JOIN`, 默认为 `false` 连接方式为 `JOIN`  | 否     |
+| right   | Bool   | `true` 连接方式为 `RIGHT JOIN`, 默认为 `false` 连接方式为 `JOIN` | 否     |
 
-### 1.10 SQL 语句(谨慎使用) `sql`
+### 1.10 SQL 语句(谨慎使用) SQL
 
 **非必要，勿使用** 除非无法使用 Query DSL 描述查询逻辑，不要直接编写 SQL 语句。直接编写 SQL 语句将加大应用程序维护难度；增加系统信息泄露安全风险；因查询逻辑不可控，可能造成数据库或数仓宕机；数据迁移、数据库、数仓、数据分析引擎升级，**也可导致查询语句不可用**。
 
@@ -887,7 +887,7 @@ SELECT `id`, `name` FROM `service` WHERE id = 1
 | stmt | String       | SQL 语句 | 是     |
 | args | Array\<Any\> | 参数表   | 否     |
 
-## 2. 字段表达式 `Field Expression`
+## 2. 字段表达式
 
 字段表达式可以用于 `select` 、`wheres`、`order`、`group` 等场景；字段表达式数据类型为 `String`，可以为主表字段名称、关联表字段名称、常量、函数等。
 
@@ -1006,7 +1006,7 @@ SELECT `id`, `name` FROM `service` WHERE id = 1
 
 [查看 Object Record 数据结构](#3.3%20数据记录数据结构%20Object%20Record)
 
-### 3.2 带分页信息的数据记录数组 `Object Paginate`
+### 3.2 带分页信息的数据记录数组 Object Paginate
 
 ```json
 {
@@ -1039,7 +1039,7 @@ SELECT `id`, `name` FROM `service` WHERE id = 1
 | pagecnt  | Integer                | 总页数                        |
 | total    | Integer                | 总记录数                      |
 
-### 3.3 数据记录数据结构 `Object Record`
+### 3.3 数据记录数据结构 Object Record
 
 Object Record 数据结构为:`[key:String]Any`
 
