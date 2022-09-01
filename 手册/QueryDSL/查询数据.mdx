@@ -65,24 +65,24 @@ ORDER BY `high_score` DESC
 
 ### Object QueryDSL 数据结构
 
-| 字段      | 类型                      | 说明                                                                                                                                                                                                       | 必填项 |
-| --------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| select    | Array\<Field Expression\> | 选择字段列表 [查看文档](#1-1%20选择字段%20%60select%60)                                                                                                                                                    | 是     |
-| from      | String                    | 查询数据表名称或数据模型 [查看文档](#12-选择数据表-from)                                                                                                                                                   | 否     |
-| wheres    | Array\<Object Where\>     | 数据查询条件 [查看文档](#13-查询条件-wheres)                                                                                                                                                               | 否     |
-| orders    | Array\<Object Order\>     | 排序条件 [查看文档](#14-排序条件-orders)                                                                                                                                                                   | 否     |
-| offset    | Int                       | 记录开始位置 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                                 | 否     |
-| limit     | Int                       | 读取数据的数量 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                               | 否     |
-| page      | Int                       | 分页查询当前页面页码 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                         | 否     |
-| pagesize  | Int                       | 每页读取记录数量 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only)                                                                                                                             | 否     |
-| data-only | Bool                      | 设定为 `true`, 查询结果为 Array\<Object Record\>; 默认为 `false`, 查询结果为 Array\<Object Paginate\>, 仅在设定 `page` 或 `pagesize`时有效。 [查看文档](#15-数量限定-limit-offset-page-pagesize-data-only) | 否     |
-| groups    | Array\<Object Group\>     | 聚合字段和统计层级设置。 [查看文档](#16-数据聚合-groups-havings)                                                                                                                                           | 否     |
-| havings   | Array\<Object Having\>    | 聚合查询结果筛选, 仅在设定 `groups` 时有效。 [查看文档](#16-数据聚合-groups-havings)                                                                                                                       | 否     |
-| unions    | Array\<Object QueryDSL\>  | 联合查询。多个查询将结果合并为一张表 [查看文档](#17-联合查询-unions)                                                                                                                                       | 否     |
-| query     | Object QueryDSL           | 子查询。按 QueryDSL 描述查询逻辑，生成一张二维数据表或数值。 [查看文档](#18-子查询-query)                                                                                                                  | 否     |
-| joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [查看文档](#19-表连接不推荐-joins)                                                                                                                       | 否     |
-| sql       | Object SQL                | SQL 语句。**非必要，勿使用**。 [查看文档](#110-sql-语句谨慎使用-sql)                                                                                                                                       | 否     |
-| comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                                                                                 | 否     |
+| 字段      | 类型                      | 说明                                                                                                                                                                                                                        | 必填项 |
+| --------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| select    | Array\<Field Expression\> | 选择字段列表 [查看文档](#1.1%20选择字段%20select)                                                                                                                                                                           | 是     |
+| from      | String                    | 查询数据表名称或数据模型 [查看文档](#1.2%20选择数据表%20from)                                                                                                                                                               | 否     |
+| wheres    | Array\<Object Where\>     | 数据查询条件 [查看文档](#1.3%20查询条件%20wheres)                                                                                                                                                                           | 否     |
+| orders    | Array\<Object Order\>     | 排序条件 [查看文档](#1.4%20排序条件%20orders)                                                                                                                                                                               | 否     |
+| offset    | Int                       | 记录开始位置 [查看文档](#1.5%20数量限定%20limit,%20offset,%20page,%20pagesize,%20data-only)                                                                                                                                 | 否     |
+| limit     | Int                       | 读取数据的数量 [查看文档](#1.5%20数量限定%20limit,%20offset,%20page,%20pagesize,%20data-only)                                                                                                                               | 否     |
+| page      | Int                       | 分页查询当前页面页码 [查看文档](#1.5%20数量限定%20limit,%20offset,%20page,%20pagesize,%20data-only)                                                                                                                         | 否     |
+| pagesize  | Int                       | 每页读取记录数量 [查看文档](#1.5%20数量限定%20limit,%20offset,%20page,%20pagesize,%20data-only)                                                                                                                             | 否     |
+| data-only | Bool                      | 设定为 `true`, 查询结果为 Array\<Object Record\>; 默认为 `false`, 查询结果为 Array\<Object Paginate\>, 仅在设定 `page` 或 `pagesize`时有效。 [查看文档](#1.5%20数量限定%20limit,%20offset,%20page,%20pagesize,%20data-only) | 否     |
+| groups    | Array\<Object Group\>     | 聚合字段和统计层级设置。 [查看文档](#1.6.1%20使用示例)                                                                                                                                                                      | 否     |
+| havings   | Array\<Object Having\>    | 聚合查询结果筛选, 仅在设定 `groups` 时有效。 [查看文档](#1.8.3%20用于%20HAVING%20场景)                                                                                                                                      | 否     |
+| unions    | Array\<Object QueryDSL\>  | 联合查询。多个查询将结果合并为一张表 [查看文档](#1.7%20联合查询%20unions)                                                                                                                                                   | 否     |
+| query     | Object QueryDSL           | 子查询。按 QueryDSL 描述查询逻辑，生成一张二维数据表或数值。 [查看文档](#1.8.1%20用于%20SELECT%20场景)                                                                                                                      | 否     |
+| joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [查看文档](#Object%20Join%20数据结构)                                                                                                                                     | 否     |
+| sql       | Object SQL                | SQL 语句。**非必要，勿使用**。 [查看文档](#2.1%20表达式)                                                                                                                                                                    | 否     |
+| comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                                                                                                  | 否     |
 
 ### 1.1 选择字段 `select`
 
@@ -125,7 +125,7 @@ ORDER BY `high_score` DESC
 
 - 可以使用 `$` 标识符，指定数据模型绑定的数据表。
 - 可以使用 `as` 对数据表设置别名，别名支持中文，在表连接、字段引用等场景可以使用别名代替数据表名称。
-- 如设置子查询 `query`([文档](#1.8-子查询-query))，解释器优先响应子查询逻辑，忽略 `from` 设定。 `query`和`from` 必填其一。
+- 如设置子查询 `query`([文档](#1.8.1%20用于%20SELECT%20场景))，解释器优先响应子查询逻辑，忽略 `from` 设定。 `query`和`from` 必填其一。
 
 ### 1.3 查询条件 `wheres`
 
@@ -173,15 +173,15 @@ Gou Query DSL:
 
 #### Object Where 数据结构
 
-| 字段    | 类型                  | 说明                                                                             | 必填项 |
-| ------- | --------------------- | -------------------------------------------------------------------------------- | ------ |
-| field   | Field Expression      | 字段表达式，不支持设置别名 `as`                                                  | 是     |
-| value   | Any                   | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}`     | 否     |
-| op      | String                | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                        | 否     |
-| or      | Bool                  | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`          | 否     |
-| wheres  | Array\<Object Where\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景      | 否     |
-| query   | Object QueryDSL       | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](#1.8-子查询-query) | 否     |
-| comment | String                | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                       | 否     |
+| 字段    | 类型                  | 说明                                                                                         | 必填项 |
+| ------- | --------------------- | -------------------------------------------------------------------------------------------- | ------ |
+| field   | Field Expression      | 字段表达式，不支持设置别名 `as`                                                              | 是     |
+| value   | Any                   | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}`                 | 否     |
+| op      | String                | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                                    | 否     |
+| or      | Bool                  | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`                      | 否     |
+| wheres  | Array\<Object Where\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景                  | 否     |
+| query   | Object QueryDSL       | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](#1.8.1%20用于%20SELECT%20场景) | 否     |
+| comment | String                | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                   | 否     |
 
 ##### 匹配关系运算符
 
@@ -221,11 +221,11 @@ Gou Query DSL:
 
 #### 1.4.1 Object Order 数据结构
 
-| 字段    | 类型             | 说明                                                                                     | 必填项 |
-| ------- | ---------------- | ---------------------------------------------------------------------------------------- | ------ |
-| field   | Field Expression | 字段表达式，不支持设置别名 `as` [查看字段表达式文档](<(#2-字段表达式-Field-Expression)>) | 是     |
-| sort    | String           | 排序方式，许可值 `asc`, `desc`, 默认值为 `asc`                                           | 否     |
-| comment | String           | 排序条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                               | 否     |
+| 字段    | 类型             | 说明                                                       | 必填项 |
+| ------- | ---------------- | ---------------------------------------------------------- | ------ |
+| field   | Field Expression | 字段表达式，不支持设置别名 `as`                            | 是     |
+| sort    | String           | 排序方式，许可值 `asc`, `desc`, 默认值为 `asc`             | 否     |
+| comment | String           | 排序条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。 | 否     |
 
 #### 1.4.2 排序条件语法糖 `orders syntactic sugar`
 
@@ -325,13 +325,13 @@ Gou Query DSL:
 
 #### 数量限定设置
 
-| 字段      | 类型 | 说明                                                                                                                                                                                                                                                            | 必填项 |
-| --------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| offset    | Int  | 记录开始位置。默认为从头开始。                                                                                                                                                                                                                                  | 否     |
-| limit     | Int  | 从开始位置起，读取数据的条目。 默认为 `0`，不限定。                                                                                                                                                                                                             | 否     |
-| page      | Int  | 分页查询当前页面页码， 默认为 `1`                                                                                                                                                                                                                               | 否     |
-| pagesize  | Int  | 每页读取记录数量。 若仅设定 `page` 数值，`pagesize` 默认为 `15`。                                                                                                                                                                                               | 否     |
-| data-only | Bool | 仅在设定 `page` 或 `pagesize` 时有效。设定为 `true`, 查询结果为[数据记录数组 Array\<Object Record\>](#31-数据记录数组-arrayobject-record); 默认为 `false`, 查询结果为[带分页信息的数据记录数组 Object Paginate](#32-带分页信息的数据记录数组-Object-Paginate)。 | 否     |
+| 字段      | 类型 | 说明                                                                                                                                                                 | 必填项 |
+| --------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| offset    | Int  | 记录开始位置。默认为从头开始。                                                                                                                                       | 否     |
+| limit     | Int  | 从开始位置起，读取数据的条目。 默认为 `0`，不限定。                                                                                                                  | 否     |
+| page      | Int  | 分页查询当前页面页码， 默认为 `1`                                                                                                                                    | 否     |
+| pagesize  | Int  | 每页读取记录数量。 若仅设定 `page` 数值，`pagesize` 默认为 `15`。                                                                                                    | 否     |
+| data-only | Bool | 仅在设定 `page` 或 `pagesize` 时有效。设定为 `true`, 默认为 `false`, 查询结果为[带分页信息的数据记录数组 Object Paginate](#从第%2020%20条开始，读取%2050%20条数据)。 | 否     |
 
 ### 1.6 数据聚合 `groups`, `havings`
 
@@ -344,11 +344,11 @@ Gou Query DSL:
 
 **Object Group 数据结构**
 
-| 字段    | 类型             | 说明                                                                                     | 必填项 |
-| ------- | ---------------- | ---------------------------------------------------------------------------------------- | ------ |
-| field   | Field Expression | 字段表达式，不支持设置别名 `as` [查看字段表达式文档](<(#2-字段表达式-Field-Expression)>) | 是     |
-| rollup  | String           | 同时返回多层级统计结果，对应聚合字段数值的名称。                                         | 否     |
-| comment | String           | 聚合条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                               | 否     |
+| 字段    | 类型             | 说明                                                       | 必填项 |
+| ------- | ---------------- | ---------------------------------------------------------- | ------ |
+| field   | Field Expression | 字段表达式，不支持设置别名 `as`                            | 是     |
+| rollup  | String           | 同时返回多层级统计结果，对应聚合字段数值的名称。           | 否     |
+| comment | String           | 聚合条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。 | 否     |
 
 #### 1.6.1 使用示例
 
@@ -545,15 +545,15 @@ Gou Query DSL:
 
 **Object Having 数据结构**
 
-| 字段    | 类型                   | 说明                                                                                     | 必填项 |
-| ------- | ---------------------- | ---------------------------------------------------------------------------------------- | ------ |
-| field   | Field Expression       | 字段表达式，不支持设置别名 `as` [查看字段表达式文档](<(#2-字段表达式-Field-Expression)>) | 是     |
-| value   | Any                    | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}`             | 否     |
-| op      | String                 | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                                | 否     |
-| or      | Bool                   | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`                  | 否     |
-| havings | Array\<Object Having\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景              | 否     |
-| query   | Object QueryDSL        | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](#1.8-子查询-query)         | 否     |
-| comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                               | 否     |
+| 字段    | 类型                   | 说明                                                                                         | 必填项 |
+| ------- | ---------------------- | -------------------------------------------------------------------------------------------- | ------ |
+| field   | Field Expression       | 字段表达式，不支持设置别名 `as`                                                              | 是     |
+| value   | Any                    | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}`                 | 否     |
+| op      | String                 | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                                    | 否     |
+| or      | Bool                   | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`                      | 否     |
+| havings | Array\<Object Having\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景                  | 否     |
+| query   | Object QueryDSL        | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](#1.8.1%20用于%20SELECT%20场景) | 否     |
+| comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                   | 否     |
 
 #### 1.6.4 数据聚合语法糖 `groups syntactic sugar`
 
@@ -812,7 +812,7 @@ LIMIT 50
 
 连接两张数据量较大的数据表，非常消耗服务器资源，且查询低效。对于数据统计分析等场景，应该使用数仓或数据分析引擎，根据业务场景设置业务数据结构、清洗归集逻辑和查询逻辑，最终归集为一张**宽表**，在宽表中进行统计查询。数据量较大的应用，推荐使用[象传智慧](https://www.iqka.com) `Xu` 数据分析引擎。
 
-`joins` 数据结构为 `Array<Object Join>` [查看数据结构](#Object-Join-数据结构)
+`joins` 数据结构为 `Array<Object Join>` [查看数据结构](#Object%20Join%20数据结构)
 
 Gou Query DSL:
 
@@ -853,7 +853,7 @@ LEFT JOIN `manu` ON `manu`.`id` = `service`.`manu_id`
 
 | 字段    | 类型   | 说明                                                                    | 必填项 |
 | ------- | ------ | ----------------------------------------------------------------------- | ------ |
-| from    | String | 连接表名称，与 Object QueryDSL `from`相同。 [文档](#12-选择数据表-from) | 是     |
+| from    | String | 连接表名称，与 Object QueryDSL `from`相同。 | 是     |
 | key     | String | 关联连接表字段名称                                                      | 是     |
 | foreign | String | 关联目标表字段名称(需指定表名或别名)                                    | 是     |
 | left    | Bool   | `true` 连接方式为 `LEFT JOIN`, 默认为 `false` 连接方式为 `JOIN`         | 否     |
@@ -1004,7 +1004,7 @@ SELECT `id`, `name` FROM `service` WHERE id = 1
 ]
 ```
 
-[查看 Object Record 数据结构](#3.3-数据记录数据结构-Object-Record)
+[查看 Object Record 数据结构](#3.3%20数据记录数据结构%20Object%20Record)
 
 ### 3.2 带分页信息的数据记录数组 `Object Paginate`
 
