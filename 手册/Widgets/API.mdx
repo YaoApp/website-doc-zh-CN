@@ -155,6 +155,60 @@ API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定
 | 503     | 服务器暂时无法访问，导致程序运行失败。比如: MySQL server has gone away!                                           |
 | 504     | 因连接超时，导致程序运行失败。比如: MySQL server connect timeout!                                                 |
 
+### 使用`guard`
+
+在请求 api 中使用 gurad，类似于使用中间件过滤请求，拦截一些不满足条件的请求，在定义 api 的时候指定 guard 字段所使用的处理器即可
+
+##### 使用系统自带的 guard `bearer-jwt`
+
+指定整个分组 api 都要验证登录
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "guard": "bearer-jwt",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+单独指定一个接口需要验证登录
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "guard": "bearer-jwt",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
 ## 示例：
 
 ### 编写一个接口描述文件 `apis/select.http.json`，指定接口路径、请求方式以及绑定的处理器，放置在应用的 `apis` 目录中。
