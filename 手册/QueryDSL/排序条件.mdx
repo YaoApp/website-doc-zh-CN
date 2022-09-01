@@ -1,0 +1,78 @@
+# 排序条件
+
+## 排序条件 `orders`
+
+`orders` 用于描述数据排序条件，数据结构为 `Array<Object Order>`。
+
+Gou Query DSL:
+
+```json
+{
+  "orders": [
+    { "comment": "更新时间倒叙", "field": "updated_at", "sort": "desc" },
+    { "field": "manu.created_at" }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为:
+
+```sql
+  ORDER BY `updated_at` DESC, `manu`.`created_at` ASC
+```
+
+## Object Order 数据结构
+
+| 字段    | 类型             | 说明                                                       | 必填项 |
+| ------- | ---------------- | ---------------------------------------------------------- | ------ |
+| field   | Field Expression | 字段表达式，不支持设置别名 `as`                            | 是     |
+| sort    | String           | 排序方式，许可值 `asc`, `desc`, 默认值为 `asc`             | 否     |
+| comment | String           | 排序条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。 | 否     |
+
+## 排序条件语法糖 `orders syntactic sugar`
+
+如果排序条件简单且易于理解，可使用 `Array<Field Expression>` 结构描述； 亦可使用 `Field Expression` 类型描述，多个用 `,` 分割。
+
+以下描述方法解析结果相同：
+
+## 完整描述
+
+```json
+{
+  "orders": [
+    { "comment": "更新时间倒叙", "field": "updated_at", "sort": "desc" },
+    { "field": "manu.created_at" }
+  ]
+}
+```
+
+## 使用 `Array<String>`
+
+```json
+{
+  "orders": [
+    { "comment": "更新时间倒叙", "field": "updated_at", "sort": "desc" },
+    "manu.updated_at"
+  ]
+}
+```
+
+```json
+{
+  "orders": ["updated_at desc", "manu.updated_at"]
+}
+```
+
+##### 多个 `Field Expression` 用 `,` 分割
+
+```json
+{
+  "orders": "updated_at desc, manu.updated_at asc"
+}
+```
+
+```json
+{
+  "orders": "updated_at desc, manu.updated_at"
+}
+```

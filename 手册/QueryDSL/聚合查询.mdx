@@ -1,0 +1,329 @@
+# 聚合查询
+
+## 数据聚合 `groups`, `havings`
+
+在 `groups` 中定义数据聚合方式，Group 数据结构为 `Array<Object Group>`。
+
+| 字段    | 类型                   | 说明                   | 必填项 |
+| ------- | ---------------------- | ---------------------- | ------ |
+| groups  | Array\<Object Group\>  | 聚合字段和统计层级设定 | 否     |
+| havings | Array\<Object Having\> | 聚合查询结果筛选       | 否     |
+
+**Object Group 数据结构**
+
+| 字段    | 类型             | 说明                                                       | 必填项 |
+| ------- | ---------------- | ---------------------------------------------------------- | ------ |
+| field   | Field Expression | 字段表达式，不支持设置别名 `as`                            | 是     |
+| rollup  | String           | 同时返回多层级统计结果，对应聚合字段数值的名称。           | 否     |
+| comment | String           | 聚合条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。 | 否     |
+
+### 数据表
+
+数据表 `service` :
+
+| id  | city | kind   | amount |
+| --- | ---- | ------ | ------ |
+| 1   | 北京 | 云主机 | 50     |
+| 2   | 北京 | 云主机 | 50     |
+| 3   | 北京 | 云存储 | 50     |
+| 4   | 上海 | 云主机 | 200    |
+
+## 聚合统计 `group`
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": [
+    { "field": "kind", "comment": "按类型统计" },
+    { "field": "city", "comment": "按城市统计" }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为(MySQL):
+
+```sql
+  SELECT
+    `kind` AS `类型`,
+    `city` AS `城市`,
+    SUM(`amount`) AS `数量`
+  FROM `service`
+  GROUP BY `kind`, `city`
+```
+
+查询结果为:
+
+| 类型   | 城市 | 数量 |
+| ------ | ---- | ---- |
+| 云主机 | 北京 | 100  |
+| 云存储 | 北京 | 50   |
+| 云主机 | 上海 | 200  |
+
+## 多层级聚合统计 `rollup`
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": [
+    { "field": "kind", "rollup": "所有类型", "comment": "按类型统计" },
+    { "field": "city", "comment": "按城市统计" }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为(MySQL):
+
+```sql
+  SELECT
+    IF(GROUPING(`kind`), '所有类型', `kind`)  AS `类型`,
+    `city` AS `城市`,
+    SUM(`amount`) AS `数量`
+  FROM `service`
+  GROUP BY `kind`, `city` WITH ROLLUP
+```
+
+查询结果为:
+
+| 类型         | 城市     | 数量 |
+| ------------ | -------- | ---- |
+| 云主机       | 上海     | 200  |
+| 云主机       | 北京     | 100  |
+| 云主机       | **NULL** | 300  |
+| 云存储       | 北京     | 50   |
+| 云存储       | **NULL** | 50   |
+| **所有类型** | **NULL** | 350  |
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": [
+    { "field": "kind", "rollup": "所有类型", "comment": "按类型统计" },
+    { "field": "city", "rollup": "所有城市", "comment": "按城市统计" }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为(MySQL):
+
+```sql
+  SELECT
+    IF(GROUPING(`kind`), '所有类型', `kind`)  AS `类型`,
+    IF(GROUPING(`city`), '所有城市', `city`) AS `城市`,
+    SUM(`amount`) AS `数量`
+  FROM `service`
+  GROUP BY `kind`, `city` WITH ROLLUP
+```
+
+查询结果为:
+
+| 类型         | 城市         | 数量 |
+| ------------ | ------------ | ---- |
+| 云主机       | 上海         | 200  |
+| 云主机       | 北京         | 100  |
+| 云主机       | **所有城市** | 300  |
+| 云存储       | 北京         | 50   |
+| 云存储       | **所有城市** | 50   |
+| **所有类型** | **所有城市** | 350  |
+
+## 聚合函数 `aggregate functions`
+
+聚合函数按特定算法，对一组数据记录统计，返回一个数值，一般用于聚合查询。
+
+### 数据表
+
+| id  | city | kind   | amount |
+| --- | ---- | ------ | ------ |
+| 1   | 北京 | 云主机 | 50     |
+| 2   | 北京 | 云主机 | 50     |
+| 3   | 北京 | 云存储 | 50     |
+| 4   | 上海 | 云主机 | 200    |
+
+### 聚合函数表
+
+| 函数             | 参数表                                  | 说明                   | SELECT 示例                                              | 数值                        |
+| ---------------- | --------------------------------------- | ---------------------- | -------------------------------------------------------- | --------------------------- |
+| SUM()            | [`Field Expression`]                    | 求和                   | `:SUM(amount)` , `:SUM(DISTINCT amount)`                 | `350`, `250`                |
+| COUNT()          | [`Field Expression`]                    | 记录行数               | `:COUNT(id)`,`:COUNT(amount)`, `:COUNT(DISTINCT amount)` | `4`,`4`, `2`                |
+| AVG()            | [`Field Expression`]                    | 平均数                 | `:AVG(amount)`, `:AVG(DISTINCT amount)`                  | `87.5000`, `125.0000`       |
+| MIN()            | [`Field Expression`]                    | 最小值                 | `:MIN(amount)`                                           | `50`                        |
+| MAX()            | [`Field Expression`]                    | 最大值                 | `:MAX(amount)`                                           | `200`                       |
+| STDDEV_POP()     | [`Field Expression`]                    | 总体标准差             | `:STDDEV_POP(amount)`                                    | `64.9519052838329`          |
+| STDDEV_SAMP()    | [`Field Expression`]                    | 样品标准差             | `:STDDEV_SAMP(amount)`                                   | `75`                        |
+| VAR_POP()        | [`Field Expression`]                    | 总体方差               | `:VAR_POP(amount)`                                       | `4218.75`                   |
+| VAR_SAMP()       | [`Field Expression`]                    | 样品方差               | `:VAR_SAMP(amount)`                                      | `5625`                      |
+| JSON_ARRAYAGG()  | [`Field Expression`]                    | 合并为一个 JSON Array  | `:JSON_ARRAYAGG(amount)`                                 | `[50, 50, 50, 200]`         |
+| JSON_OBJECTAGG() | [`Field Expression`,`Field Expression`] | 合并为一个 JSON Object | `:JSON_OBJECTAGG(city,price)`                            | `{"上海": 200, "北京": 50}` |
+
+## 聚合结果筛选 `havings`
+
+在 `wheres` 中不能筛选聚合结果数据，如需对聚合查询结果进行筛选，可以使用 `havings` 实现, 数据结构为 `Array<Object Having>`
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": [
+    { "field": "kind", "rollup": "所有类型", "comment": "按类型统计" },
+    { "field": "city", "rollup": "所有城市", "comment": "按城市统计" }
+  ],
+  "havings": [
+    { "field": "类型", "value": "云主机", "comment": "在聚合结果中筛选云主机" },
+    {
+      "havings": [
+        { "field": "数量", "op": "=", "value": 100, "comment": "数量等于100" },
+        { "or": true, "field": "数量", "value": 300, "comment": "或300的记录" }
+      ]
+    }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为(MySQL):
+
+```sql
+  SELECT
+    IF(GROUPING(`kind`), '所有类型', `kind`)  AS `类型`,
+    IF(GROUPING(`city`), '所有城市', `city`) AS `城市`,
+    SUM(`amount`) AS `数量`
+  FROM `service`
+  GROUP BY `kind`, `city` WITH ROLLUP
+  HAVING `类型` = '云主机' AND (`数量` = 100 OR `数量` = 300)
+```
+
+查询结果为:
+
+| 类型   | 城市     | 数量 |
+| ------ | -------- | ---- |
+| 云主机 | 北京     | 100  |
+| 云主机 | 所有城市 | 300  |
+
+**Object Having 数据结构**
+
+| 字段    | 类型                   | 说明                                                                                | 必填项 |
+| ------- | ---------------------- | ----------------------------------------------------------------------------------- | ------ |
+| field   | Field Expression       | 字段表达式，不支持设置别名 `as`                                                     | 是     |
+| value   | Any                    | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}`        | 否     |
+| op      | String                 | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                           | 否     |
+| or      | Bool                   | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`             | 否     |
+| havings | Array\<Object Having\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景         | 否     |
+| query   | Object QueryDSL        | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](手册/QueryDSL/子查询) | 否     |
+| comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                          | 否     |
+
+## 数据聚合语法糖 `groups syntactic sugar`
+
+### Groups 简写
+
+在通常情况下，只需指定聚合字段即可，可使用 `Array<Field Expression>` 结构描述； 亦可使用 `Field Expression` 类型描述，多个用 `,` 分割。
+
+以下描述解析结果相同。
+
+`完整描述`
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": [
+    { "field": "kind", "comment": "按类型统计" },
+    { "field": "city", "comment": "按城市统计" }
+  ]
+}
+```
+
+`简化为 Array<Field Expression>`
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": ["kind", { "field": "city", "comment": "按城市统计" }]
+}
+```
+
+`简化为 Field Expression`
+
+```json
+{
+  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
+  "from": "service",
+  "groups": "kind,city"
+}
+```
+
+## JSON Array 字段聚合
+
+在对 `JSON Array` 字段聚合查询时，需要先连接 JSON Table，再对连接后的数据表进行聚合查询。可以简写为直接按 JSON Array 字段聚合。
+
+数据表 `service` :
+
+| id  | city | kind   | industries(JSON Array) | pricing(JSON Array\<Object\>)                                 | amount |
+| --- | ---- | ------ | ---------------------- | ------------------------------------------------------------- | ------ |
+| 1   | 北京 | 云主机 | `["教育","医疗"]`      | `[{"id":1, "name":"按月付费"},{"id":2, "name":"按年付费"}]`   | 50     |
+| 2   | 北京 | 云主机 | `["艺术","医疗"]`      | `[{"id":1, "name":"按月付费"},{"id":3, "name":"一次性付费"}]` | 50     |
+| 3   | 北京 | 云存储 | `["教育","制造"]`      | `[{"id":2, "name":"按年付费"},{"id":3, "name":"一次性付费"}]` | 50     |
+| 4   | 上海 | 云主机 | `["能源","汽车"]`      | `[{"id":1, "name":"按月付费"}]`                               | 200    |
+
+Query DSL:
+
+```json
+{
+  "select": [
+    "@industries as 行业",
+    "@pricing[*].name as 计费方式",
+    ":SUM(amount) as 数量"
+  ],
+  "from": "service",
+  "groups": [
+    { "field": "行业", "rollup": "全部行业" },
+    { "field": "计费方式", "rollup": "所有计费方式" }
+  ]
+}
+```
+
+解析后的 `SQL语句` (MySQL8):
+
+```sql
+SELECT
+  IF(GROUPING(`行业`), '全部行业', `行业`)  AS `行业`,
+  IF(GROUPING(`计费方式`), '所有计费方式', `计费方式`) AS `计费方式`,
+  SUM(`amount`) AS `数量`
+FROM `service`
+  JOIN JSON_TABLE(`service`.`industries`, '$[*]' columns (`行业` varchar(50) path '$') ) as industries
+  JOIN JSON_TABLE(`service`.`pricing`, '$[*]' columns (`计费方式` varchar(50) path '$.name') ) as pricing
+GROUP by `行业`, `计费方式` WITH ROLLUP
+```
+
+返回结果:
+
+| 行业     | 计费方式     | 数量 |
+| -------- | ------------ | ---- |
+| 制造     | 一次性付费   | 50   |
+| 制造     | 按年付费     | 50   |
+| 制造     | 所有计费方式 | 100  |
+| 医疗     | 一次性付费   | 50   |
+| 医疗     | 按年付费     | 50   |
+| 医疗     | 按月付费     | 100  |
+| 医疗     | 所有计费方式 | 200  |
+| 教育     | 一次性付费   | 50   |
+| 教育     | 按年付费     | 100  |
+| 教育     | 按月付费     | 50   |
+| 教育     | 所有计费方式 | 200  |
+| 汽车     | 按月付费     | 200  |
+| 汽车     | 所有计费方式 | 200  |
+| 能源     | 按月付费     | 200  |
+| 能源     | 所有计费方式 | 200  |
+| 艺术     | 一次性付费   | 50   |
+| 艺术     | 按月付费     | 50   |
+| 艺术     | 所有计费方式 | 100  |
+| 全部行业 | 所有计费方式 | 1000 |

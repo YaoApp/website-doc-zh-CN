@@ -525,7 +525,30 @@
 | actions | \[key:String\]:\[key:String\]:Object Render | 页面可用功能呈现方式映射表，每个页面不同，在具体页面中定义。 | 否     |
 | option  | \[key:String\]:Any                          | 页面配置信息，根据需要自由定义。API Setting 原样返回。       | 否     |
 
-## 表格还设置预处理事件，在 Hooks 对象中可加入以下预处理器
+### 编写表格预处理器，使用 Hooks
+
+可以使用 Hooks 处理表格 API 输入输出数据。Hook 分为 `before` 和 `after` 两类， before hook，在 API 调用前运行，可以用来处理传入参数，after hook，在 API 调用后运行，可用来处理查询结果。
+
+在描述数据表格时，在 `hooks` 字段，声明 **Hook 关联的处理器**，例如：
+
+```json
+{
+  "name": "类目",
+  "version": "1.0.0",
+  "decription": "类目",
+  "bind": { "model": "category" },
+  "hooks": {
+    "before:find": "flows.hooks.before_find",
+    "after:find": "flows.hooks.after_find",
+    "before:search": "flows.hooks.before_search",
+    "after:search": "flows.hooks.after_search",
+    "before:save": "flows.hooks.before_save",
+    "after:save": "flows.hooks.after_save"
+  },
+  "apis": {},
+  "columns": {}
+}
+```
 
 ### Hooks 一览表
 

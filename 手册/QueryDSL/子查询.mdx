@@ -1,0 +1,178 @@
+# 子查询
+
+## 子查询 `query`
+
+可以通过描述 `query` 动态生成一张二维数据表或数值，在该数据表上查询或应用用于 WHERE, HAVING 查询条件。用于 SELECT 子查询场景时，必须设定别名，如设置 `query`, 则 `from` 失效。 `query` 数据结构为 `QueryDSL`。
+
+### 用于 SELECT 场景
+
+Query DSL:
+
+```json
+{
+  "select": ["id", "name"],
+  "query": {
+    "comment": "通过子查询生成一张新数据表(必须设置别名)",
+    "select": ["id", "short_name as name"],
+    "from": "manu as m",
+    "limit": 50
+  },
+  "orders": "id",
+  "limit": 20
+}
+```
+
+解析后的 `SQL语句` :
+
+```sql
+SELECT `id`, `name`
+FROM (
+  SELECT `id`, `short_name` as `name` FROM `manu` LIMIT 50
+) AS `m`
+ORDER BY `id` ASC
+LIMIT 50
+```
+
+### 用于 WHERE 场景
+
+Query DSL:
+
+```json
+{
+  "select": ["id", "name"],
+  "form": "service",
+  "wheres": [
+    {
+      "field": "manu_id",
+      "op": "in",
+      "query": {
+        "comment": "查询查询厂商ID数组",
+        "select": ["id"],
+        "from": "manu"
+      }
+    }
+  ],
+  "orders": "id",
+  "limit": 20
+}
+```
+
+解析后的 `SQL语句` :
+
+```sql
+SELECT `id`, `name`
+FROM `service`
+WHERE `manu_id` IN (
+  SELECT `id` FROM `manu`
+)
+ORDER BY `id` ASC
+LIMIT 50
+```
+
+### 用于 HAVING 场景
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["id", "name", ":COUNT(`id`) as 数量"],
+  "form": "service",
+  "groups": "id",
+  "havings": [
+    {
+      "field": "数量",
+      "op": "=",
+      "query": {
+        "select": ["1"]
+      }
+    }
+  ]
+}
+```
+
+解析后的 `SQL语句` :
+
+```sql
+SELECT `id`, `name`, COUNT(`id`) as 数量
+FROM `service`
+GROUP BY `id`
+HAVING `数量` = ( SELECT 1 )
+LIMIT 50
+```
+
+### 表连接(不推荐) `joins`
+
+连接两张数据量较大的数据表，非常消耗服务器资源，且查询低效。对于数据统计分析等场景，应该使用数仓或数据分析引擎，根据业务场景设置业务数据结构、清洗归集逻辑和查询逻辑，最终归集为一张**宽表**，在宽表中进行统计查询。数据量较大的应用，推荐使用[象传智慧](https://www.iqka.com) `Xu` 数据分析引擎。
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["id", "name", "manu.name as manu_name"],
+  "form": "service",
+  "joins": [
+    {
+      "left": true,
+      "from": "manu",
+      "key": "id",
+      "foreign": "service.manu_id"
+    }
+  ]
+}
+```
+
+解析后的 `SQL语句` :
+
+```sql
+SELECT `service`.`id`, `service`.`name`, `manu`.`name` as `manu_name`
+FROM `service`
+LEFT JOIN `manu` ON `manu`.`id` = `service`.`manu_id`
+```
+
+查询结果为:
+
+| id  | name           | manu_name                        |
+| --- | -------------- | -------------------------------- |
+| 1   | 腾讯云主机 CVM | 北京云道天成科技有限公司         |
+| 2   | 腾讯云磁盘     | 北京云道天成科技有限公司         |
+| 3   | 阿里主机       | 象传高新（北京）数字科技有限公司 |
+| 4   | UCloud 云主机  | 象传智数（北京）软件科技有限公司 |
+| 5   | adfasdf        | 北京云道天成科技有限公司         |
+
+#### Object Join 数据结构
+
+| 字段    | 类型   | 说明                                                             | 必填项 |
+| ------- | ------ | ---------------------------------------------------------------- | ------ |
+| from    | String | 连接表名称，与 Object QueryDSL `from`相同。                      | 是     |
+| key     | String | 关联连接表字段名称                                               | 是     |
+| foreign | String | 关联目标表字段名称(需指定表名或别名)                             | 是     |
+| left    | Bool   | `true` 连接方式为 `LEFT JOIN`, 默认为 `false` 连接方式为 `JOIN`  | 否     |
+| right   | Bool   | `true` 连接方式为 `RIGHT JOIN`, 默认为 `false` 连接方式为 `JOIN` | 否     |
+
+### SQL 语句(谨慎使用) `sql`
+
+**非必要，勿使用** 除非无法使用 Query DSL 描述查询逻辑，不要直接编写 SQL 语句。直接编写 SQL 语句将加大应用程序维护难度；增加系统信息泄露安全风险；因查询逻辑不可控，可能造成数据库或数仓宕机；数据迁移、数据库、数仓、数据分析引擎升级，**也可导致查询语句不可用**。
+
+Gou Query DSL:
+
+```json
+{
+  "sql": {
+    "stmt": "SELECT `id`, `name` FROM `service` WHERE id = ?",
+    "args": [1]
+  }
+}
+```
+
+解析后的 `SQL语句` :
+
+```sql
+SELECT `id`, `name` FROM `service` WHERE id = 1
+```
+
+**Object SQL 数据结构**
+
+| 字段 | 类型         | 说明     | 必填项 |
+| ---- | ------------ | -------- | ------ |
+| stmt | String       | SQL 语句 | 是     |
+| args | Array\<Any\> | 参数表   | 否     |

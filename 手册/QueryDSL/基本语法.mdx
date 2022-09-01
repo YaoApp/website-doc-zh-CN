@@ -1,39 +1,69 @@
-# Query DSL
+# 基本语法
 
-## 示例代码:
+Query DSL(Domain Specific Language) 用来描述数据查询条件，适用基于数据库实现的数据分析引擎，如 `Xu` 等。
 
-<Detail title="查看源码">
+## 数据结构
+
+数据查询的数据类型为 `Object QueryDSL`，通过 `select`, `wheres` 等字段描述查询条件，解析器将其转换为对应的 `SQL语句`。
+
+数据表 `service` :
+
+| id  | industries       | city | score | created_at          | updated_at |
+| --- | ---------------- | ---- | ----- | ------------------- | ---------- |
+| 1   | ["旅游", "教育"] | 北京 | 99    | 2021-10-03 13:40:52 | NULL       |
+| 2   | ["旅游", "教育"] | 上海 | 68    | 2021-10-03 13:40:52 | NULL       |
+| 3   | ["旅游", "教育"] | 北京 | 92    | 2021-10-03 13:40:52 | NULL       |
+| 4   | ["旅游", "教育"] | 上海 | 87    | 2021-10-03 13:40:52 | NULL       |
+| 5   | ["旅游", "教育"] | 北京 | 71    | 2021-10-03 13:46:06 | NULL       |
+
+Query DSL:
 
 ```json
 {
   "comment": "统计各行业最高分",
-  "select": ["industries@", "city", ":MAX(score) as high_score"],
+  "select": ["@industries", "city", ":MAX(score) as high_score"],
   "from": "service",
   "wheres": [
-    { ":created_at": "创建时间", ">=": "2021-01-01" },
-    { ":created_at": "创建时间", "<=": "{'2021-12-31'}" },
-    { ":updated_at": "更新时间", "is": "null" },
+    { "field": "created_at", "op": ">=", "value": "2021-01-01" },
+    { "field": "created_at", "op": "<=", "value": "{'2021-12-31'}" },
+    { "field": "{updated_at}", "op": "null" },
     {
       "wheres": [
-        { ":type": "类型", "=": 1 },
-        { "or:type": "或类型", "=": 2 }
+        { "field": "type", "value": 1 },
+        { "or": true, "field": "type", "value": 2 }
       ]
     }
   ],
-  "orders": "high_score desc",
+  "orders": [{ "field": "high_score", "sort": "desc" }],
   "limit": 100,
-  "groups": ["industries@", "city"]
+  "groups": ["@industries", "city"]
 }
 ```
 
-</Detail>
+解析后的 `SQL语句` 为 (MySQL 8):
 
-## 介绍
+```sql
+SELECT `@industries`.`industries`,`city`, MAX(`score`) AS `high_score`
+FROM `service`
+JOIN JSON_TABLE(`service`.`industries`, '$[*]' columns (`industries` varchar(50) path '$') ) as `@industries`
+WHERE `created_at` >= '2021-01-01'
+  AND `created_at` <= '2021-12-31'
+  AND `updated_at` IS NULL
+  AND ( `type` = 1 OR `type` = 2)
+GROUP BY `@industries`.`industries`, `city`
+ORDER BY `high_score` DESC
+```
 
-Gou Query DSL(Domain Specific Language) 用来描述数据查询条件，适用基于数据库实现的数据分析引擎。
-数据查询的数据类型为 `Object QueryDSL`，通过 `select`, `wheres` 等字段描述查询条件，解析器将其转换为对应的 `SQL语句`。
+返回结果:
 
-## 数据结构说明:
+| industries | city | high_score |
+| ---------- | ---- | ---------- |
+| 旅游       | 北京 | 99         |
+| 教育       | 北京 | 99         |
+| 旅游       | 上海 | 87         |
+| 教育       | 上海 | 87         |
+
+### Object QueryDSL 字段说明
 
 | 字段      | 类型                      | 说明                                                                                                                                         | 必填项 |
 | --------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -53,9 +83,3 @@ Gou Query DSL(Domain Specific Language) 用来描述数据查询条件，适用�
 | joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [文档](手册/QueryDSL/子查询)                                                               | 否     |
 | sql       | Object SQL                | SQL 语句。**非必要，勿使用**。[文档](手册/QueryDSL/子查询)                                                                                   | 否     |
 | comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                   | 否     |
-| 否        |
-
-<Div style={{ display: "flex", justifyContent: "right" }}>
-
-  <Link type="next" title="查询数据" link="手册/QueryDSL/基本语法"></Link>
-</Div>

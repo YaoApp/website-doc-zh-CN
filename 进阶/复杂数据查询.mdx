@@ -6,7 +6,7 @@
   ，可以编写基本的SQL语句。
 </blockquote>
 
-## 数据模型处理器
+## 使用 Model 处理器查询
 
 数据模型处理器 `Find`, `Get`, `Paginate`, `UpdateWhere`, `DeleteWhere`, `DestroyWhere` 均支持传入查询参数 `Object QueryParam`，对读取记录范围进行限定。
 
@@ -123,17 +123,9 @@ LIMIT 2
 
 </Detail>
 
-推荐阅读:
+## 使用 Query DSL 查询
 
-<Extend
-  title="通过 URL Query String 传递查询参数"
-  desc="了解如何与 API 绑定，通过 URL Query String 传递查询参数"
-  link="d.参考手册/c.接口#输入参数"
-></Extend>
-
-## Gou Query DSL
-
-Gou Query DSL 可以在数据流中使用，一般用于数据分析统计等更为复杂的场景。
+Query DSL 可以在数据流中使用，一般用于数据分析统计等更为复杂的场景。
 
 对数据表 `service` (见下表)分析， 统计各行业最高分。
 
@@ -145,7 +137,7 @@ Gou Query DSL 可以在数据流中使用，一般用于数据分析统计等更
 | 4   | ["旅游", "教育"] | 上海 | 87    | 2021-10-03 13:40:52 | NULL       |
 | 5   | ["旅游", "教育"] | 北京 | 71    | 2021-10-03 13:46:06 | NULL       |
 
-Gou Query DSL 示例:
+Query DSL 示例:
 
 <Detail title="查看源码">
 
@@ -200,15 +192,7 @@ ORDER BY `high_score` DESC
 
 </Detail>
 
-扩展阅读:
-
-<Extend
-  title="Query DSL 手册"
-  desc="了解 Quecy DSL 详细使用方法"
-  link="f.参考手册/e.Query%20DSL"
-></Extend>
-
-## 在数据流中使用
+## 在 Flow 中使用
 
 在数据流中，可以使用 `{{$in}}` 或 `?:$in` 接收参数， `{{$res}}` 或 `?:$res` 引用节点查询结果。
 
@@ -243,7 +227,7 @@ ORDER BY `high_score` DESC
 }
 ```
 
-### 使用 Gou Query DSL
+### 使用 Query DSL
 
 ```json
 {
@@ -267,7 +251,7 @@ ORDER BY `high_score` DESC
 }
 ```
 
-### 在 JS 文件中使用
+## 在 Script 中使用
 
 ```javascript
 function test(id) {

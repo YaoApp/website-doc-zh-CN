@@ -1,0 +1,171 @@
+# 查询条件
+
+### 查询条件 `wheres`
+
+`wheres` 用于描述数据查询条件，数据结构为 `Array<Object Where>`。
+
+Query DSL:
+
+```json
+{
+  "wheres": [
+    { "field": "created_at", "op": ">=", "value": "2020-01-01" },
+    { "field": "created_at", "op": "<=", "value": "{'2020-12-31'}" },
+    { "field": "created_at", "op": "<=", "value": "{updated_at}" },
+    {
+      "wheres": [
+        { "field": "type", "value": 1 },
+        { "or": true, "field": "type", "value": 2 }
+      ]
+    },
+    {
+      "comment": "限定范围: 仅列出有效厂商",
+      "field": "manu_id",
+      "op": "in",
+      "query": {
+        "select": ["id"],
+        "from": "$manu",
+        "wheres": [{ "field": "status", "value": "enabled" }]
+      }
+    }
+  ]
+}
+```
+
+解析后的 `SQL语句` 为:
+
+```sql
+  WHERE `created_at` >=  '2020-01-01'
+    AND `created_at` <=  '2020-12-31'
+    AND `created_at` <=  `updated_at`
+    AND (
+      `type` = 1 OR `type` = 2
+    )
+    AND `manu_id` IN (SELECT `id` FROM `manu` WHERE `status` = 'enabled' )
+```
+
+#### Object Where 数据结构
+
+| 字段    | 类型                  | 说明                                                                         | 必填项 |
+| ------- | --------------------- | ---------------------------------------------------------------------------- | ------ |
+| field   | Field Expression      | 字段表达式，不支持设置别名 `as`                                              | 是     |
+| value   | Any                   | 匹配数值。如果数据类型为 `Field Expression`, 用 `{}` 包括，如 `{updated_at}` | 否     |
+| op      | String                | 匹配关系运算符。许可值 `=`,`like`,`in`,`>` 等，默认为 `=`                    | 否     |
+| or      | Bool                  | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`      | 否     |
+| wheres  | Array\<Object Where\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景  | 否     |
+| query   | Object QueryDSL       | 子查询；如设定 `query` 则忽略 `value` 数值。                                 | 否     |
+| comment | String                | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                   | 否     |
+
+##### 匹配关系运算符
+
+| 运算符    | 说明                             |
+| --------- | -------------------------------- |
+| `=`       | 默认值 等于 WHERE 字段 = 数值    |
+| `>`       | 大于 WHERE 字段 > 数值           |
+| `>=`      | 大于等于 WHERE 字段 >= 数值      |
+| `<`       | 小于 WHERE 字段 < 数值           |
+| `<=`      | 小于等于 WHERE 字段 <= 数值      |
+| `like`    | 匹配 WHERE 字段 like 数值        |
+| `match`   | 模糊匹配 WHERE 字段 match 数值   |
+| `null`    | 为空 WHERE 字段 IS NULL          |
+| `notnull` | 不为空 WHERE 字段 IS NOT NULL    |
+| `in`      | 列表包含 WHERE 字段 IN (数值...) |
+
+### 选择字段 `select`
+
+`select` 用来描述选择字段列表，数据类型为字段表达式字符串数组 `Array<Field Expression>` ，支持数据表字段名称、常量和函数；可以使用 `as` 对字段设置别名，别名视为主表字段名称，可在 `wheres`, `order`, `having` 中直接使用。
+
+```json
+{
+  "select": [
+    "name",
+    "short_name as short",
+    "*mobile",
+    ":MAX(score) as high_score",
+    "$extra",
+    "$extra.sex as sex",
+    "@prices",
+    "@prices[0] as price",
+    "@addresses[0].id as address_id",
+    "t2.name as t2_name",
+    "t2.short_name as t2_short",
+    "0.618 as 黄金分割",
+    "'enable' as 状态"
+  ]
+}
+```
+
+### 选择数据表 `from`
+
+`form` 用来指定查询数据表名称或数据模型，数据类型为 `String`；
+
+| 示例         | 表达式                  | 说明                                                                                                          |
+| ------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `goods`      | `数据表名称`            | 在 `goods` 数据表中查询                                                                                       |
+| `goods as g` | `数据表名称 as 别名`    | 在 `goods` 数据表中查询, 设置别名为 `g`, `g.字段名称` 与 `goods.字段名称` 等价                                |
+| `$user`      | `$数据模型名称`         | 在数据模型 `models.user` 关联的数据表(`xxx`)中查询，设置别名为 `user`, `user.字段名称` 与 `xxx.字段名称` 等价 |
+| `$user as u` | `$数据模型名称 as 别名` | 在数据模型 `models.user` 关联的数据表(`xxx`)中查询， 设置别名为 `u`, `u.字段名称` 与 `xxx.字段名称` 等价      |
+
+**说明**
+
+- 可以使用 `$` 标识符，指定数据模型绑定的数据表。
+- 可以使用 `as` 对数据表设置别名，别名支持中文，在表连接、字段引用等场景可以使用别名代替数据表名称。
+- 如设置子查询 `query`( [查看子查询文档](手册/QueryDSL/子查询))，解释器优先响应子查询逻辑，忽略 `from` 设定。 `query`和`from` 必填其一。
+
+### 数量限定 `limit`, `offset`, `page`, `pagesize`, `data-only`
+
+使用 `limit`, `offset` 或 `page`, `pagesize` 限定记录范围。`page` 和 `pagesize` 根据查询条件自动分页。
+
+#### 从第 20 条开始，读取 50 条数据
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["id", "name"],
+  "from": "manu",
+  "offset": 20,
+  "limit": 50
+}
+```
+
+解析后的 `SQL语句` 为(MySQL 示例):
+
+```sql
+  SELECT `id`, `name` FROM `manu` LIMIT 20,50
+```
+
+#### 每页 50 条数据，从第 1 页开始读取
+
+通过 `page` 和 `pagesize` 限定记录范围，QueryDSL 默认返回值包含分页信息, 可以通过设置 `data-only` 不返回分页信息。
+
+Gou Query DSL:
+
+```json
+{
+  "select": ["id", "name"],
+  "from": "manu",
+  "page": 1,
+  "pagesize": 50
+}
+```
+
+解析后的 `SQL语句` 为(MySQL 示例):
+
+```sql
+  -- 执行第一次查询, 查询记录总数
+  SELECT count(`id`) as `total` FROM `manu`
+  -- 解析器根据 total, page 和 pagesize 计算 offset 和 limit
+  -- 执行第二次查询
+  SELECT `id`, `name` FROM `manu` LIMIT 50
+```
+
+#### 数量限定设置
+
+| 字段      | 类型 | 说明                                                                | 必填项 |
+| --------- | ---- | ------------------------------------------------------------------- | ------ |
+| offset    | Int  | 记录开始位置。默认为从头开始。                                      | 否     |
+| limit     | Int  | 从开始位置起，读取数据的条目。 默认为 `0`，不限定。                 | 否     |
+| page      | Int  | 分页查询当前页面页码， 默认为 `1`                                   | 否     |
+| pagesize  | Int  | 每页读取记录数量。 若仅设定 `page` 数值，`pagesize` 默认为 `15`。   | 否     |
+| data-only | Bool | 仅在设定 `page` 或 `pagesize` 时有效。设定为 `true`, 默认为 `false` | 否     |

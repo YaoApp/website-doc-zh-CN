@@ -1,6 +1,6 @@
 # 编写处理器
 
-## 编写`flows`处理器
+## 使用 Flow 编写处理器
 
 ### 新建`models/category.mod.json`写入以下代码:
 
@@ -110,7 +110,7 @@
 ]
 ```
 
-## 编写`scripts`处理器
+## 使用 Script 编写处理器
 
 ### 新建 `scripts/category.js`:
 
@@ -130,41 +130,7 @@ function getData() {
 
 运行命令行调用 `yao run scripts.category.category`等价于 `yao run scripts.category.getData`
 
-### 编写表格预处理器，使用 Hooks
 
-可以使用 Hooks 处理表格 API 输入输出数据。Hook 分为 `before` 和 `after` 两类， before hook，在 API 调用前运行，可以用来处理传入参数，after hook，在 API 调用后运行，可用来处理查询结果。
-
-在描述数据表格时，在 `hooks` 字段，声明 **Hook 关联的处理器**，例如：
-
-```json
-{
-  "name": "类目",
-  "version": "1.0.0",
-  "decription": "类目",
-  "bind": { "model": "category" },
-  "hooks": {
-    "before:find": "flows.hooks.before_find",
-    "after:find": "flows.hooks.after_find",
-    "before:search": "flows.hooks.before_search",
-    "after:search": "flows.hooks.after_search",
-    "before:save": "flows.hooks.before_save",
-    "after:save": "flows.hooks.after_save"
-  },
-  "apis": {},
-  "columns": {}
-}
-```
-
-### Hooks 一览表
-
-| Hook          | 说明                     | 输入                          | 输出规范                                      |
-| ------------- | ------------------------ | ----------------------------- | --------------------------------------------- |
-| before:find   | 在 Find 处理器之前调用   | Find 接口传入数据             | 输出结果作为 Find 关联处理器输入参数          |
-| after:find    | 在 Find 处理器之后调用   | Find 接口关联处理器执行结果   | 自定义(输出结果作为 Find 处理器的最终输出)    |
-| before:search | 在 Search 处理器之前调用 | Search 接口传入数据           | 输出结果作为 Search 关联处理器输入参数        |
-| after:search  | 在 Search 处理器之后调用 | Search 接口关联处理器执行结果 | 自定义 (输出结果作为 Search 处理器的最终输出) |
-| before:save   | 在 Save 处理器之前调用   | Save 接口传入数据             | 输出结果作为 Save 关联处理器输入参数          |
-| after:save    | 在 Save 处理器之后调用   | Save 接口关联处理器执行结果   | 自定义 (输出结果作为 Save 接口的最终输出)     |
 
 <Div style={{ display: "flex", justifyContent: "right" }}>
 

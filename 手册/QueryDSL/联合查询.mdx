@@ -1,0 +1,46 @@
+# 联合查询
+
+## 联合查询 `unions`
+
+可以在 `unions` 中将多个查询将结果合并成为一张结构相同数据表进行查询，可用于数据统计、分页展示等场景。
+
+`unions` 数据结构为 `Array<Object QueryDSL>`
+
+Gou Query DSL:
+
+```json
+{
+  "unions": [
+    {
+      "comment": "20只宠物猫",
+      "select": ["id", "name"],
+      "from": "cat",
+      "limit": 20
+    },
+    {
+      "comment": "20条宠物狗",
+      "select": ["id", "name"],
+      "from": "dog",
+      "limit": 20
+    },
+    {
+      "comment": "20条观赏鱼",
+      "select": ["id", "name"],
+      "from": "fish",
+      "limit": 20
+    }
+  ],
+  "limit": 10,
+  "orders": "id"
+}
+```
+
+解释为 `SQL 语句` (MySQL):
+
+```sql
+ (SELECT `id`, `name` FROM `cat` LIMIT 20)
+ UNION ALL (SELECT `id`, `name` FROM `dog` LIMIT 20)
+ UNION ALL (SELECT `id`, `name` FROM `fish` LIMIT 20)
+ ORDER BY `id`
+ LIMIT 10
+```
