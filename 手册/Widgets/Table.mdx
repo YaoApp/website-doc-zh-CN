@@ -1,5 +1,108 @@
 # 数据表格
 
+<Detail title="查看源码">
+
+```json
+{
+  "name": "分类列表",
+  "version": "1.0.0",
+  "decription": "分类列表",
+  "bind": {
+    "model": "category",
+    "withs": {
+      "parent": {}
+    }
+  },
+  "apis": {},
+  "columns": {
+    "ID": {
+      "label": "ID",
+      "view": { "type": "label", "props": { "value": ":id" } }
+    },
+
+    "父类": {
+      "label": "父类",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":parent.name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":parent_id"
+        }
+      }
+    },
+    "分类名称": {
+      "label": "分类名称",
+      "view": {
+        "type": "label",
+        "props": {
+          "value": ":name"
+        }
+      },
+      "edit": {
+        "type": "input",
+        "props": {
+          "value": ":name"
+        }
+      }
+    }
+  },
+  "filters": {
+    "分类名称": {
+      "label": "分类名称",
+      "bind": "where.name.match",
+      "input": {
+        "type": "input",
+        "props": { "placeholder": "分类名称" }
+      }
+    }
+  },
+  "list": {
+    "primary": "id",
+    "layout": {
+      "columns": [
+        { "name": "ID", "width": 80 },
+        { "name": "父类", "width": 200 },
+        { "name": "分类名称", "width": 200 }
+      ],
+      "filters": [{ "name": "分类名称" }]
+    },
+    "actions": {
+      "pagination": { "props": { "showTotal": true } },
+      "create": {
+        "props": { "label": "添加分类" }
+      }
+    },
+    "option": { "operation": { "unfold": true } }
+  },
+  "edit": {
+    "primary": "id",
+    "layout": {
+      "fieldset": [
+        {
+          "columns": [
+            { "name": "父类", "width": 200 },
+            { "name": "分类名称", "width": 200 }
+          ]
+        }
+      ]
+    },
+    "actions": {
+      "cancel": {},
+      "save": {},
+      "delete": { "type": "button", "props": { "label": "Delete" } }
+    },
+    "option": { "dev": false }
+  }
+}
+```
+
+</Detail>
+
 代码示例 [代码示例](#完整示例)
 
 <blockquote>

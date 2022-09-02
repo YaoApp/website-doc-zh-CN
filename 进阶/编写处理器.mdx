@@ -1,5 +1,25 @@
 # 编写处理器
 
+## 使用 Script 编写处理器
+
+### 新建 `scripts/category.js`:
+
+```javascript
+function category() {
+  var data = Process("models.category.get", {
+    wheres: [{ column: "parent_id", value: null }],
+  });
+  return data;
+}
+
+// 在JS中调用其他的处理器,调用上面的category方法
+function getData() {
+  return Process("scripts.category.category");
+}
+```
+
+运行命令行调用 `yao run scripts.category.category`等价于 `yao run scripts.category.getData`
+
 ## 使用 Flow 编写处理器
 
 ### 新建`models/category.mod.json`写入以下代码:
@@ -109,28 +129,6 @@
   }
 ]
 ```
-
-## 使用 Script 编写处理器
-
-### 新建 `scripts/category.js`:
-
-```javascript
-function category() {
-  var data = Process("models.category.get", {
-    wheres: [{ column: "parent_id", value: null }],
-  });
-  return data;
-}
-
-// 在JS中调用其他的处理器,调用上面的category方法
-function getData() {
-  return Process("scripts.category.category");
-}
-```
-
-运行命令行调用 `yao run scripts.category.category`等价于 `yao run scripts.category.getData`
-
-
 
 <Div style={{ display: "flex", justifyContent: "right" }}>
 

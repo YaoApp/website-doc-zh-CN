@@ -1,5 +1,45 @@
 # Import 数据导入
 
+<Detail title="查看源码">
+
+```json
+{
+  "name": "工单列表",
+  "version": "1.0.0",
+  "decription": "工单列表",
+  "bind": {
+    "model": "ticket"
+  },
+  "apis": {},
+  "actions": {
+    "create": {
+      "type": "button",
+      "props": { "label": "添加工单", "icon": "fas fa-plus" }
+    },
+    "import": {
+      "props": {
+        "api": {
+          "setting": "/api/xiang/import/ticket/setting",
+          "mapping": "/api/xiang/import/ticket/mapping",
+          "mapping_setting": "/api/xiang/import/ticket/mapping/setting",
+          "preview": "/api/xiang/import/ticket/data",
+          "preview_setting": "/api/xiang/import/ticket/data/setting",
+          "import": "/api/xiang/import/ticket"
+        }
+      }
+    },
+    "pagination": {}
+  },
+  "columns": {},
+  "filters": {},
+  "list": {},
+  "edit": {},
+  "view": {}
+}
+```
+
+</Detail>
+
 代码示例 [代码示例](#示例代码)
 
 <blockquote>
