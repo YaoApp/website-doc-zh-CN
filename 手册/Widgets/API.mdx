@@ -1,5 +1,31 @@
 # API
 
+<Detail title="查看源码">
+
+```json
+{
+  "name": "下拉搜索",
+  "version": "1.0.0",
+  "description": "下拉搜索",
+  "guard": "bearer-jwt",
+  "group": "select",
+  "paths": [
+    {
+      "path": "/category",
+      "method": "GET",
+      "process": "flows.category",
+      "in": [],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}
+```
+
+</Detail>
+
 代码示例 [代码示例](https://github.com/YaoApp/demo-lms/blob/main/apis/select.http.json)
 
 编写 API 接口 JSON 描述文件，将其放置在应用 `apis` 目录中，运行 yao start

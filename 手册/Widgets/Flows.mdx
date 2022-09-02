@@ -1,5 +1,46 @@
 # Flows 处理器
 
+<Detail title="查看源码">
+
+```json
+{
+  "label": "Password Login",
+  "version": "1.0.0",
+  "description": "Password Login",
+  "nodes": [
+    {
+      "name": "Validate Captcha",
+      "process": "xiang.helper.CaptchaValidate",
+      "args": ["{{$captcha.id}}", "{{$captcha.code}}"]
+    },
+    {
+      "name": "User",
+      "process": "models.user.Get",
+      "args": [
+        {
+          "select": ["id", "mobile", "password"],
+          "wheres": [{ "column": "mobile", "value": "?:$mobile" }],
+          "limit": 1
+        }
+      ]
+    },
+    {
+      "name": "Validate Passwor",
+      "process": "xiang.helper.PasswordValidate",
+      "args": ["{{$password}}", "{{$res.User.0.password}}"]
+    },
+    {
+      "name": "Response",
+      "process": "flows.login.Token",
+      "args": ["{{$res.User.0.id}}"]
+    }
+  ],
+  "output": "{{$res.Response}}"
+}
+```
+
+</Detail>
+
 代码示例 [代码示例](https://github.com/YaoApp/demo-crm/blob/master/flows/login/password.flow.json)
 
 数据流(`Flow`)用来编排数据查询逻辑，支持使用 JavaScript 脚本处理各查询节点结果，可以作为处理 (`process`) 来使用，引用方式为 `flows.<数据流名称>` 。

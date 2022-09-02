@@ -1,5 +1,18 @@
 # Store 使用缓存
 
+<Detail title="查看源码">
+
+```json
+{
+  "name": "LRU Cache",
+  "description": "LRU缓存",
+  "type": "lru",
+  "option": { "size": 102400 }
+}
+```
+
+</Detail>
+
 代码示例 [代码示例](#示例)
 
 缓存（cache），是每个系统必不可少的一个功能，我们可以使用 Yao 自带的缓存功能，来进行一些临时数据存储
@@ -11,13 +24,30 @@
 | cache.Set | 设置缓存内容 | -    |
 | cache.Get | 获取缓存内容 | -    |
 
+## 命名规范
+
+```json
+{
+  "name": "缓存",
+  "description": "缓存描述",
+  "type": "lru",
+  "option": {}
+}
+```
+
+## DSL 结构
+
+| 字段        | 说明     |
+| ----------- | -------- |
+| name        | 名称     |
+| description | 描述     |
+| type        | 类型:lru |
+
 ## 示例
 
 ### 第一步：新建缓存脚本文件
 
 Store 使用缓存，新增文件`stores/cache.lru.json`：
-
-````
 
 应用目录结构:
 
@@ -30,7 +60,7 @@ Store 使用缓存，新增文件`stores/cache.lru.json`：
 └── stores    #用于存放缓存目录
 |
 └── app.json
-````
+```
 
 ### 第二步：编写代码`cache.lru.json`：
 
