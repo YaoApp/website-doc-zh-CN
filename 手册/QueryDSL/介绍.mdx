@@ -37,25 +37,25 @@ Gou Query DSL(Domain Specific Language) 用来描述数据查询条件，适用�
 
 | 字段      | 类型                      | 说明                                                                                                                                         | 必填项 |
 | --------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| select    | Array\<Field Expression\> | 选择字段列表 [文档](手册/QueryDSL/查询条件)                                                                                                  | 是     |
-| from      | String                    | 查询数据表名称或数据模型 [文档](手册/QueryDSL/查询条件)                                                                                      | 否     |
-| wheres    | Array\<Object Where\>     | 数据查询条件 [文档](手册/QueryDSL/查询条件)                                                                                                  | 否     |
-| orders    | Array\<Object Order\>     | 排序条件 [文档](手册/QueryDSL/排序条件)                                                                                                      | 否     |
-| offset    | Int                       | 记录开始位置 [文档](手册/QueryDSL/查询条件)                                                                                                  | 否     |
-| limit     | Int                       | 读取数据的数量 [文档](手册/QueryDSL/查询条件)                                                                                                | 否     |
-| page      | Int                       | 分页查询当前页面页码 [文档](手册/QueryDSL/查询条件)                                                                                          | 否     |
-| pagesize  | Int                       | 每页读取记录数量 [文档](手册/QueryDSL/查询条件)                                                                                              | 否     |
+| select    | Array\<Field Expression\> | 选择字段列表 [文档](./查询条件)                                                                                                              | 是     |
+| from      | String                    | 查询数据表名称或数据模型 [文档](./查询条件)                                                                                                  | 否     |
+| wheres    | Array\<Object Where\>     | 数据查询条件 [文档](./查询条件)                                                                                                              | 否     |
+| orders    | Array\<Object Order\>     | 排序条件 [文档](./排序条件)                                                                                                                  | 否     |
+| offset    | Int                       | 记录开始位置 [文档](./查询条件)                                                                                                              | 否     |
+| limit     | Int                       | 读取数据的数量 [文档](./查询条件)                                                                                                            | 否     |
+| page      | Int                       | 分页查询当前页面页码 [文档](./查询条件)                                                                                                      | 否     |
+| pagesize  | Int                       | 每页读取记录数量 [文档](./查询条件)                                                                                                          | 否     |
 | data-only | Bool                      | 设定为 `true`, 查询结果为 Array\<Object Record\>; 默认为 `false`, 查询结果为 Array\<Object Paginate\>, 仅在设定 `page` 或 `pagesize`时有效。 | 否     |
-| groups    | Array\<Object Group\>     | 聚合字段和统计层级设置。 [文档](手册/QueryDSL/聚合查询)                                                                                      | 否     |
-| havings   | Array\<Object Having\>    | 聚合查询结果筛选, 仅在设定 `groups` 时有效。[文档](手册/QueryDSL/聚合查询)                                                                   | 否     |
-| unions    | Array\<Object QueryDSL\>  | 联合查询。多个查询将结果合并为一张表 [文档](手册/QueryDSL/联合查询)                                                                          | 否     |
-| query     | Object QueryDSL           | 子查询。按 QueryDSL 描述查询逻辑，生成一张二维数据表或数值。 [查看子查询文档](手册/QueryDSL/子查询)                                          | 否     |
-| joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [文档](手册/QueryDSL/子查询)                                                               | 否     |
-| sql       | Object SQL                | SQL 语句。**非必要，勿使用**。[文档](手册/QueryDSL/子查询)                                                                                   | 否     |
+| groups    | Array\<Object Group\>     | 聚合字段和统计层级设置。 [文档](./聚合查询)                                                                                                  | 否     |
+| havings   | Array\<Object Having\>    | 聚合查询结果筛选, 仅在设定 `groups` 时有效。[文档](./聚合查询)                                                                               | 否     |
+| unions    | Array\<Object QueryDSL\>  | 联合查询。多个查询将结果合并为一张表 [文档](./联合查询)                                                                                      | 否     |
+| query     | Object QueryDSL           | 子查询。按 QueryDSL 描述查询逻辑，生成一张二维数据表或数值。 [查看子查询文档](./子查询)                                                      | 否     |
+| joins     | Array\<Object Join\>      | 表连接。连接数据量较大的数据表时 **不推荐使用**。 [文档](./子查询)                                                                           | 否     |
+| sql       | Object SQL                | SQL 语句。**非必要，勿使用**。[文档](./子查询)                                                                                               | 否     |
 | comment   | String                    | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                                                                                   | 否     |
 | 否        |
 
 <Div style={{ display: "flex", justifyContent: "right" }}>
 
-  <Link type="next" title="查询数据" link="手册/QueryDSL/基本语法"></Link>
+  <Link type="next" title="查询数据" link="./基本语法"></Link>
 </Div>
