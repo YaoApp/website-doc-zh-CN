@@ -30,8 +30,8 @@ docker build \
 示例:
 
 ```bash
- cd /path/root/dockerfiles/
- docker build --platform linux/amd64 \
+cd /path/root/dockerfiles/application/amd64
+docker build --platform linux/amd64 \
       --build-arg REPO=github.com/YaoApp/yao-wms  \
       --build-arg TOKEN=xxxxxxxxx  \
       --build-arg VERSION=1.0.3  \
@@ -62,8 +62,8 @@ docker build \
 示例:
 
 ```bash
-cd
- docker build --platform linux/arm64 \
+cd /path/root/dockerfiles/application/arm64
+docker build --platform linux/arm64 \
       --build-arg REPO=github.com/YaoApp/yao-wms  \
       --build-arg TOKEN=xxxxxxxxx  \
       --build-arg VERSION=1.0.3  \
@@ -91,7 +91,7 @@ cd
 ### SQLite 数据库
 
 ```bash
-docker run -d -p 5099:5099 \
+docker run -d -p 5099:5099 --restart unless-stopped \
     -e YAO_INIT=demo \
     -e YAO_PROCESS_RESET=flows.init.menu \
     -e YAO_PROCESS_DEMO=flows.demo.data  \
@@ -101,11 +101,11 @@ docker run -d -p 5099:5099 \
 ### MySQL 数据库
 
 ```bash
-docker run -d -p 3307:3306 -e MYSQL_PASSWORD=123456 yaoapp/mysql:8.0-amd64
+docker run -d -p 3307:3306 --restart unless-stopped -e MYSQL_PASSWORD=123456 yaoapp/mysql:8.0-amd64
 ```
 
 ```bash
-docker run -d -p 5099:5099 \
+docker run -d -p 5099:5099 --restart unless-stopped \
     -e YAO_INIT=demo \
     -e YAO_PROCESS_RESET=flows.init.menu \
     -e YAO_PROCESS_DEMO=flows.demo.data  \
@@ -133,10 +133,19 @@ services:
       - data:/data/app/data
     depends_on:
       - mysql
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        max-attempts: 3
+
   mysql:
     image: yaoapp/mysql:8.0-amd64
     environment:
       - MYSQL_PASSWORD=123456
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        max-attempts: 3
 
 volumes:
   data: {}
@@ -145,15 +154,15 @@ volumes:
 ### MySQL 数据库 + REDIS
 
 ```bash
-docker run -d -p 3307:3306 -e MYSQL_PASSWORD=123456 yaoapp/mysql:8.0-amd64
+docker run -d -p 3307:3306 --restart unless-stopped -e MYSQL_PASSWORD=123456 yaoapp/mysql:8.0-amd64
 ```
 
 ```bash
-docker run -d -p 6371:6379 -e REDIS_PASSWORD=123456 yaoapp/redis:6.2-amd64
+docker run -d -p 6371:6379 --restart unless-stopped -e REDIS_PASSWORD=123456 yaoapp/redis:6.2-amd64
 ```
 
 ```bash
-docker run -d -p 5099:5099 \
+docker run -d -p 5099:5099 --restart unless-stopped \
     -e YAO_INIT=demo \
     -e YAO_PROCESS_RESET=flows.init.menu \
     -e YAO_PROCESS_DEMO=flows.demo.data  \
@@ -189,14 +198,29 @@ services:
       - data:/data/app/data
     depends_on:
       - mysql
+        redis
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        max-attempts: 3
+
   mysql:
     image: yaoapp/mysql:8.0-amd64
     environment:
       - MYSQL_PASSWORD=123456
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        max-attempts: 3
+
   redis:
     image: yaoapp/mysql:8.0-amd64
     environment:
       - REDIS_PASSWORD=123456
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        max-attempts: 3
 
 volumes:
   data: {}
