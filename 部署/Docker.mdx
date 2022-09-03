@@ -269,3 +269,28 @@ yaoadmin reset
 ```bash
 yaoadmin reset --with-demo
 ```
+
+## CI/CD
+
+可以通过配置持续集成工作流，在更新 `app.json` 中版本信息时，自动构建并发布 docker 镜像。
+
+### Github
+
+Github Workflow 参考:
+
+https://github.com/YaoApp/dockerfiles/blob/main/cicd/github/workflows/docker.yml
+
+可以将示例 `github` 目录复制到项目根目录，改名为 `.github`
+
+```bash
+cp -r /path/root/dockerfiles/github  /your-project/path/root/.github
+```
+
+Secrets 变量说明
+
+| 变量            | 说明                |
+| --------------- | ------------------- |
+| DOCKER_USER     | Docker hub 用户名   |
+| DOCKER_PASSWORD | Docker hub 登录密码 |
+
+[查看 Github Workflow 文档](https://docs.github.com/en/actions)
