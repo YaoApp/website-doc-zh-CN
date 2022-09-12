@@ -141,3 +141,23 @@ https://github.com/YaoApp/yao/blob/main/.github/workflows/release-macos.yml
   <Link type="prev" title="编写Widget" link="专家/编写Widget"></Link>
   <Link type="next" title="参与贡献" link="专家/参与贡献"></Link>
 </Div>
+
+## 编译环境镜像
+
+编译环境 Dockerfile: https://github.com/YaoApp/dockerfiles/tree/main/build
+
+### 镜像使用
+
+```bash
+docker run -it --rm yaoapp/yao-build:0.10.1-amd64 /bin/bash
+```
+
+```bash
+docker run -it --rm -v /path/source:/source yaoapp/yao-build:0.10.1-amd64 /bin/bash
+```
+
+### 镜像构建
+
+```bash
+docker build --platform linux/amd64 -t yaoapp/yao-build:0.10.1-amd64 .
+```
