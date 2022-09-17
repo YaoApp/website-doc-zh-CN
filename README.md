@@ -1,6 +1,8 @@
 # YAO 中文文档
 
-## YAO 最新版下载 (v0.10.2)
+## YAO 0.10.2 下载
+
+**注意: v0.10.2 正在持续迭代中, 功能随时调整, 不推荐用于生产环境**
 
 ### 制品下载
 
@@ -12,7 +14,7 @@
 
 [yao-0.10.2-linux-arm64 Linux Arm64](https://release-sv.yaoapps.com/archives/yao-0.10.2-linux-arm64)
 
-### Docker 
+### Docker
 
 ```bash
 docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.2-amd64-dev
