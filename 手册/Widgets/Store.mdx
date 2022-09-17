@@ -32,14 +32,25 @@ Connector: `redis.conn.json`
 
 Store: `share.redis.json`
 
-```json
+````json
 {
   "name": "Redis Cache",
   "description": "Redis 缓存",
   "connector": "redis",
   "option": {}
 }
-```
+
+
+LRU缓存: `cache.lru.json`
+
+```json
+{
+  "name": "LRU Cache",
+  "description": "LRU 缓存",
+  "type": "lru",
+  "option": {}
+}
+````
 
 </Detail>
 
