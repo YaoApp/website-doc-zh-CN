@@ -103,37 +103,7 @@ Host Object
 
 ### MySQL
 
-```json
-{
-  "LANG": "1.0.0",
-  "VERSION": "1.0.0",
-  "label": "MySQL 8.0 TEST",
-  "type": "mysql",
-  "version": "8.0.26",
-  "options": {
-    "db": "test",
-    "charset": "utf8mb4",
-    "parseTime": true,
-    "hosts": [
-      {
-        "host": "$ENV.MYSQL_TEST_HOST",
-        "port": "$ENV.MYSQL_TEST_PORT",
-        "user": "$ENV.MYSQL_TEST_USER",
-        "pass": "$ENV.MYSQL_TEST_PASS",
-        "primary": true
-      },
-      {
-        "host": "$ENV.MYSQL_TEST_HOST",
-        "port": "$ENV.MYSQL_TEST_PORT",
-        "user": "$ENV.MYSQL_TEST_USER",
-        "pass": "$ENV.MYSQL_TEST_PASS"
-      }
-    ]
-  }
-}
-```
-
-### MySQL
+`my.conn.json`
 
 ```json
 {
@@ -167,6 +137,8 @@ Host Object
 
 ### Redis
 
+`redis.conn.json`
+
 ```json
 {
   "LANG": "1.0.0",
@@ -185,6 +157,8 @@ Host Object
 
 ### Sqlite
 
+`sqlite.conn.json`
+
 ```json
 {
   "LANG": "1.0.0",
@@ -198,6 +172,8 @@ Host Object
 ```
 
 ### MongoDB
+
+`mongo.conn.json`
 
 ```json
 {
