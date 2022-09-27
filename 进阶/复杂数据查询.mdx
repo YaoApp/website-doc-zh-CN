@@ -20,7 +20,7 @@ JSON 描述:
 {
   "select": ["id", "name", "mobile", "status"],
   "withs": {
-    "manu": { "select": ["name", "short_name", "status"] },
+    "manu": { "query": ["name", "short_name", "status"] },
     "addresses": {}
   },
   "wheres": [
