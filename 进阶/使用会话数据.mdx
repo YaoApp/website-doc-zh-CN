@@ -301,7 +301,7 @@ yao start
 读取验证码接口:
 
 ```bash
-curl http://127.0.0.1:5099/xiang/api/user/captcha
+curl http://127.0.0.1:5099/api/user/captcha
 ```
 
 <Notice type="success">
@@ -312,7 +312,7 @@ curl http://127.0.0.1:5099/xiang/api/user/captcha
 登录接口:
 
 ```bash
-curl -X POST http://127.0.0.1:5099/xiang/api/user/login/password \
+curl -X POST http://127.0.0.1:5099/api/user/login/password \
     -H 'Content-Type: application/json' \
     -d '{"mobile":"zhang@yaoapps.com", "password": "5MCIXQYrR", "captcha":{"id":1024, "code":"xv98"}}'
 ```
