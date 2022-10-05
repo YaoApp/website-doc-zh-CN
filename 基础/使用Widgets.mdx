@@ -18,7 +18,7 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 
 [查看文档](../手册/Widgets/Model)
 
-### 新增`models/ccategory.mod.json`文件,写入以下内容:
+### 新增`models/category.mod.json`文件,写入以下内容:
 
 <Detail title="查看源码">
 
@@ -285,7 +285,7 @@ YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘�
 
 [查看文档](../手册/Widgets/Task)
 
-- 新建文件目录 `/tasks/task.js`:
+- 新建文件目录 `/tasks/test.task.js`:
 
 ```json
 {
@@ -379,11 +379,12 @@ function OnError(id, err) {
   "name": "任务",
   "version": "1.0.0",
   "description": "任务",
-  "guard": "",
+  "guard": "-",
   "group": "task",
   "paths": [
     {
       "path": "/task",
+       "guard": "-",
       "method": "GET",
       "process": "scripts.test.task",
       "in": [],
