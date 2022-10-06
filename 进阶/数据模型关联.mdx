@@ -188,7 +188,7 @@ yao run models.user.Get '::{"withs":{ "supplier": {} }}'
 指定关联模型的选取字段:
 
 ```bash
-yao run models.user.Find 1 '::{"withs":{ "supplier": { "select":["name"] } }}'
+yao run models.user.Find 1 '::{"withs":{ "supplier": {"query":{ "select":["name"] }} }}'
 ```
 
 按关联模型的字段查询条件:
@@ -209,7 +209,7 @@ function test() {
         },
       },
     },
-    wheres: [{ column: "user_id", value: 1, op: "=" }],
+    wheres: [{ column: "supplier_id", value: 1, op: "=" }],
     orders: [{ column: "id", option: "desc" }],
     limit: 1,
   });
@@ -267,7 +267,7 @@ yao run models.supplier.Get '::{"withs":{ "users": {} }}'
 指定关联模型的选取字段:
 
 ```bash
-yao run models.supplier.Find 1 '::{"withs":{ "users": { "select":["name"] } }}'
+yao run models.supplier.Find 1 '::{"withs":{ "users": { "query":{"select":["name"] }} }}'
 ```
 
 指定关联用户筛选条件:
