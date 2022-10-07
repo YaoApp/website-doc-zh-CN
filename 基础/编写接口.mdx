@@ -46,7 +46,7 @@
       "method": "PATCH",
       "guard": "-",
       "process": "models.pet.Update",
-      "in": ["$params.id", ":payload"],
+      "in": ["$param.id", ":payload"],
       "out": {
         "status": 200,
         "type": "application/json"
@@ -57,7 +57,7 @@
       "method": "DELETE",
       "guard": "-",
       "process": "models.pet.Delete",
-      "in": ["$params.id"],
+      "in": ["$param.id"],
       "out": {
         "status": 200,
         "type": "application/json"
