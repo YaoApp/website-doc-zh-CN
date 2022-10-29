@@ -177,7 +177,7 @@ function Login(payload) {
 
 | 请求方式 | 路由                           | 鉴权 | Payload                                                                                                                                                        | 说明                   |
 | -------- | ------------------------------ | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `GET`    | `/api/__yao/login/:id/captcha` | `-`  |                                                                                                                                                                | 获取用户登录图片验证码 |
+| `GET`    | `/api/__yao/login/:id/captcha` | `-`  |                                                                                                                                                                | 获取用户登录图形验证码 |
 | `POST`   | `/api/__yao/login/:id`         | `-`  | `{"email": "xiang@iqka.com","password": "A123456p+", "captcha": {"id": "XtuV3ZufGzhtJoxoGfhn", "code": "41804"}, "sid": "9YJhcWQxPt-V-G1aGsx021667052000536"}` | 提交用户登录           |
 
 ## 处理器
@@ -192,8 +192,8 @@ function Login(payload) {
 
 | 处理器                     | 参数表                               | 返回值     | 说明                                           |
 | -------------------------- | ------------------------------------ | ---------- | ---------------------------------------------- |
-| yao.utils.Captcha          |                                      | 图片验证码 | 返回图片验证码 [查看手册](../处理器/Utils.mdx) |
-| yao.utils.CaptchaValidate  | `["<验证码ID>", "<验证码>"]`         |            | 图片验证码校验 [查看手册](../处理器/Utils.mdx) |
+| yao.utils.Captcha          |                                      | 图形验证码 | 返回图形验证码 [查看手册](../处理器/Utils.mdx) |
+| yao.utils.CaptchaValidate  | `["<验证码ID>", "<验证码>"]`         |            | 图形验证码校验 [查看手册](../处理器/Utils.mdx) |
 | yao.utils.PasswordValidate | `["<明文密码>", "<密文密码>"]`       |            | 密码校验 [查看手册](../处理器/Utils.mdx)       |
 | yao.utils.JwtMake          | `["用户ID", "<用户数据>", "<选项>"]` |            | 生成 JWT [查看手册](../处理器/Utils.mdx)       |
 | yao.utils.JwtValidate      | `["<Token>"]`                        |            | JWT 校验 [查看手册](../处理器/Utils.mdx)       |
