@@ -1,4 +1,4 @@
-# App
+# App 应用
 
 <blockquote>
   App Widget 用于描述应用的基本信息。 每个应用只有一个，名称固定为 app.json
@@ -8,7 +8,7 @@
 **约定**
 
 1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
-2. 使用 `<>` 标识开发者自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 3. DSL 字段大小写敏感, 例如 `adminRoot` 与 `adminroot` 不同
 
 <Detail title="查看示例 /data/app/app.json">
@@ -41,17 +41,17 @@
 | version     | String |        | `1.0.0` | `1.3.6`                                             | 应用版本号，建议遵循 [Semantic Versioning 标准](https://semver.org/lang/zh-CN/)                                                                                                                                                                            |
 | short       | String |        |         | `Demo`                                              | 应用简称, 支持多语言。                                                                                                                                                                                                                                     |
 | description | String |        |         | `Another yao application`                           | 应用介绍, 支持多语言。                                                                                                                                                                                                                                     |
-| adminRoot   | String |        | `yao`   | `admin`                                             | 管理后台入口路由地址前缀。例如 `admin` 管理后台入口路由为 `http://<服务器IP或域名>:<YAO_PORT>/admin/`                                                                                                                                                      |
+| adminRoot   | String |        | `yao`   | `admin`                                             | 管理后台路由前缀。例如 `admin` 管理后台入口路由为 `http://<服务器IP或域名>:<YAO_PORT>/admin/`                                                                                                                                                              |
 | menu        | Object |        |         | `{ "process": "flows.app.menu", "args": ["demo"] }` | 管理后台菜单读取处理器. `menu.process` String 处理器名称, `menu.args` []Any 处理器参数表                                                                                                                                                                   |
 | setup       | String |        |         | `scripts.demo.Data`                                 | 应用首次安装后运行的处理器名称， 一般可以用来建立初始化数据；处理器第一个参数为应用配置信息。 支持使用 `studio` 命名空间，调用 studio 脚本函数；例如: `studio.build.CreateModels`, 安装后调用 `/data/app/studio/build.js` 中定义的 `CreateModels()` 方法。 |
 | optional    | Object |        | `{}`    | `{"hideNotification": true, "hideSetting": false}`  | 应用可选配置项。                                                                                                                                                                                                                                           |
 
 ### menu Object
 
-| 字段    | 类型   | 必填项 | 默认值 | 示例             | 说明         |
-| ------- | ------ | ------ | ------ | ---------------- | ------------ |
-| process | String | 是     |        | `flows.app.menu` | 处理器名称   |
-| args    | String |        | `[]`   | `["demo"]`       | 处理器参数表 |
+| 字段    | 类型         | 必填项 | 默认值 | 示例             | 说明         |
+| ------- | ------------ | ------ | ------ | ---------------- | ------------ |
+| process | String       | 是     |        | `flows.app.menu` | 处理器名称   |
+| args    | Array\<Any\> |        | `[]`   | `["demo"]`       | 处理器参数表 |
 
 **处理器返回值数据结构约定:**
 
@@ -128,7 +128,7 @@
 | yao.app.menu    |                  | 返回菜单         | 读取应用菜单                                              |
 | yao.app.icons   | `[<图标文件名>]` | 返回图标文件数据 | 读取图标文件目录下文件数据 `/data/app/icons/<图标文件名>` |
 
-[查阅处理器手册](../处理器/App.mdx)
+[查看处理器手册](../处理器/App.mdx)
 
 ## 应用图标
 
