@@ -1,14 +1,9 @@
 # Table 表格界面
 
 <blockquote>
-  Table Widget 用于描述表格界面，可以用来制作列表界面。 Table DSL 文件放在
-  tables 目录中, 文件扩展名为 .tab.json。
+  Table Widget 用于列表界面制作。 Table DSL 文件放在 tables 目录中, 文件扩展名为
+  .tab.json。
 </blockquote>
-
-**约定**
-
-1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
-2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 
 **命名**
 
@@ -24,7 +19,18 @@ DSL 文件命名:
 | /data/app/tables/user/tasks.tab.json     | `user.tasks`     |
 | /data/app/tables/user/stat/list.tab.json | `user.stat.list` |
 
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
 <Detail title="查看表格示例 /data/app/tables/pet.tab.json">
+
+```json
+{
+  "name": "pet"
+}
+```
 
 </Detail>
 
