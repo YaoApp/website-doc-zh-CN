@@ -470,6 +470,23 @@ function AfterDeleteWhere(result) {
       "action": {
         "History.push": { "payload": "/404" }
       }
+    },
+    {
+      "title": "云函数",
+      "icon": "icon-cloud",
+      "action": {
+        // 调用 /data/app/services/foo.js 中定义的 function Bar(...args){} 方法
+        "Service.foo": { "method": "Bar", "args": ["foo", "bar"] }
+      }
+    },
+    {
+      "title": "Studio 方法",
+      "icon": "icon-layers",
+      "action": {
+        // 调用 /data/app/studio/hello.js 中定义的 function World(...args){} 方法
+        // **仅开发模式下有效**
+        "Studio.hello": { "method": "World", "args": ["hello", "world"] }
+      }
     }
   ]
 }
@@ -477,10 +494,12 @@ function AfterDeleteWhere(result) {
 
 **可用自定义操作 actions[*].action**
 
-| KEY 执行动作 | VALUE 参数                   | 说明               |
-| ------------ | ---------------------------- | ------------------ |
-| History.push | `{ "payload": "<路由地址>"}` | 跳转到指定路由地址 |
-| ....         | ...                          | ...                |
+| KEY 执行动作   | VALUE 参数                                     | 说明                                    |
+| -------------- | ---------------------------------------------- | --------------------------------------- |
+| History.push   | `{ "payload": "<路由地址>"}`                   | 跳转到指定路由地址                      |
+| Service.<名称> | `{ "method": "<函数名>", "args": [<参数表>] }` | 调用云函数                              |
+| Studio.<名称>  | `{ "method": "<函数名>", "args": [<参数表>] }` | 调用 Studio 云函数 **仅开发模式下有效** |
+| ....           | ...                                            | ...                                     |
 
 使用动态数据
 ...
@@ -516,6 +535,23 @@ function AfterDeleteWhere(result) {
           "Form": { "type": "edit", "model": "pet" }
         }
       }
+    },
+    {
+      "title": "云函数",
+      "icon": "icon-cloud",
+      "action": {
+        // 调用 /data/app/services/foo.js 中定义的 function Bar(...args){} 方法
+        "Service.foo": { "method": "Bar", "args": ["foo", "bar"] }
+      }
+    },
+    {
+      "title": "Studio 方法",
+      "icon": "icon-layers",
+      "action": {
+        // 调用 /data/app/studio/hello.js 中定义的 function World(...args){} 方法
+        // **仅开发模式下有效**
+        "Studio.hello": { "method": "World", "args": ["hello", "world"] }
+      }
     }
   ]
 }
@@ -523,10 +559,12 @@ function AfterDeleteWhere(result) {
 
 **可用自定义操作 actions[*].action**
 
-| KEY 执行动作     | VALUE 参数                                                                                           | 说明           |
-| ---------------- | ---------------------------------------------------------------------------------------------------- | -------------- |
-| Common.openModal | `{"width":<窗体宽度>, "Form": { "type":"<表单呈现方式 edit \| view>", "model":"<Form Widget ID>"} }` | 打开表单模态窗 |
-| ....             | ...                                                                                                  | ...            |
+| KEY 执行动作     | VALUE 参数                                                                                           | 说明                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Common.openModal | `{"width":<窗体宽度>, "Form": { "type":"<表单呈现方式 edit \| view>", "model":"<Form Widget ID>"} }` | 打开表单模态窗                          |
+| Service.<名称>   | `{ "method": "<函数名>", "args": [<参数表>] }`                                                       | 调用云函数                              |
+| Studio.<名称>    | `{ "method": "<函数名>", "args": [<参数表>] }`                                                       | 调用 Studio 云函数 **仅开发模式下有效** |
+| ....             | ...                                                                                                  | ...                                     |
 
 在参数中使用动态数据
 
@@ -573,6 +611,32 @@ operation Object
             "Form": { "type": "view", "model": "pet" }
           }
         }
+      },
+      {
+        "title": "治愈 {{name}}", // 使用 {{<字段名称>}} 引用表单数据
+        "icon": "icon-check",
+        "action": {
+          "Table.save": { "id": ":id", "status": "cured" }
+        },
+        "style": "success",
+        "confirm": { "title": "提示", "desc": "确认变更为治愈状态？{{name}}" }
+      },
+      {
+        "title": "云函数",
+        "icon": "icon-cloud",
+        "action": {
+          // 调用 /data/app/services/foo.js 中定义的 function Bar(...args){} 方法, 使用 {{<字段名称>}} 引用表单数据
+          "Service.foo": { "method": "Bar", "args": ["{{id}}", "{{name}}"] }
+        }
+      },
+      {
+        "title": "Studio 方法",
+        "icon": "icon-layers",
+        "action": {
+          // 调用 /data/app/studio/hello.js 中定义的 function World(...args){} 方法, 使用 {{<字段名称>}} 引用表单数据
+          // **仅开发模式下有效**
+          "Studio.hello": { "method": "World", "args": ["{{id}}", "{{name}}"] }
+        }
       }
     ]
   }
@@ -581,10 +645,14 @@ operation Object
 
 **可用自定义操作 actions[*].action**
 
-| KEY 执行动作     | VALUE 参数                                                                                           | 说明           |
-| ---------------- | ---------------------------------------------------------------------------------------------------- | -------------- |
-| Common.openModal | `{"width":<窗体宽度>, "Form": { "type":"<表单呈现方式 edit \| view>", "model":"<Form Widget ID>"} }` | 打开表单模态窗 |
-| ....             | ...                                                                                                  | ...            |
+| KEY 执行动作     | VALUE 参数                                                                                           | 说明                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Common.openModal | `{"width":<窗体宽度>, "Form": { "type":"<表单呈现方式 edit \| view>", "model":"<Form Widget ID>"} }` | 打开表单模态窗                          |
+| Table.Save       | `{ "id": ":id", "status": "cured" }`                                                                 | 保存当前行数据                          |
+| Table.Delete     | `{ "id": ":id"}`                                                                                     | 删除当前行数据                          |
+| Service.<名称>   | `{ "method": "<函数名>", "args": [<参数表>] }`                                                       | 调用云函数                              |
+| Studio.<名称>    | `{ "method": "<函数名>", "args": [<参数表>] }`                                                       | 调用 Studio 云函数 **仅开发模式下有效** |
+| ....             | ...                                                                                                  | ...                                     |
 
 在参数中使用动态数据
 
