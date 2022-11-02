@@ -5,6 +5,11 @@
   .login.json。
 </blockquote>
 
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
 **命名**
 
 DSL 文件命名:
@@ -20,10 +25,17 @@ DSL 文件命名:
 
 **当前版暂不支持多个登录界面。管理员登录界面描述文件固定为 admin.login.json, 用户登录界面描述固定为 user.login.json。**
 
-**约定**
+**路由**
 
-1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
-2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+管理员登录:
+
+`http://<IP|域名>:<YAO_PORT>/<adminRoot>/`
+
+`http://<IP|域名>:<YAO_PORT>/<adminRoot>/login/admin`
+
+用户登录:
+
+`http://<IP|域名>:<YAO_PORT>/<adminRoot>/login/user`
 
 <Detail title="查看管理员登录示例 /data/app/logins/admin.login.json">
 
