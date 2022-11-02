@@ -39,7 +39,7 @@ DSL 文件命名:
 | 字段   | 类型   | 必填项 | 默认值 | 示例                       | 说明                                                                          |
 | ------ | ------ | ------ | ------ | -------------------------- | ----------------------------------------------------------------------------- |
 | name   | String | 是     |        | `Pet Admin`                | 表单名称, 支持多语言                                                          |
-| action | Object | 是     |        | [查看详情](#action-object) | 表单数据交互。用于指定列表检索、保存等操作的处理器，设置数据 Hook，绑定模型等 |
+| action | Object | 是     |        | [查看详情](#action-object) | 表单数据交互。用于指定数据读取、保存等操作的处理器，设置数据 Hook，绑定模型等 |
 | layout | Object |        |        | [查看详情](#layout-object) | 表单界面布局。                                                                |
 | fields | Object |        |        | [查看详情](#fields-object) | 表单字段定义。指定表单字段定义                                                |
 | config | Object |        |        | [查看详情](#config-object) | 表单界面配置项。表单满屏显示等配置                                            |
@@ -470,7 +470,6 @@ KEY: 表单列字段名称, VALUE: 字段定义
   },
   "医生": {
     "bind": "doctor_id",
-    "view": { "type": "Text" },
     "edit": {
       "type": "Select",
       "props": {
