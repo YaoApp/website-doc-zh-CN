@@ -34,7 +34,7 @@ DSL 文件命名:
 
 `http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/x/Form/<Widget ID>/edit`
 
-<Detail title="查看表单示例 /data/app/forms/pet.tab.json">
+<Detail title="查看表单示例 /data/app/forms/pet.chart.json">
 
 ```json
 {
@@ -391,7 +391,7 @@ function AfterDelete(result) {
 
       // 字段列表 在 fields.form 中定义的字段
       "columns": [
-        { "name": "表格", "width": 24 }, // name: fiields.form.<KEY> ,  width 字段显示宽度, 24栅格
+        { "name": "表格", "width": 24 }, // name: fields.form.<KEY> ,  width 字段显示宽度, 24栅格
         {
           "width": 24,
 
@@ -400,7 +400,7 @@ function AfterDelete(result) {
             {
               "title": "Base", // 标签名称
               "columns": [
-                { "name": "ID", "width": 12 }, // name: fiields.form.<KEY> ,  width 字段显示宽度, 24栅格
+                { "name": "ID", "width": 12 }, // name: fields.form.<KEY> ,  width 字段显示宽度, 24栅格
                 { "name": "名称", "width": 12 }
               ]
             },
