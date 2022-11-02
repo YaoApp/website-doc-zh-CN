@@ -29,13 +29,13 @@ DSL 文件命名:
 
 管理员登录:
 
-`http://<IP|域名>:<YAO_PORT>/<adminRoot>/`
+`http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/`
 
-`http://<IP|域名>:<YAO_PORT>/<adminRoot>/login/admin`
+`http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/login/admin`
 
 用户登录:
 
-`http://<IP|域名>:<YAO_PORT>/<adminRoot>/login/user`
+`http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/login/user`
 
 <Detail title="查看管理员登录示例 /data/app/logins/admin.login.json">
 
@@ -70,16 +70,6 @@ DSL 文件命名:
 ```
 
 </Detail>
-
-## 界面路由
-
-`http://<服务器IP或域名>:<YAO_PORT>/<管理后台路由前缀>/login/<Widget ID>`
-
-`Widget ID` 有效值为 `admin` 和 `user`, 分别对应管理员登录界面和用户登录界面。
-
-管理员登录界面路由: `http://<服务器IP或域名>:<YAO_PORT>/<管理后台路由前缀>/login/admin`
-
-用户登录界面路由: `http://<服务器IP或域名>:<YAO_PORT>/<管理后台路由前缀>/login/user`
 
 ## Login DSL
 
