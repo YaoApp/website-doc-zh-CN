@@ -117,7 +117,7 @@ yao run yao.utils.JwtMake 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
 ```bash
 curl -X POST http://127.0.0.1:5099/api/product/save \
    -H 'Content-Type: application/json' \
-   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2lkIjoiZTZIODVMQ3Y5ODZZNVFsUG5lWWRGa1pPSUQ1LVFYYWxMX1pEazFLb0F3ND0iLCJkYXRhIjp7Imlzc3VlciI6InlhbyJ9LCJhdWQiOiJYaWFuZyBNZXRhZGF0YSBBZG1pbiBQYW5lbCIsImV4cCI6MTY2NzQ5NDg0MSwianRpIjoiMSIsImlhdCI6MTY2NzQ5MTI0MSwiaXNzIjoieGlhbmc6MSIsIm5iZiI6MTY2NzQ5MTI0MSwic3ViIjoiVXNlciBUb2tlbiJ9.AHv7OVeFZCTopWXPj1E__xVXal0oHdNYNrcoM93K8RI' \
+   -H 'Authorization: Bearer <JWT>' \
    -d '{ "name":"沙丘六部曲", "remark":"(美) 弗兰克·赫伯特 "}'
 ```
 
@@ -193,7 +193,7 @@ yao run yao.utils.JwtMake 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
 # 模拟没有权限
 curl -X POST http://127.0.0.1:5099/api/product/save?error=1 \
    -H 'Content-Type: application/json' \
-   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2lkIjoiZTZIODVMQ3Y5ODZZNVFsUG5lWWRGa1pPSUQ1LVFYYWxMX1pEazFLb0F3ND0iLCJkYXRhIjp7Imlzc3VlciI6InlhbyJ9LCJhdWQiOiJYaWFuZyBNZXRhZGF0YSBBZG1pbiBQYW5lbCIsImV4cCI6MTY2NzQ5NDg0MSwianRpIjoiMSIsImlhdCI6MTY2NzQ5MTI0MSwiaXNzIjoieGlhbmc6MSIsIm5iZiI6MTY2NzQ5MTI0MSwic3ViIjoiVXNlciBUb2tlbiJ9.AHv7OVeFZCTopWXPj1E__xVXal0oHdNYNrcoM93K8RI' \
+   -H 'Authorization: Bearer <JWT>' \
    -d '{ "name":"沙丘六部曲", "remark":"(美) 弗兰克·赫伯特 "}'
 #
 # {"code":403,"message":"没有权限"}
@@ -204,7 +204,7 @@ curl -X POST http://127.0.0.1:5099/api/product/save?error=1 \
 # 放行
 curl -X POST http://127.0.0.1:5099/api/product/save \
    -H 'Content-Type: application/json' \
-   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2lkIjoiZTZIODVMQ3Y5ODZZNVFsUG5lWWRGa1pPSUQ1LVFYYWxMX1pEazFLb0F3ND0iLCJkYXRhIjp7Imlzc3VlciI6InlhbyJ9LCJhdWQiOiJYaWFuZyBNZXRhZGF0YSBBZG1pbiBQYW5lbCIsImV4cCI6MTY2NzQ5NDg0MSwianRpIjoiMSIsImlhdCI6MTY2NzQ5MTI0MSwiaXNzIjoieGlhbmc6MSIsIm5iZiI6MTY2NzQ5MTI0MSwic3ViIjoiVXNlciBUb2tlbiJ9.AHv7OVeFZCTopWXPj1E__xVXal0oHdNYNrcoM93K8RI' \
+   -H 'Authorization: Bearer <JWT>' \
    -d '{ "name":"沙丘六部曲", "remark":"(美) 弗兰克·赫伯特 "}'
 ```
 
