@@ -120,6 +120,12 @@ yao run models.product.Save '::{"id":1,"remark":"黑塞的小说"}'
 yao run models.product.Get '::{}'
 ```
 
+列表查询(分页)
+
+```bash
+yao run models.product.Paginate '::{}' 1 2
+```
+
 按主键查询数据
 
 ```bash
@@ -134,5 +140,5 @@ yao run models.product.Delete 1 '::{}'
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="安装配置" link="基础/安装配置"></Link>
-  <Link type="next" title="数据查询" link="基础/数据查询"></Link>
+  <Link type="next" title="逻辑编排" link="基础/逻辑编排"></Link>
 </Div>
