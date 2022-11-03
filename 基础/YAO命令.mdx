@@ -24,7 +24,7 @@ yao <command> [options] [args...]
 | websocket | 建立 WebSocket 连接 |
 | dump      | 导出应用数据        |
 | restore   | 导入应用数据        |
-| stuido    | Stuido CLI          |
+| studio    | Studio CLI          |
 
 全局选项:
 
@@ -164,9 +164,9 @@ yao restore /backup/data/app/edge-20220827151641.zip
 
 命令:
 
-| 命令 | 说明                                  |
-| ---- | ------------------------------------- |
-| run  | 运行 Stuido 脚本 (应用 studio 目录下) |
+| 命令 | 说明                                        |
+| ---- | ------------------------------------------- |
+| run  | 运行 Stuido 脚本 ( /data/studio 目录下脚本) |
 
 ```bash
 yao studio run hello.Foo world '::{"foo":"bar"}'
