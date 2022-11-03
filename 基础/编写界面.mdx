@@ -42,9 +42,10 @@
   "name": "产品",
   "action": { "bind": { "model": "product" } },
   "layout": {
+    "header": { "preset": {} },
     "table": {
       "columns": [
-        { "name": "产品名称", "width": 200 },
+        { "name": "名称", "width": 200 },
         { "name": "上架状态", "width": 200 }
       ]
     }
@@ -63,32 +64,34 @@
   "name": "产品",
   "action": { "bind": { "model": "product" } },
   "layout": {
+    "header": { "preset": {} },
     "table": {
       "columns": [
-        { "name": "产品名称", "width": 200 },
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
         { "name": "上架状态", "width": 200 }
       ]
     }
   },
   "fields": {
     "table": {
-      "上架状态": {
+      "联动": {
         "bind": "online",
         "view": {
-          "type": "Tag",
-          "props": {
-            "options": [
-              { "label": "已上架", "value": "online" },
-              { "label": "已下架", "value": "offline" }
-            ]
+          "bind": "new_field",
+          "type": "Text",
+          "compute": {
+            "process": "Concat",
+            "args": ["$C(row.name)", "(", "$C(row.remark)", ")"]
           }
         },
         "edit": {
           "type": "Select",
           "props": {
             "options": [
-              { "label": "已上架", "value": "online" },
-              { "label": "已下架", "value": "offline" }
+              { "label": "已上架", "value": true },
+              { "label": "已下架", "value": false }
             ]
           }
         }
@@ -108,9 +111,9 @@
 
 在浏览器输入表格路由地址访问:
 
-`http://<IP>:<YAO_PORT>/<管理后台路由前缀>/x/Form/product`
+`http://<IP>:<YAO_PORT>/<管理后台路由前缀>/x/Form/product/0/edit`
 
-`/data/app/forms/product.tab.json`
+`/data/app/forms/product.form.json`
 
 ```json
 {
@@ -132,6 +135,7 @@
   "name": "产品",
   "action": { "bind": { "model": "product" } },
   "layout": {
+    "header": { "preset": {} },
     "filter": {
       "actions": [
         {
@@ -148,7 +152,9 @@
     },
     "table": {
       "columns": [
-        { "name": "产品名称", "width": 200 },
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
         { "name": "上架状态", "width": 200 }
       ],
       "operation": {
@@ -179,23 +185,22 @@
   },
   "fields": {
     "table": {
-      "上架状态": {
+      "联动": {
         "bind": "online",
         "view": {
-          "type": "Tag",
-          "props": {
-            "options": [
-              { "label": "已上架", "value": "online" },
-              { "label": "已下架", "value": "offline" }
-            ]
+          "bind": "new_field",
+          "type": "Text",
+          "compute": {
+            "process": "Concat",
+            "args": ["$C(row.name)", "(", "$C(row.remark)", ")"]
           }
         },
         "edit": {
           "type": "Select",
           "props": {
             "options": [
-              { "label": "已上架", "value": "online" },
-              { "label": "已下架", "value": "offline" }
+              { "label": "已上架", "value": true },
+              { "label": "已下架", "value": false }
             ]
           }
         }
