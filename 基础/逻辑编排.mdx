@@ -176,8 +176,6 @@ function Product() {
     wheres: [{ column: "user_id", value: 2 }],
   });
 
-  console.log(products);
-
   let result = [];
   products.forEach((item) => {
     result.push(`${item.id} - ${item.name} ( ${item.remark} )`);
