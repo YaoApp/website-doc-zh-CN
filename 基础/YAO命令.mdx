@@ -1,5 +1,12 @@
 # Yao 命令
 
+<blockquote>Yao 命令用于启动服务、运行处理器、查看配置信息等操作。</blockquote>
+
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
 ```bash
 yao <command> [options] [args...]
 ```
@@ -8,7 +15,7 @@ yao <command> [options] [args...]
 | --------- | ------------------- |
 | version   | 显示当前版本号      |
 | inspect   | 显示应用配置信息    |
-| migrate   | 更新数据表结构      |
+| migrate   | 更新模型数据表结构  |
 | run       | 运行处理器          |
 | start     | 启动服务            |
 | socket    | 建立 Socket 连接    |
@@ -38,7 +45,7 @@ yao version
 项目初始化, 创建 app.json, data, models 等文件和目录。
 
 ```bash
-cd /path/app
+cd /data/app
 yao init
 ```
 
@@ -47,7 +54,7 @@ yao init
 显示应用配置信息
 
 ```bash
-cd /path/app
+cd /data/app
 yao inspect
 ```
 
@@ -69,12 +76,12 @@ yao inspect
 | --force |      | 在 production 模式下, 强制使用 migrate |
 
 ```bash
-cd /path/app
+cd /data/app
 yao migrate
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao migrate -n pet
 ```
 
@@ -85,12 +92,12 @@ yao migrate -n pet
 如果需要输入复杂数据结构可以使用 `::` 前缀，声明参数为 JSON 格式， 例如: `'::{"foo":"bar"}'`
 
 ```bash
-cd /path/app
+cd /data/app
 yao run scripts.day.NextDay 2020-01-02
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao run xiang.flow.Return hello '::{"foo":"bar"}'
 ```
 
@@ -106,12 +113,12 @@ yao run xiang.flow.Return hello '::{"foo":"bar"}'
 | --debug |      | 使用开发模式启动 |
 
 ```bash
-cd /path/app
+cd /data/app
 yao start
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao start --debug
 ```
 
@@ -120,7 +127,7 @@ yao start --debug
 建立 socket 连接。 [使用 Socket Widget DSL 建立 Socket 连接](../手册/Widgets/Socket)
 
 ```bash
-cd /path/app
+cd /data/app
 yao socket gate.g02
 ```
 
@@ -129,7 +136,7 @@ yao socket gate.g02
 建立 WebSocket 连接。 [使用 Socket Widget DSL 建立 WebSocket 连接](../手册/Widgets/WebSocket)
 
 ```bash
-cd /path/app
+cd /data/app
 yao websocket message
 ```
 
@@ -138,7 +145,7 @@ yao websocket message
 导出应用数据
 
 ```bash
-cd /path/app
+cd /data/app
 yao dump
 ```
 
@@ -147,8 +154,8 @@ yao dump
 导入应用数据, 参数为使用 `yao dump` 命令导出的应用数据包文件。
 
 ```bash
-cd /path/app
-yao restore /backup/path/edge-20220827151641.zip
+cd /data/app
+yao restore /backup/data/app/edge-20220827151641.zip
 ```
 
 ## yao studio
