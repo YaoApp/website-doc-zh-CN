@@ -84,6 +84,28 @@ yao migrate -n product
 
 ## 数据查询
 
+新增一条数据
+
+```bash
+yao run models.product.Create '::{"name":"悉达多", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
+```
+
+更新一条数据
+
+```bash
+yao run models.product.Update 1 '::{"remark":"一本工具书"}'
+```
+
+保存一条数据，指定主键则更新，不指定创建创建。
+
+```bash
+yao run models.product.Save '::{"name":"资治通鉴", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
+```
+
+```bash
+yao run models.product.Save '::{"id":1,"remark":"黑塞的小说"}'
+```
+
 列表查询
 
 ```bash
@@ -93,35 +115,13 @@ yao run models.product.Get '::{}'
 按主键查询数据
 
 ```bash
-yao run models.category.find 1 '::{}'
+yao run models.product.find 1 '::{}'
 ```
 
 删除一条数据
 
 ```bash
 yao run models.product.Delete 1 '::{}'
-```
-
-新增一条数据
-
-```bash
-yao run models.product.Create '::{"name":"cat", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
-```
-
-更新一条数据
-
-```bash
-yao run models.product.Update 1 '::{"remark":"一只可爱的三色猫"}'
-```
-
-保存一条数据，指定主键则更新，不指定创建创建。
-
-```bash
-yao run models.product.Save '::{"name":"cat", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
-```
-
-```bash
-yao run models.product.Save '::{"id":1,"remark":"一只可爱的三色猫"}'
 ```
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
