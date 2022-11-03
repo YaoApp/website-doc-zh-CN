@@ -110,7 +110,7 @@ yao run xiang.flow.Return hello '::{"foo":"bar"}'
 
 启动服务
 
-**注意: 如果未检测到应用配置信息, 首先启动应用安装服务，安装完毕后启动服务。**
+**注意: 如果未检测到应用配置信息, 将启动应用安装服务，根据提示完成安装配置。**
 
 选项:
 
@@ -128,6 +128,14 @@ yao start
 cd /data/app
 yao start --debug
 ```
+
+<Notice type="warning">
+  管理后台默认用户名: `xiang@iqka.com`， 密码: `A123456p+`
+</Notice>
+
+<Notice type="warning">
+  如果网络结构较为复杂，命令行提示的IP地址无法访问，可根据实际网络结构，更换为相应IP地址。
+</Notice>
 
 ### yao socket
 
