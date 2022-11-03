@@ -36,7 +36,7 @@ Yao 的名字源于汉字**爻(yáo)**，是构成八卦的基本符号。八卦
 
 参考文档: [YAO 编程基础](../基础/YAO%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80)
 
-### 准备: 安装 Yao
+### 安装 Yao
 
 在终端下运行脚本: ( MacOS / Linux )
 
@@ -52,38 +52,27 @@ windows 用户请参考安装调试章节:
   link="介绍/安装调试"
 ></Extend>
 
-### 第一步: 创建项目
+### 创建应用
 
-新建一个项目目录，进入项目目录，运行 `yao init` 命令，创建一个空白的 Yao 应用。
+**新建应用**
+
+新建一个应用目录，进入应用目录，运行 `yao start` 命令, 启动安装界面。
 
 ```bash
-mkdir -p /data/crm  # 创建项目目录
-cd /data/crm  # 进入项目目录
-yao init # 运行初始化程序
+mkdir -p /data/crm  # 创建应用目录
+cd /data/crm  # 进入应用目录
+yao start # 启动安装界面
 ```
 
-命令运行成功后，将创建 `app.json文件` , `db`, `ui` , `data` 等目录
+**下载应用**
+
+新建一个项目目录，进入项目目录，运行 `yao get` 命令, 下载应用代码。
 
 ```bash
-├── data        # 用于存放应用产生的文件，如图片,PDF等
-├── db          # 用于存放 SQLite 数据库文件
-│   └── yao.db
-└── ui          # 静态文件服务器文件目录，可以放置自定义前端制品，该目录下文件可通过 http://host:port/文件名称 访问。
-└── app.json    # 应用配置文件, 用来定义应用名称等
-```
-
-### 第二步: 创建数据表
-
-使用 `yao migrate` 命令创建数据表，打开命令行终端，**在项目根录下运行**:
-
-```bash
-yao migrate
-```
-
-初始化菜单
-
-```bash
-yao run flows.setmenu
+mkdir -p /data/demo  # 创建应用目录
+cd /data/demo  # 进入应用目录
+yao get yao-admin # 下载应用代码
+yao start # 启动安装界面
 ```
 
 扩展阅读:
