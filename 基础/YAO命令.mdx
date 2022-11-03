@@ -17,6 +17,7 @@ yao <command> [options] [args...]
 | --------- | ------------------- |
 | version   | 显示当前版本号      |
 | inspect   | 显示应用配置信息    |
+| get       | 下载应用代码        |
 | migrate   | 更新模型数据表结构  |
 | run       | 运行处理器          |
 | start     | 启动服务            |
@@ -49,6 +50,17 @@ yao version
 ```bash
 cd /data/app
 yao inspect
+```
+
+### yao get
+
+下载应用代码。从 [INFRA](https://letsinfra.com/) 应用库中下载代码。
+
+**注意: 当前应用目录必须为空目录**
+
+```bash
+cd /data/app
+yao get yaoapp/demo-app
 ```
 
 ### yao migrate
