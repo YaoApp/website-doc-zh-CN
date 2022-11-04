@@ -183,7 +183,7 @@ function makeFlow(name, title) {
         args: ["{{$in[0]}}", { select: ["id", "name"] }],
       },
     ],
-    output: "{{$res.产品}}",
+    output: `{{$res.${title}}}`,
   });
 }
 
