@@ -186,12 +186,6 @@ function GetProduct(id) {
 yao studio run demo.GetProduct 1
 ```
 
-获取 Studio Token
-
-![管理员登录](./assets/jwt-token-step1.jpg)
-
-![获取 Studio Token](./assets/jwt-token-step2.jpg)
-
 ```bash
 # Studio JWT 可以通过管理后台, 管理员登录接口获取
 curl -X POST http://127.0.0.1:5077/service/demo \
@@ -200,6 +194,12 @@ curl -X POST http://127.0.0.1:5077/service/demo \
    -d '{ "method":"GetProduct", "args":[1]}'
 
 ```
+
+附: 如何获取 Studio Token
+
+![管理员登录](./assets/jwt-token-step1.jpg)
+
+![获取 Studio Token](./assets/jwt-token-step2.jpg)
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="编写图表" link="基础/编写图表"></Link>
