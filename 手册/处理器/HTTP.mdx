@@ -12,7 +12,20 @@
 
 ## 处理器
 
-**参数说明**
+| 处理器      | 参数表                                                                     | 返回值   | 说明                                                                  |
+| ----------- | -------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
+| http.Get    | `[<URL>, <Query(可选)>, <Headers Map (可选)>]`                             | 响应结果 | 发送 HTTP GET 请求 [示例](#get) [文档](./HTTP/Get)                    |
+| http.Head   | `[<URL>, <Query(可选)>, <Headers Map (可选)>]`                             | 响应结果 | 发送 HTTP HEAD 请求 [示例](#head) [文档](./HTTP/Head)                 |
+| http.Post   | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP POST 请求 [示例](#post) [文档](./HTTP/Post)                 |
+| http.Put    | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP PUT 请求 [示例](#put) [文档](./HTTP/Put)                    |
+| http.Patch  | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP PATCH 请求 [示例](#patch) [文档](./HTTP/Patch)              |
+| http.Delete | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP DELETE 请求 [示例](#delete) [文档](./HTTP/Delete)           |
+| http.Upload | `[<URL>, <文件名>, <ChunkSize(可选)>, <Query(可选)>, <Headers Map(可选)>]` | 响应结果 | 上传 [示例](#upload) [文档](./HTTP/Upload)                            |
+| http.Send   | `[<METHOD>, <URL>, <Query(可选)>, <Body(可选)>, <Headers Array(可选)>]`    | 响应结果 | 发送 HTTP POST 请求, 返回 JSON 数据 [示例](#send) [文档](./HTTP/Send) |
+
+在脚本中可以使用 JS API: [查看 JS API 手册](../JSAPI/HTTP)
+
+### 参数说明
 
 URL: 目标网址
 
@@ -29,19 +42,6 @@ Body: 请求数据, 示例: `name=pet`
 文件名: 相对地址, 示例: `/text/foo.txt`, 绝对路径为: `/data/app/data/text/foo.txt`
 
 ChunkSize: 分段上传, 每次上传字节数
-
-| 处理器      | 参数表                                                                     | 返回值   | 说明                                                                  |
-| ----------- | -------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
-| http.Get    | `[<URL>, <Query(可选)>, <Headers Map (可选)>]`                             | 响应结果 | 发送 HTTP GET 请求 [示例](#get) [文档](./HTTP/Get)                    |
-| http.Head   | `[<URL>, <Query(可选)>, <Headers Map (可选)>]`                             | 响应结果 | 发送 HTTP HEAD 请求 [示例](#head) [文档](./HTTP/Head)                 |
-| http.Post   | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP POST 请求 [示例](#post) [文档](./HTTP/Post)                 |
-| http.Put    | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP PUT 请求 [示例](#put) [文档](./HTTP/Put)                    |
-| http.Patch  | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP PATCH 请求 [示例](#patch) [文档](./HTTP/Patch)              |
-| http.Delete | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers Map(可选)>]`                | 响应结果 | 发送 HTTP DELETE 请求 [示例](#delete) [文档](./HTTP/Delete)           |
-| http.Upload | `[<URL>, <文件名>, <ChunkSize(可选)>, <Query(可选)>, <Headers Map(可选)>]` | 响应结果 | 上传 [示例](#upload) [文档](./HTTP/Upload)                            |
-| http.Send   | `[<METHOD>, <URL>, <Query(可选)>, <Body(可选)>, <Headers Array(可选)>]`    | 响应结果 | 发送 HTTP POST 请求, 返回 JSON 数据 [示例](#send) [文档](./HTTP/Send) |
-
-在脚本中可以使用 JS API: [查看 JS API 手册](../JSAPI/HTTP)
 
 ### 数据结构
 
