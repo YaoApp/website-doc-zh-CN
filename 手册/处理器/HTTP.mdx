@@ -14,19 +14,19 @@
 
 | 处理器      | 参数表                                                            | 返回值   | 说明                                                                  |
 | ----------- | ----------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
-| http.Get    | `[<URL>, <Query(可选)>, <Headers(可选)>]`                         | 请求结果 | 发送 HTTP GET 请求 [示例](#get) [文档](./HTTP/Get)                    |
-| http.Head   | `[<URL>, <Query(可选)>, <Headers(可选)>]`                         | 请求结果 | 发送 HTTP HEAD 请求 [示例](#head) [文档](./HTTP/Head)                 |
-| http.Post   | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 请求结果 | 发送 HTTP POST 请求 [示例](#post) [文档](./HTTP/Post)                 |
-| http.Put    | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 请求结果 | 发送 HTTP PUT 请求 [示例](#put) [文档](./HTTP/Put)                    |
-| http.Patch  | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 请求结果 | 发送 HTTP PATCH 请求 [示例](#patch) [文档](./HTTP/Patch)              |
-| http.Delete | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 请求结果 | 发送 HTTP DELETE 请求 [示例](#delete) [文档](./HTTP/Delete)           |
-| http.Send   | `[<METHOD>, <URL>, <Query(可选)>, <Data(可选)>, <Headers(可选)>]` | 请求结果 | 发送 HTTP POST 请求, 返回 JSON 数据 [示例](#send) [文档](./HTTP/Send) |
+| http.Get    | `[<URL>, <Query(可选)>, <Headers(可选)>]`                         | 响应结果 | 发送 HTTP GET 请求 [示例](#get) [文档](./HTTP/Get)                    |
+| http.Head   | `[<URL>, <Query(可选)>, <Headers(可选)>]`                         | 响应结果 | 发送 HTTP HEAD 请求 [示例](#head) [文档](./HTTP/Head)                 |
+| http.Post   | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 响应结果 | 发送 HTTP POST 请求 [示例](#post) [文档](./HTTP/Post)                 |
+| http.Put    | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 响应结果 | 发送 HTTP PUT 请求 [示例](#put) [文档](./HTTP/Put)                    |
+| http.Patch  | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 响应结果 | 发送 HTTP PATCH 请求 [示例](#patch) [文档](./HTTP/Patch)              |
+| http.Delete | `[<URL>, <Data(可选)>, <Query(可选)>, <Headers(可选)>]`           | 响应结果 | 发送 HTTP DELETE 请求 [示例](#delete) [文档](./HTTP/Delete)           |
+| http.Send   | `[<METHOD>, <URL>, <Query(可选)>, <Data(可选)>, <Headers(可选)>]` | 响应结果 | 发送 HTTP POST 请求, 返回 JSON 数据 [示例](#send) [文档](./HTTP/Send) |
 
 在脚本中可以使用 JS API: [查看 JS API 手册](../JSAPI/HTTP)
 
 ### 数据结构
 
-#### 请求结果
+#### 响应结果
 
 | 字段    | 类型    | 示例                      | 说明                                                                   |
 | ------- | ------- | ------------------------- | ---------------------------------------------------------------------- |
