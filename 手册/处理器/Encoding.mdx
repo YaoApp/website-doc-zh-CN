@@ -18,14 +18,20 @@
 | encoding.base64.Decode | `[<Base64Code>]` | 原始字符串         | Base64 解码 [示例](#base64decode) [文档](./Encoding/Base64Decode) |
 | encoding.hex.Encode    | `[<Source>]`     | 十六进制编码字符串 | 十六进制编码 [示例](#hexencode) [文档](./Encoding/HexEncode)      |
 | encoding.hex.Decode    | `[<HexCode>]`    | 原始字符串         | 十六进制解码 [示例](#hexdecode) [文档](./Encoding/HexDecode)      |
+| encoding.json.Encode   | `[<SourceData>]` | JSON 字符串        | JSON 格式编码 [示例](#jsonencode) [文档](./Encoding/JSONEncode)   |
+| encoding.json.Decode   | `[<JSON>]`       | 原始数据           | JSON 格式解码 [示例](#jsondecode) [文档](./Encoding/JSONDecode)   |
 
 **参数说明**
 
 Source: `String` 原始数据
 
+SourceData: `Any` 原始数据
+
 Base64Code: `String` Base64 编码字符串
 
 HexCode: `String` 十六进制编码字符串
+
+JSON: JSON 格式字符串
 
 ## 示例
 
@@ -36,3 +42,7 @@ HexCode: `String` 十六进制编码字符串
 ### hex.Encode
 
 ### hex.Decode
+
+### json.Encode
+
+### json.Decode
