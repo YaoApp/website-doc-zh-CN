@@ -15,19 +15,106 @@
 
 ## 处理器
 
-| 处理器                    | 参数表 | 返回值 | 说明 |
-| ------------------------- | ------ | ------ | ---- |
-| yao.compute.Get           |        |        |      |
-| yao.compute.Trim          |        |        |      |
-| yao.compute.Concat        |        |        |      |
-| yao.compute.QueryString   |        |        |      |
-| yao.compute.ImagesView    |        |        |      |
-| yao.compute.ImagesEdit    |        |        |      |
-| yao.compute.Duration      |        |        |      |
-| yao.compute.HumanDate     |        |        |      |
-| yao.compute.HumanTime     |        |        |      |
-| yao.compute.HumanDateTime |        |        |      |
-| yao.compute.Mapping       |        |        |      |
-| yao.compute.Currency      |        |        |      |
+| 处理器 | 参数表              | 返回值             | 说明                       |
+| ------ | ------------------- | ------------------ | -------------------------- |
+| Get    | `[<字符串参数>]`    | `<字符串参数>`     | 读取数值 [示例](#get)      |
+| Trim   | `[<字符串参数>]`    |                    | 过滤首尾空格 [示例](#trim) |
+| Concat | `[...<字符串参数>]` | `"value1value2.."` | 连接字符串 [示例](#concat) |
+| Hide   | `[]`                | `""` 空字符串      | 返回空字符串 [示例](#hide) |
 
 ## 示例
+
+### Get
+
+```jsonc
+{
+  // ...
+  // fields.table
+  "名称": {
+    "bind": "name",
+    "view": {
+      "bind": "name_view",
+      "type": "Text",
+      "compute": { "process": "Get", "args": ["$C(row.type)"] },
+      "props": {}
+    },
+    "edit": {
+      "bind": "name",
+      "type": "Input",
+      "props": { "placeholder": "请输入宠物名称" }
+    }
+  }
+  // ...
+}
+```
+
+### Trim
+
+```jsonc
+{
+  // ...
+  // fields.filter
+  "名称": {
+    "bind": "where.name.like",
+    "edit": {
+      "type": "Input",
+      "compute": "Trim",
+      "props": { "placeholder": "请输入宠物名称" }
+    }
+  }
+  // ...
+}
+```
+
+### Concat
+
+```jsonc
+{
+  // ...
+  // fields.table
+  "名称": {
+    "bind": "name",
+    "view": {
+      "bind": "name_view",
+      "type": "Text",
+      "compute": {
+        "process": "Concat",
+        "args": [
+          "$C(row.type)",
+          "\\::",
+          "$C(row.name)",
+          "-",
+          "$C(row.status)",
+          "-",
+          "$C(id)"
+        ]
+      },
+      "props": {}
+    },
+    "edit": {
+      "bind": "name",
+      "type": "Input",
+      "props": { "placeholder": "请输入宠物名称" }
+    }
+  }
+  // ...
+}
+```
+
+### Hide
+
+```jsonc
+{
+  // ...
+  // fields.form
+  "密码": {
+    "bind": "password",
+    "view": { "compute": "Hide" },
+    "edit": {
+      "type": "Input",
+      "props": { "placeholder": "请输入密码", "type": "password" }
+    }
+  }
+  // ...
+}
+```
