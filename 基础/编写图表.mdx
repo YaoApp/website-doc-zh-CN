@@ -189,9 +189,101 @@ yao run flows.stat.product '::{"range":["08:00", "16:00"]}'
 
 增加按时间范围筛选，并设置为 TimePicker 组件。
 
+`/data/app/charts/stat.chart.json`
+
+```json
+{
+  "name": "统计",
+  "action": {
+    "data": { "process": "flows.stat.product" }
+  },
+  "layout": {
+    "operation": { "actions": [] },
+    "filter": {
+      "columns": [{ "name": "时间区间", "width": 6 }]
+    },
+    "chart": {
+      "columns": [
+        { "name": "产品数量", "width": 6 },
+        { "name": "时刻分布", "width": 24 }
+      ]
+    }
+  },
+  "fields": {
+    "filter": {
+      "时间区间": {
+        "bind": "range",
+        "edit": { "type": "TimePicker", "props": { "range": true } }
+      }
+    },
+    "chart": {
+      "产品数量": {
+        "bind": "数量",
+        "link": "/x/Table/product",
+        "view": { "type": "Number", "props": { "unit": "个" } }
+      },
+      "时刻分布": {
+        "bind": "分布",
+        "link": "/x/Table/product",
+        "view": {
+          "type": "Bar",
+          "props": {
+            "height": 240,
+            "nameKey": "时刻",
+            "axisLabel": { "interval": 0, "fontSize": 12 },
+            "series": [
+              {
+                "valueKey": "数量",
+                "type": "bar",
+                "colorBy": "data",
+                "itemStyle": { "borderRadius": 6 },
+                "splitLine": { "show": false },
+                "axisLabel": { "show": false }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "config": { "full": false }
+}
+```
+
+### 添加 Hook 转换筛选器参数
+
+添加一个 Befor Hook, 将参数转换为处理器需要格式。
+
 在浏览器刷新图表路由地址访问:
 
 `http://<IP>:<YAO_PORT>/<管理后台路由前缀>/x/Chart/stat`
+
+**添加一个 Hook 脚本用于转换参数。**
+
+`/data/app/scripts/hook.js`
+
+```javascript
+/**
+ * Stat Hook
+ * @param {*} args
+ * @returns
+ */
+function FormatTime(args) {
+  log.Trace("[FormatTime] %v", args);
+  let range = args["range[]"] || [];
+  let start = range[0] ? range[0].split("T")[1].split("+")[0] : "08:00";
+  let end = range[1] ? range[1].split("T")[1].split("+")[0] : "18:00";
+  return [{ range: [start, end] }];
+}
+```
+
+运行调试
+
+```bash
+yao run scripts.hook.FormatTime '::{"range[]":["2022-11-14T08:00:00+08:00", "2022-11-14T23:00:00+08:00"]}'
+```
+
+**修改 Chart DSL 挂载 Hook**
 
 `/data/app/charts/stat.chart.json`
 
@@ -199,6 +291,7 @@ yao run flows.stat.product '::{"range":["08:00", "16:00"]}'
 {
   "name": "统计",
   "action": {
+    "before:data": "scripts.hook.FormatTime",
     "data": { "process": "flows.stat.product" }
   },
   "layout": {
