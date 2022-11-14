@@ -110,7 +110,7 @@ yao run models.product.Paginate '::{}' 1 2
     },
     {
       "name": "打印",
-      "process": "yao.utils.Print",
+      "process": "utils.fmt.Print",
       "args": ["{{$res.宠物}}"]
     }
   ]
@@ -173,7 +173,7 @@ function GetProduct(id) {
 运行调试
 
 ```bash
-yao run yao.utils.JwtMake 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
+yao run utils.jwt.Make 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
 ```
 
 ```bash

@@ -111,7 +111,7 @@ curl 'http://127.0.0.1:5099/api/product/search?where.name.match=沙丘&page=1&pa
 生成 JWT
 
 ```bash
-yao run yao.utils.JwtMake 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
+yao run utils.jwt.Make 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
 ```
 
 ```bash
@@ -186,7 +186,7 @@ function User(path, params, query, payload, headers) {
 生成 JWT
 
 ```bash
-yao run yao.utils.JwtMake 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
+yao run utils.jwt.Make 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
 ```
 
 ```bash
