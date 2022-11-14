@@ -112,7 +112,9 @@ yao run flows.product
 yao run flows.query.search
 ```
 
-### 参数表
+### Flow 处理器传参
+
+#### 使用参数表
 
 使用 `{{$in[<参数表下标>]}}` 变量访问传入参数
 
@@ -143,6 +145,45 @@ yao run flows.query.search
 
 ```bash
 yao run flows.query.args 1
+```
+
+#### 使用 Map 参数
+
+如果参数表中 **只有一个 Map 类型参数**, 可以直接使用 `KEY` 作为变量名称。
+
+在 `flows/query` 目录下, 新建一个 Flow DSL 文件。
+
+`/data/app/flows/query/args_map.flow.json`
+
+```json
+{
+  "label": "演示",
+  "version": "1.0.0",
+  "description": "数据查询",
+  "nodes": [
+    {
+      "name": "用户",
+      "process": "models.xiang.user.Find",
+      "args": ["{{$id}}", { "select": ["id", "name"] }]
+    }
+  ],
+  "output": {
+    "参数表": "{{$in}}",
+    "用户": "{{$res.用户}}",
+    "ID": {
+      "$id": "{{$id}}",
+      "$in[0].id": "{{$in[0].id}}"
+    }
+  }
+}
+```
+
+本例中 `{{$id}}` 与 `{{$in[0].id}}` 等效
+
+**运行调试**
+
+```bash
+yao run flows.query.args_map '::{"id":1}'
 ```
 
 [查看 Flow Widget 手册](../手册/Widgets/Flow)
