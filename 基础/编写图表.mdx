@@ -187,7 +187,7 @@ yao run flows.stat.product '::{"range":["08:00", "16:00"]}'
 
 ### 添加筛选器
 
-增加 TimePicker 组件。
+增加按时间范围筛选，并设置为 TimePicker 组件。
 
 在浏览器刷新图表路由地址访问:
 
@@ -255,6 +255,114 @@ yao run flows.stat.product '::{"range":["08:00", "16:00"]}'
 ```
 
 [查看 Chart Widget 手册](../手册/Widgets/Chart)
+
+## 添加菜单
+
+编辑 `/data/app/flows/app/menu.flow.json` 添加菜单项
+
+<Detail title="查看源码">
+
+```json
+{
+  "name": "APP Menu",
+  "nodes": [],
+  "output": [
+    {
+      "blocks": 0,
+      "icon": "icon-activity",
+      "id": 1,
+      "name": "图表",
+      "parent": null,
+      "path": "/x/Chart/dashboard",
+      "visible_menu": 1,
+      "children": [
+        {
+          "blocks": 0,
+          "icon": "icon-book",
+          "name": "演示图表",
+          "id": 2010,
+          "parent": 1,
+          "path": "/x/Chart/dashboard",
+          "visible_menu": 1
+        },
+        {
+          "blocks": 0,
+          "icon": "icon-book",
+          "name": "产品图表",
+          "id": 2020,
+          "parent": 1,
+          "path": "/x/Chart/stat",
+          "visible_menu": 1
+        }
+      ]
+    },
+    {
+      "blocks": 0,
+      "icon": "icon-book",
+      "id": 2,
+      "name": "表格",
+      "parent": null,
+      "path": "/x/Table/pet",
+      "visible_menu": 1,
+      "children": [
+        {
+          "blocks": 0,
+          "icon": "icon-book",
+          "name": "宠物列表",
+          "id": 2010,
+          "parent": 2,
+          "path": "/x/Table/pet",
+          "visible_menu": 1
+        },
+        {
+          "blocks": 0,
+          "icon": "icon-book",
+          "name": "产品管理",
+          "id": 2010,
+          "parent": 2,
+          "path": "/x/Table/product",
+          "visible_menu": 1
+        }
+      ]
+    },
+    {
+      "blocks": 0,
+      "icon": "icon-clipboard",
+      "id": 2,
+      "name": "表单",
+      "parent": null,
+      "path": "/x/Form/pet/1/edit",
+      "visible_menu": 1,
+      "children": [
+        {
+          "blocks": 0,
+          "icon": "icon-clipboard",
+          "name": "编辑模式",
+          "id": 2010,
+          "parent": 2,
+          "path": "/x/Form/pet/1/edit",
+          "visible_menu": 1
+        },
+        {
+          "blocks": 0,
+          "icon": "icon-clipboard",
+          "name": "查看模式",
+          "id": 2010,
+          "parent": 2,
+          "path": "/x/Form/pet/1/view",
+          "visible_menu": 1
+        }
+      ]
+    }
+  ]
+}
+```
+
+</Detail>
+
+点击菜单栏下方设置图标，点击更新菜单，或退出后台重新登录。
+
+![更新菜单](./assets/admin-stat-done.jpg)
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="编写界面" link="基础/编写界面"></Link>
