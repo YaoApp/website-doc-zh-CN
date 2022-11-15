@@ -96,8 +96,7 @@ yao migrate -n product
       "props": {
         "filetype": "image", // 上传文件类型设定为 image
         "$api": {
-          "process": "fs.system.Upload", // 声明一个API接口, 并绑定 fs.system.Upload 处理器
-          "in": ["$file.file"] // 将 API 参数设定为 $file.file
+          "process": "fs.system.Upload" // 声明一个API接口, 并绑定 fs.system.Upload 处理器
         }
       }
     }
@@ -176,10 +175,7 @@ yao migrate -n product
           "type": "Upload",
           "props": {
             "filetype": "image",
-            "$api": {
-              "process": "fs.system.Upload",
-              "in": ["$file.file"]
-            }
+            "$api": { "process": "fs.system.Upload" }
           }
         }
       },
@@ -401,8 +397,7 @@ yao run scripts.upload.File '::{"tempFile":"<tempfile>"}'
       "props": {
         "filetype": "image",
         "$api": {
-          "process": "flows.upload.file", // 绑定 flows.upload.file 处理器
-          "in": ["$file.file"]
+          "process": "flows.upload.file" // 绑定 flows.upload.file 处理器
         }
       }
     }
@@ -420,8 +415,7 @@ yao run scripts.upload.File '::{"tempFile":"<tempfile>"}'
       "props": {
         "filetype": "image",
         "$api": {
-          "process": "scripts.upload.File", // 绑定 scripts.upload.File 处理器
-          "in": ["$file.file"]
+          "process": "scripts.upload.File" // 绑定 scripts.upload.File 处理器
         }
       }
     }
