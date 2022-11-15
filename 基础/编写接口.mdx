@@ -10,6 +10,15 @@
 2. 示例中约定服务器地址为 `http://127.0.0.1:5099`, 实际编写时需自行替换。
 3. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 
+**文件系统路由**
+
+API 采用文件系统路由。 例如 DSL 文件名称为 `product.http.json` 则对应接口路由地址为 `http://127.0.0.1:5099/api/procuct/<path>`
+
+| DSL 文件                              | 路由地址                                        |
+| ------------------------------------- | ----------------------------------------------- |
+| /data/app/apis/product.http.json      | `http://127.0.0.1:5099/api/procuct/<path>`      |
+| /data/app/apis/project/task.http.json | `http://127.0.0.1:5099/api/project/task/<path>` |
+
 ## 编写 REST API
 
 ### 添加 API DSL 文件
@@ -24,7 +33,6 @@
   "version": "1.0.0",
   "description": "产品接口",
   "guard": "-",
-  "group": "product",
   "paths": [
     {
       "path": "/search",
