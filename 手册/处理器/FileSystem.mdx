@@ -44,8 +44,20 @@
 | fs.system.MimeType        | `[<文件名>]`                                                  | 文件 MIME-TYPE                          | 读取文件 MIME-TYPE [示例](#mimetype) [文档](./FileSystem/MimeType)                            |
 | fs.system.Move            | `[<文件名>, <目标文件名>]`                                    | -                                       | 移动文件或目录(含子文件) [示例](#move) [文档](./FileSystem/Move)                              |
 | fs.system.Copy            | `[<文件名>, <目标文件名>]`                                    | -                                       | 移动文件或目录(含子文件) [示例](#copy) [文档](./FileSystem/Copy)                              |
+| fs.system.Upload          | `[<临时文件>]`                                                | -                                       | 上传文件 [示例](#upload) [文档](./FileSystem/Upload)                                          |
 
 在脚本中可以使用 JS API: [查看 JS API 手册](../JSAPI/FileSystem)
+
+### 数据结构
+
+#### 临时文件
+
+| 字段     | 类型    | 示例 | 说明         |
+| -------- | ------- | ---- | ------------ |
+| name     | String  |      | 文件名称     |
+| tempFile | String  |      | 临时文件名称 |
+| Size     | Integer |      | 文件大小     |
+| mimeType | Integer |      | MIME Type    |
 
 ## 示例
 
@@ -96,3 +108,5 @@
 ### Move
 
 ### Copy
+
+### Upload

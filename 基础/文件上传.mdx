@@ -222,7 +222,6 @@ yao migrate -n product
   "version": "1.0.0",
   "description": "文件上传",
   "guard": "bearer-jwt",
-  "group": "upload",
   "paths": [
     {
       "path": "/file",
@@ -282,7 +281,7 @@ curl http://127.0.0.1:5099/api/upload/file \
     {
       "name": "文件名",
       "process": "utils.str.JoinPath",
-      "args": ["/texts", "{{$res.文件名称}}"]
+      "args": ["texts", "{{$res.文件名称}}"]
     },
     {
       "name": "保存文件",
@@ -328,7 +327,7 @@ function File(temp) {
   let tempFile = temp.tempFile || null;
   var data = fs.ReadFile(tempFile);
   let now = new Date().getTime();
-  let file = `/texts/${now}.txt`;
+  let file = `texts/${now}.txt`;
   fs.WriteFile(file, data, 0644);
   return file;
 }
