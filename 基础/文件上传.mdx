@@ -266,23 +266,28 @@ curl http://127.0.0.1:5099/api/upload/file \
   "nodes": [
     {
       "name": "文件",
-      "process": "fs.system.ReadTemp",
-      "args": ["{{$tempFile}}"]
+      "process": "fs.system.ReadFile",
+      "args": ["{{$in[0].tempFile}}"]
     },
     {
       "name": "当前时刻",
-      "process": "utils.now.Timestamp",
+      "process": "utils.now.Timestampms",
       "args": []
     },
     {
+      "name": "文件名称",
+      "process": "utils.str.Concat",
+      "args": ["{{$res.当前时刻}}", ".txt"]
+    },
+    {
       "name": "文件名",
-      "process": "utils.filepath.Join",
-      "args": ["texts", "{{$res.当前时刻}}", ".txt"]
+      "process": "utils.str.JoinPath",
+      "args": ["/texts", "{{$res.文件名称}}"]
     },
     {
       "name": "保存文件",
-      "process": "fs.system.WirteFile",
-      "args": ["{{$res.文件名}}", "{{$res.文件}}"]
+      "process": "fs.system.WriteFile",
+      "args": ["{{$res.文件名}}", "{{$res.文件}}", "0644"]
     }
   ],
   "output": "{{$res.文件名}}"
@@ -313,7 +318,7 @@ yao run flows.upload.file '::{"tempFile":"<tempfile>"}'
  * @param {*} temp
  * @returns
  */
-function Upload(temp) {
+function File(temp) {
   temp = temp || {};
   if (!temp.tempFile) {
     throw new Exception("参数错误", 400);
@@ -321,10 +326,10 @@ function Upload(temp) {
 
   var fs = new FS("system");
   let tempFile = temp.tempFile || null;
-  var data = fs.ReadTemp(tempFile);
+  var data = fs.ReadFile(tempFile);
   let now = new Date().getTime();
   let file = `/texts/${now}.txt`;
-  fs.system.WirteFile(file, data);
+  fs.WriteFile(file, data, 0644);
   return file;
 }
 ```
