@@ -270,14 +270,14 @@ curl http://127.0.0.1:5099/api/upload/file \
       "args": []
     },
     {
-      "name": "文件名称",
+      "name": "名称",
       "process": "utils.str.Concat",
       "args": ["{{$res.当前时刻}}", ".txt"]
     },
     {
       "name": "文件名",
       "process": "utils.str.JoinPath",
-      "args": ["texts", "{{$res.文件名称}}"]
+      "args": ["/", "texts", "{{$res.名称}}"]
     },
     {
       "name": "保存文件",
@@ -323,7 +323,7 @@ function File(temp) {
   let tempFile = temp.tempFile || null;
   var data = fs.ReadFile(tempFile);
   let now = new Date().getTime();
-  let file = `texts/${now}.txt`;
+  let file = `/texts/${now}.txt`;
   fs.WriteFile(file, data, 0644);
   return file;
 }
@@ -381,6 +381,30 @@ yao run scripts.upload.File '::{"tempFile":"<tempfile>"}'
     }
   ]
 }
+```
+
+**运行调试**
+
+添加一个测试文件用于上传
+
+```bash
+mkdir -p /data/app/data/ # 如 data 目录不存在, 创建一个 data 目录
+echo "Upload Test" > /data/app/data/upload-test.txt
+```
+
+```bash
+curl http://127.0.0.1:5099/api/upload/file \
+  -F file=@data/upload-test.txt
+```
+
+```bash
+curl http://127.0.0.1:5099/api/upload/flow \
+  -F file=@data/upload-test.txt
+```
+
+```bash
+curl http://127.0.0.1:5099/api/upload/script \
+  -F file=@data/upload-test.txt
 ```
 
 ### 在 Upload 组件中使用
