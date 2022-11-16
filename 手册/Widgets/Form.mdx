@@ -511,16 +511,17 @@ KEY: 表单列字段名称, VALUE: 字段定义
 
 Form Widget API
 
-| 请求方式 | 路由                                           | 鉴权               | query                                  | payload                     | 说明                                                           |
-| -------- | ---------------------------------------------- | ------------------ | -------------------------------------- | --------------------------- | -------------------------------------------------------------- |
-| `GET`    | `/api/__yao/form/:id/setting`                  | `关联处理器中指定` |                                        |                             | 获取表单配置信息                                               |
-| `GET`    | `/api/__yao/form/:id/component/:xpath/:method` | `关联处理器中指定` |                                        |                             | 返回 `fields.form\|filter.<key>.props.$xxx` 绑定处理器运行结果 |
-| `GET`    | `/api/__yao/form/:id/find/:primary`            | `关联处理器中指定` | [URL Query Params](../Widgets/API.mdx) |                             | 按主键查询单条记录，返回单条记录                               |
-| `POST`   | `/api/__yao/form/:id/upload/:xpath/:method`    | `关联处理器中指定` |                                        | `{"file":"<file content>"}` | 文件上传 `fields.form.<key>.props.$api`                        |
-| `POST`   | `/api/__yao/form/:id/save`                     | `关联处理器中指定` |                                        | `{"<field>":"<value>"}`     | 保存单条记录，如 payload 中包含主键则更新，否则创建            |
-| `POST`   | `/api/__yao/form/:id/create`                   | `关联处理器中指定` |                                        | `{"<field>":"<value>"}`     | 创建一条记录                                                   |
-| `POST`   | `/api/__yao/form/:id/update/:primary`          | `关联处理器中指定` |                                        | `{"<field>":"<value>"}`     | 更新指定主键的记录                                             |
-| `POST`   | `/api/__yao/form/:id/delete/:primary`          | `关联处理器中指定` |                                        | `{"<field>":"<value>"}`     | 删除指定主键的记录                                             |
+| 请求方式 | 路由                                           | 鉴权               | query                                   | payload                     | 说明                                                                |
+| -------- | ---------------------------------------------- | ------------------ | --------------------------------------- | --------------------------- | ------------------------------------------------------------------- |
+| `GET`    | `/api/__yao/form/:id/setting`                  | `关联处理器中指定` |                                         |                             | 获取表单配置信息                                                    |
+| `GET`    | `/api/__yao/form/:id/component/:xpath/:method` | `关联处理器中指定` |                                         |                             | 返回 `fields.form\|filter.<key>.props.$xxx` 绑定处理器运行结果      |
+| `GET`    | `/api/__yao/form/:id/find/:primary`            | `关联处理器中指定` | [URL Query Params](../Widgets/API.mdx)  |                             | 按主键查询单条记录，返回单条记录                                    |
+| `GET`    | `/api/__yao/form/:id/download/:field`          | `JWT`              | `{"name":"<file name>", "token":"JWT"}` |                             | 文件下载 返回 `{"content":"<文件内容>", "type":"<文件 Mime Type>"}` |
+| `POST`   | `/api/__yao/form/:id/upload/:xpath/:method`    | `关联处理器中指定` |                                         | `{"file":"<file content>"}` | 文件上传 `fields.form.<key>.props.$api`                             |
+| `POST`   | `/api/__yao/form/:id/save`                     | `关联处理器中指定` |                                         | `{"<field>":"<value>"}`     | 保存单条记录，如 payload 中包含主键则更新，否则创建                 |
+| `POST`   | `/api/__yao/form/:id/create`                   | `关联处理器中指定` |                                         | `{"<field>":"<value>"}`     | 创建一条记录                                                        |
+| `POST`   | `/api/__yao/form/:id/update/:primary`          | `关联处理器中指定` |                                         | `{"<field>":"<value>"}`     | 更新指定主键的记录                                                  |
+| `POST`   | `/api/__yao/form/:id/delete/:primary`          | `关联处理器中指定` |                                         | `{"<field>":"<value>"}`     | 删除指定主键的记录                                                  |
 
 ## 处理器
 

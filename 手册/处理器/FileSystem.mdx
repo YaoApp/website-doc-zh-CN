@@ -18,33 +18,34 @@
 
 命名规则: `*-logs`
 
-| 处理器                    | 参数表                                                        | 返回值                                  | 说明                                                                                          |
-| ------------------------- | ------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------- |
-| fs.system.ReadFile        | `[<文件名>]`                                                  | 文件内容(String)                        | 读取文件内容, 用于文本文件 [示例](#readfile) [文档](./FileSystem/ReadFile)                    |
-| fs.system.ReadFileBuffer  | `[<文件名>]`                                                  | 文件内容([]Byte/Unit8Array)             | 读取文件内容, 用于二进制文件 [示例](#readfilebuffer) [文档](./FileSystem/ReadFileBuffer)      |
-| fs.system.WirteFile       | `[<文件名>, <文件内容(String)>, <文件权限(可选)>]`            | 文件字节数                              | 写入文本文件, 返回文件字节数 [示例](#wirtefile) [文档](./FileSystem/WirteFile)                |
-| fs.system.WirteFileBuffer | `[<文件名>, <文件内容([]Byte/Unit8Array)>, <文件权限(可选)>]` | 文件字节数                              | 写入二进制文件, 返回文件字节数 [示例](#wirtefilebuffer)) [文档](./FileSystem/WirteFileBuffer) |
-| fs.system.ReadDir         | `[<目录称>, <递归(可选, 默认 false)>]`                        | 文件名数组                              | 读取文件夹下所有文件, 返回文件名数组 [示例](#readdir) [文档](./FileSystem/ReadDir)            |
-| fs.system.Mkdir           | `[<目录称>, <目录权限(可选)>]`                                | -                                       | 创建文件目录 [示例](#mkdir) [文档](./FileSystem/Mkdir)                                        |
-| fs.system.MkdirAll        | `[<目录称>, <目录权限(可选)>]`                                | -                                       | 创建文件目录(含子目录) [示例](#mkdirall) [文档](./FileSystem/MkdirAll)                        |
-| fs.system.MkdirTemp       | `[<根目录(可选)>, <命名规则(可选)>]`                          | 文件夹路径                              | 创建临时文件目录 [示例](#mkdirtemp) [文档](./FileSystem/MkdirTemp)                            |
-| fs.system.Remove          | `[<文件名>]`                                                  |                                         | 删除文件或目录 [示例](#remove) [文档](./FileSystem/Remove)                                    |
-| fs.system.RemoveAll       | `[<文件名>]`                                                  |                                         | 删除文件或目录(含目录下文件或目录) [示例](#removeall) [文档](./FileSystem/RemoveAll)          |
-| fs.system.Exists          | `[<文件名>]`                                                  | 存在返回 true, 否则返回 false           | 检查文件或目录是否存在 [示例](#exists) [文档](./FileSystem/Exists)                            |
-| fs.system.IsDir           | `[<文件名>]`                                                  | 文件名是为目录 true, 否则返回 false     | 检查文件名是否为目录 [示例](#isdir) [文档](./FileSystem/IsDir)                                |
-| fs.system.IsFile          | `[<文件名>]`                                                  | 文件名是为文件 true, 否则返回 false     | 检查文件名是否为文件 [示例](#isfile) [文档](./FileSystem/IsFile)                              |
-| fs.system.IsLink          | `[<文件名>]`                                                  | 文件名是为符号链接 true, 否则返回 false | 检查文件名是否为符号链接 [示例](#islink) [文档](./FileSystem/IsLink)                          |
-| fs.system.Size            | `[<文件名>]`                                                  | 文件字节数                              | 读取文件字节数 [示例](#size) [文档](./FileSystem/Size)                                        |
-| fs.system.Mode            | `[<文件名>]`                                                  | 文件权限(Uint)                          | 读取文件权限 [示例](#mode) [文档](./FileSystem/Mode)                                          |
-| fs.system.ModeTime        | `[<文件名>]`                                                  | 时间戳                                  | 读取文件修改时间 [示例](#modetime) [文档](./FileSystem/ModeTime)                              |
-| fs.system.Chmod           | `[<文件名>, <文件权限>]`                                      | -                                       | 修改文件权限 [示例](#chomd) [文档](./FileSystem/Chmod)                                        |
-| fs.system.BaseName        | `[<文件名>]`                                                  | 文件 Base Name                          | 读取 Base Name [示例](#basename) [文档](./FileSystem/BaseName)                                |
-| fs.system.DirName         | `[<文件名>]`                                                  | 文件所在目录                            | 读取文件所在目录 [示例](#dirname) [文档](./FileSystem/DirName)                                |
-| fs.system.ExtName         | `[<文件名>]`                                                  | 文件扩展名                              | 读取文件扩展名 [示例](#extname) [文档](./FileSystem/ExtName)                                  |
-| fs.system.MimeType        | `[<文件名>]`                                                  | 文件 MIME-TYPE                          | 读取文件 MIME-TYPE [示例](#mimetype) [文档](./FileSystem/MimeType)                            |
-| fs.system.Move            | `[<文件名>, <目标文件名>]`                                    | -                                       | 移动文件或目录(含子文件) [示例](#move) [文档](./FileSystem/Move)                              |
-| fs.system.Copy            | `[<文件名>, <目标文件名>]`                                    | -                                       | 移动文件或目录(含子文件) [示例](#copy) [文档](./FileSystem/Copy)                              |
-| fs.system.Upload          | `[<临时文件>]`                                                | -                                       | 上传文件 [示例](#upload) [文档](./FileSystem/Upload)                                          |
+| 处理器                    | 参数表                                                        | 返回值                                           | 说明                                                                                          |
+| ------------------------- | ------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| fs.system.ReadFile        | `[<文件名>]`                                                  | 文件内容(String)                                 | 读取文件内容, 用于文本文件 [示例](#readfile) [文档](./FileSystem/ReadFile)                    |
+| fs.system.ReadFileBuffer  | `[<文件名>]`                                                  | 文件内容([]Byte/Unit8Array)                      | 读取文件内容, 用于二进制文件 [示例](#readfilebuffer) [文档](./FileSystem/ReadFileBuffer)      |
+| fs.system.WirteFile       | `[<文件名>, <文件内容(String)>, <文件权限(可选)>]`            | 文件字节数                                       | 写入文本文件, 返回文件字节数 [示例](#wirtefile) [文档](./FileSystem/WirteFile)                |
+| fs.system.WirteFileBuffer | `[<文件名>, <文件内容([]Byte/Unit8Array)>, <文件权限(可选)>]` | 文件字节数                                       | 写入二进制文件, 返回文件字节数 [示例](#wirtefilebuffer)) [文档](./FileSystem/WirteFileBuffer) |
+| fs.system.ReadDir         | `[<目录称>, <递归(可选, 默认 false)>]`                        | 文件名数组                                       | 读取文件夹下所有文件, 返回文件名数组 [示例](#readdir) [文档](./FileSystem/ReadDir)            |
+| fs.system.Mkdir           | `[<目录称>, <目录权限(可选)>]`                                | -                                                | 创建文件目录 [示例](#mkdir) [文档](./FileSystem/Mkdir)                                        |
+| fs.system.MkdirAll        | `[<目录称>, <目录权限(可选)>]`                                | -                                                | 创建文件目录(含子目录) [示例](#mkdirall) [文档](./FileSystem/MkdirAll)                        |
+| fs.system.MkdirTemp       | `[<根目录(可选)>, <命名规则(可选)>]`                          | 文件夹路径                                       | 创建临时文件目录 [示例](#mkdirtemp) [文档](./FileSystem/MkdirTemp)                            |
+| fs.system.Remove          | `[<文件名>]`                                                  |                                                  | 删除文件或目录 [示例](#remove) [文档](./FileSystem/Remove)                                    |
+| fs.system.RemoveAll       | `[<文件名>]`                                                  |                                                  | 删除文件或目录(含目录下文件或目录) [示例](#removeall) [文档](./FileSystem/RemoveAll)          |
+| fs.system.Exists          | `[<文件名>]`                                                  | 存在返回 true, 否则返回 false                    | 检查文件或目录是否存在 [示例](#exists) [文档](./FileSystem/Exists)                            |
+| fs.system.IsDir           | `[<文件名>]`                                                  | 文件名是为目录 true, 否则返回 false              | 检查文件名是否为目录 [示例](#isdir) [文档](./FileSystem/IsDir)                                |
+| fs.system.IsFile          | `[<文件名>]`                                                  | 文件名是为文件 true, 否则返回 false              | 检查文件名是否为文件 [示例](#isfile) [文档](./FileSystem/IsFile)                              |
+| fs.system.IsLink          | `[<文件名>]`                                                  | 文件名是为符号链接 true, 否则返回 false          | 检查文件名是否为符号链接 [示例](#islink) [文档](./FileSystem/IsLink)                          |
+| fs.system.Size            | `[<文件名>]`                                                  | 文件字节数                                       | 读取文件字节数 [示例](#size) [文档](./FileSystem/Size)                                        |
+| fs.system.Mode            | `[<文件名>]`                                                  | 文件权限(Uint)                                   | 读取文件权限 [示例](#mode) [文档](./FileSystem/Mode)                                          |
+| fs.system.ModeTime        | `[<文件名>]`                                                  | 时间戳                                           | 读取文件修改时间 [示例](#modetime) [文档](./FileSystem/ModeTime)                              |
+| fs.system.Chmod           | `[<文件名>, <文件权限>]`                                      | -                                                | 修改文件权限 [示例](#chomd) [文档](./FileSystem/Chmod)                                        |
+| fs.system.BaseName        | `[<文件名>]`                                                  | 文件 Base Name                                   | 读取 Base Name [示例](#basename) [文档](./FileSystem/BaseName)                                |
+| fs.system.DirName         | `[<文件名>]`                                                  | 文件所在目录                                     | 读取文件所在目录 [示例](#dirname) [文档](./FileSystem/DirName)                                |
+| fs.system.ExtName         | `[<文件名>]`                                                  | 文件扩展名                                       | 读取文件扩展名 [示例](#extname) [文档](./FileSystem/ExtName)                                  |
+| fs.system.MimeType        | `[<文件名>]`                                                  | 文件 MIME-TYPE                                   | 读取文件 MIME-TYPE [示例](#mimetype) [文档](./FileSystem/MimeType)                            |
+| fs.system.Move            | `[<文件名>, <目标文件名>]`                                    | -                                                | 移动文件或目录(含子文件) [示例](#move) [文档](./FileSystem/Move)                              |
+| fs.system.Copy            | `[<文件名>, <目标文件名>]`                                    | -                                                | 移动文件或目录(含子文件) [示例](#copy) [文档](./FileSystem/Copy)                              |
+| fs.system.Upload          | `[<临时文件>]`                                                | 文件地址                                         | 上传文件 [示例](#upload) [文档](./FileSystem/Upload)                                          |
+| fs.system.Download        | `[<文件名>]`                                                  | `{"content":"<文件内容>", "type":"<MIME Type>"}` | 下载文件 [示例](#download) [文档](./FileSystem/Download)                                      |
 
 在脚本中可以使用 JS API: [查看 JS API 手册](../JSAPI/FileSystem)
 
@@ -110,3 +111,5 @@
 ### Copy
 
 ### Upload
+
+### Download
