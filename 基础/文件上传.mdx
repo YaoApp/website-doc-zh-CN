@@ -90,9 +90,10 @@ yao migrate -n product
 {
   "图集": {
     "bind": "images",
-    "view": { "type": "Image" }, // 使用 Image 组件显示已上传图片
+    "view": { "type": "Image", "compute": "Downalod" }, // 使用 Image 组件显示已上传图片
     "edit": {
       "type": "Upload",
+      "compute": "Upload",
       "props": {
         "filetype": "image", // 上传文件类型设定为 image
         "$api": {
@@ -103,6 +104,13 @@ yao migrate -n product
   }
 }
 ```
+
+使用 `Downalod` 和 `Upload` Compute 处理器转换图片预览 URL
+
+| Compute  | 原始值                                                                 | 转换后                                                                 |
+| -------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Downalod | `["/path/img.png"]`                                                    | `["/api/__yao/table/<Widget ID>/download/<field>?name=/path/img.png"]` |
+| Upload   | `["/api/__yao/table/<Widget ID>/download/<field>?name=/path/img.png"]` | `["/path/img.png"]`                                                    |
 
 <Notice type="warning">
   组件 Props 以 <strong>$</strong> 开头的 KEY, 引擎将其解析为一个
@@ -170,9 +178,10 @@ yao migrate -n product
     "table": {
       "图集": {
         "bind": "images",
-        "view": { "type": "Image" },
+        "view": { "type": "Image", "compute": "Download" },
         "edit": {
           "type": "Upload",
+          "compute": "Upload",
           "props": {
             "filetype": "image",
             "$api": { "process": "fs.system.Upload" }
@@ -415,9 +424,10 @@ curl http://127.0.0.1:5099/api/upload/script \
 {
   "图集": {
     "bind": "images",
-    "view": { "type": "Image" },
+    "view": { "type": "Image", "compute": "Download" },
     "edit": {
       "type": "Upload",
+      "compute": "Upload",
       "props": {
         "filetype": "image",
         "$api": {
@@ -433,9 +443,10 @@ curl http://127.0.0.1:5099/api/upload/script \
 {
   "图集": {
     "bind": "images",
-    "view": { "type": "Image" },
+    "view": { "type": "Image", "compute": "Download" },
     "edit": {
       "type": "Upload",
+      "compute": "Upload",
       "props": {
         "filetype": "image",
         "$api": {
@@ -453,9 +464,10 @@ curl http://127.0.0.1:5099/api/upload/script \
 {
   "图集": {
     "bind": "images",
-    "view": { "type": "Image" },
+    "view": { "type": "Image", "compute": "Download" },
     "edit": {
       "type": "Upload",
+      "compute": "Upload",
       "props": { "filetype": "image", "api": "/apis/upload/flow" }
     }
   }
@@ -466,9 +478,10 @@ curl http://127.0.0.1:5099/api/upload/script \
 {
   "图集": {
     "bind": "images",
-    "view": { "type": "Image" },
+    "view": { "type": "Image", "compute": "Download" },
     "edit": {
       "type": "Upload",
+      "compute": "Download",
       "props": { "filetype": "image", "api": "/apis/upload/script" }
     }
   }
