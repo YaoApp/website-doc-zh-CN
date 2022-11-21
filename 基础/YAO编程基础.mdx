@@ -26,60 +26,97 @@ YAO 应用引擎是给专业开发者使用的应用开发和运行时工具， 
 
 领域特定语言 DSL (domain specific language), 是专门针对特定应用领域的计算机语言。
 
-YAO 根据业务特性，定义了一套 YAO DSL，用来描述数据结构、数据流、API 接口、并发任务、计划任务、Socket 服务等功能模块，这些功能模块被定义为 Widget。
-YAO DSL 和 YAO Widget 支持根据自身业务特征定义扩展，这让基于 YAO 构建符合自身业务特征的低代码平台变得更加容易。
+YAO 定义了一套 YAO DSL，用来描述数据结构、数据流、API 接口、并发任务、计划任务、WebSocket 、Socket、Table、Form、Chart 等功能(或服务)模块。
 
-YAO DSL 有多种编写方式:
+DSL 文件是一个 JSON 格式的文本, 编写体验与 HTML 相似, HTML 描述页面元素, DSL 用来描述功能。
 
-1. 手工编写
-2. 根据上下文逻辑用程序生成
-3. 使用可视化编辑器生成
+YAO DSL 有多种编写方式，且这些编程方式可以随意切换。
 
-通过这种编码方式，可以有效提升生产力, 降低复制粘贴错误率，同时也让用程序编写程序成为可能。
+1. 支持手工编写， 开发者可以使用任意编程工具编写调试。
+2. 支持程序生成， 根据上下文逻辑，自动生成 DSL 或脚本代码，甚至可以接入 AI 让人工智能编程序。
+3. 支持可视化编程工具制作，使用 Studio 通过托拉拽图形化编程。
 
-我们也正在尝试将 AI 与 YAO 连接，探索 AI ”工程师“ 全自动编程的可能性。
+通过这种编码方式，可以有效提升生产力, 降低复制粘贴错误率，同时也让自动化编程成为可能。
+
+### YAO Runtime
+
+YAO 内建 JavaScript Runtime。
+
+在复杂业务逻辑编排、Studio 自动化生成 DSL 和云函数等场景下，均可以使用 JavaScript 脚本实现复杂业务逻辑。
+
+这一特性使 YAO 具备脚本语言的基础能力，在一些场景下可以代替脚本语言使用。
 
 ### YAO Widget
 
-YAO 内建多个 Widgets 和 XGEN 界面引擎， 通过编写 DSL，实现各种特定功能。
+Widget 抽象出一个功能模块的通用部分,使用 YAO DSL 描述差异，实现快速复制，有效提升开发效率。
 
-YAO 内建 Widgets, 几乎涵盖大部分应用程序开发常见功能。
+Widget 支持自定义, 支持使用 Studio 脚本创建实例，可用于自建低代码平台。
 
-| 内建 Widget | 功能说明     |
-| ----------- | ------------ |
-| model       | 数据结构建模 |
-| flow        | 数据逻辑编排 |
-| api         | RESTFul API  |
-| table       | 表格 CURD    |
-| chart       | 数据图表     |
-| login       | 用户登录     |
-| register    | 用户注册     |
-| task        | 并发任务     |
-| schedule    | 计划任务     |
-| socket      | Socket       |
-| websocket   | WebSocket    |
+**内建 Widgets:**
 
-[查看 Widget 文档](../手册/Widgets/API)
+| Widget           | 说明                                                                                                                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| App              | APP Widget 每一个应用只有一个 [查看文档](../手册/Widgets/App)                                                          |
+| Model            | 数据模型 用于描述数据表结构 [查看文档](../手册/Widgets/Model)                                                          |
+| Store            | Key-Value 存储 [查看文档](../手册/Widgets/Store)                                                                       |
+| Flow             | 数据流 用于编排处理器调用逻辑 [查看文档](../手册/Widgets/Flow)                                                         |
+| API              | REST API 用于编写 RESTFul API [查看文档](../手册/Widgets/API)                                                          |
+| Connector        | 连接器 用于连接 Redis, Mongo, MySQL, ES 等外部服务, 连接器可与 Model, Store 关联 [查看文档](../手册/Widgets/Connector) |
+| Task             | 并发任务 [查看文档](../手册/Widgets/Task)                                                                              |
+| Schedule         | 计划任务 [查看文档](../手册/Widgets/Schedule)                                                                          |
+| WebSocket Server | WebSocket Server[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| WebSocket Client | WebSocket Client[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| Socket           | Socket Server/Client [查看文档](../手册/Widgets/Socket)                                                                |
+| Cert             | PEM 证书导入 [查看文档](../手册/Widgets/Cert)                                                                          |
+| Import           | 数据导入 可以与表格界面关联 [查看文档](../手册/Widgets/Import)                                                         |
+| Login            | 登录界面 [查看文档](../手册/Widgets/Login)                                                                             |
+| Table            | 表格界面 [查看文档](../手册/Widgets/Table)                                                                             |
+| Form             | 表单界面 [查看文档](../手册/Widgets/Form)                                                                              |
+| Chart            | 图表界面 [查看文档](../手册/Widgets/Chart)                                                                             |
+
+[使用 Widgets 文档](使用Widgets)
 
 ### YAO Process
 
-Yao 基于 flow-based 编程思想, 一切皆为处理器。处理器可以用于 Flow, API, Table, Task 等 Widgets 中，用这种方式，实现各种特定业务逻辑。
+YAO 提供一组数据原子操作、网络请求、流程控制等一系列的处理器。
 
-YAO 内建了一系列原子操作处理器， 同时也支持使用 JavaScript 脚本扩展。
+这些处理器可以在命令行、Widget、Script、云函数和 Studio 脚本中使用。
 
-| 处理器类型 | 功能说明                 |
-| ---------- | ------------------------ |
-| 应用引擎   | 引擎相关处理器           |
-| 数据模型   | 数据原子操作处理器       |
-| 网络请求   | 网络请求原子处理器       |
-| 文件处理   | 文件 I/O 处理器          |
-| 会话数据   | 用户会话数处理器         |
-| 加密解密   | 加密解密算法处理器       |
-| 数组       | 数组数据处理器           |
-| 字符串     | 字符串数据处理器         |
-| 流程控制   | 数据流编排流程控制处理器 |
+处理器支持自定义，可以通过编写 Flow、Script、 GRPC 插件或自定义 Widget 方式扩展。
 
-[查看处理器文档](../手册/处理器/应用引擎)
+**内建处理器:**
+
+| 处理器      | 说明                                                        |
+| ----------- | ----------------------------------------------------------- |
+| models.\*   | 数据模型原子操作 [查看文档](../手册/处理器/Model)           |
+| schemas.\*  | 数据表结构操作 [查看文档](../手册/处理器/Schema)            |
+| stores.\*   | 数据存储 [查看文档](../手册/处理器/Store)                   |
+| fs.\*       | 文件系统 [查看文档](../手册/处理器/Network)                 |
+| http.\*     | HTTP 请求 [查看文档](../手册/处理器/HTTP)                   |
+| session.\*  | 会话数据 [查看文档](../手册/处理器/Session)                 |
+| encoding.\* | 编码解码 [查看文档](../手册/处理器/Encoding)                |
+| crypto.\*   | 加密解密 [查看文档](../手册/处理器/Crypto)                  |
+| ssl.\*      | 签名校验 [查看文档](../手册/处理器/SSL)                     |
+| utils.\*    | 一组实用程序 [查看文档](../手册/处理器/Utils)               |
+| flows.\*    | 使用 Flow 编写的处理器 [查看文档](逻辑编排)                 |
+| scripts.\*  | 使用 Script 脚本编写的处理器 [查看文档](逻辑编排)           |
+| plugins.\*  | 使用 GRPC 插件编写处理器 [查看文档](../进阶/编写插件)       |
+| widgets.\*  | 自定义 Widget 导出的的处理器 [查看文档](../专家/编写Widget) |
+
+内建 Widgets 的处理器:
+
+| Widget   | 处理器       | 说明                                                               |
+| -------- | ------------ | ------------------------------------------------------------------ |
+| App      | yao.app.\*   | App Widget 处理器 [查看文档](../手册/处理器/App)                   |
+| Login    | yao.login.\* | Login Widget 处理器 [查看文档](../手册/处理器/Login)               |
+| Table    | yao.table.\* | Table Widget 处理器 [查看文档](../手册/处理器/Table)               |
+| Form     | yao.form.\*  | Form Widget 处理器 [查看文档](../手册/处理器/Form)                 |
+| Chart    | yao.chart.\* | Chart Widget 处理器 [查看文档](../手册/处理器/Chart)               |
+| Import   | imports.\*   | Import Widget 数据导入处理器 [查看文档](../手册/处理器/Chart)      |
+| Task     | tasks.\*     | Task Widget 并发任务处理器 [查看文档](../手册/处理器/Task)         |
+| Schedule | schedules.\* | Schedule Widget 异步任务处理器 [查看文档](../手册/处理器/Schedule) |
+
+[使用使用处理器文档](使用处理器)
 
 ### 关系数据库
 

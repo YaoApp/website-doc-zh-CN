@@ -6,6 +6,11 @@
 
 </blockquote>
 
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
 ## 安装
 
 <Tabs defaultActiveKey='1'>
@@ -23,7 +28,7 @@ curl -fsSL https://website.yaoapps.com/install.sh | bash
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
 
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.1-amd64-dev`
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.2-amd64-dev`
 
 进入容器:
 
@@ -41,10 +46,10 @@ yao version
 
 | 镜像                        | 环境     | 使用场景                                                   |
 | --------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.1-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-| yaoapp/yao:0.10.1-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.1-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.1-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| yaoapp/yao:0.10.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| yaoapp/yao:0.10.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.2-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
 
 </TabPane>
 
@@ -52,7 +57,7 @@ yao version
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
 
-2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.1-amd64-dev`
+2. 创建并启动容器:`docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.2-amd64-dev`
 
 进入容器:
 
@@ -70,10 +75,10 @@ yao version
 
 | 镜像                        | 环境     | 使用场景                                                   |
 | --------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.1-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-| yaoapp/yao:0.10.1-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.1-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.1-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| yaoapp/yao:0.10.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| yaoapp/yao:0.10.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.2-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
 
 </TabPane>
 
@@ -85,34 +90,14 @@ yao version
   MySQL 8 或Postgres14。
 </Notice>
 
-## 调试命令
-
-### Run 运行处理器
-
-进入项目目录，使用 `run` 命令，运行数据流、脚本、插件以及内建的处理器。
-
-`yao run <process> [args...]`
-
-```bash
-cd /data/customer
-yao run xiang.main.Inspect
-```
-
-参数表:
-
-| 参数    | 必填 | 说明                                                 |
-| ------- | ---- | ---------------------------------------------------- |
-| process | 是   | 运行处理器名称. [处理器文档](../基础/使用处理器)     |
-| args... | 否   | 处理器的输入参数表。[处理器文档](../基础/使用处理器) |
-
-### Start 启动服务
+## 启动命令
 
 `yao start`
 
-进入项目目录，使用 `start` 命令，启动服务。默认服务端口为 `5099`， 可通过声明环境变量，指定服务端口。 [环境变量](#环境变量)
+进入应用目录，使用 `start` 命令，启动服务。默认服务端口为 `5099`， 可通过声明环境变量，指定服务端口。 [环境变量](../基础/YAO%E5%91%BD%E4%BB%A4.mdx)
 
 ```bash
-cd /data/customer
+cd /data/app
 yao start
 ```
 
@@ -123,40 +108,109 @@ yao start
 | --alpha | 否   | 如果希望试用 Yao 的一些内测功能，使用 `yao start --alpha` 命令启动 |
 | --debug | 否   | 强制开启开发模式 `yao start --debug` 命令启动                      |
 
-## 环境变量
+## 调试命令
 
-可以通过声明环境变量，指定服务端口，配置数据库连接 例如：
+### Run 运行处理器
+
+进入应用目录，使用 `run` 命令，运行数据流、脚本、插件以及内建的处理器。
+
+`yao run <process> [args...]`
 
 ```bash
-export YAO_ENV="production" # development | production 运行模式
-export YAO_ROOT="/data/app"  # 应用目录
-export YAO_HOST="127.0.0.1" # 服务 HOST
-export YAO_PORT="5099"  # 监听端口
-export YAO_LOG="/data/app/logs/application.log"  # 日志文件位置
-export YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
-export YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
-export YAO_DB_DRIVER="mysql" # 数据库类型 mysql | sqlite3
-export YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
-export YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
-export YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
+cd /data/app
+yao run yao.utils.Ping
 ```
 
-可以在项目目录根目录下添加 `.env`，服务启动时将优先使用 .env 声明的环境变量；或将以上命令追加到 `~/.bashrc` 文件（macos `~/.bash_profile` )
+参数表:
 
-`/data/customer/.env` 文件内容
+| 参数    | 必填 | 说明                                                 |
+| ------- | ---- | ---------------------------------------------------- |
+| process | 是   | 运行处理器名称. [处理器文档](../基础/使用处理器)     |
+| args... | 否   | 处理器的输入参数表。[处理器文档](../基础/使用处理器) |
+
+### 查看日志
+
+在开发模式下,可以再日志中查看运行的 SQL 语句等调试信息。
+日志文件默认存在在应用 logs 目录。
 
 ```bash
-YAO_ENV="production" # development | production 运行模式
-YAO_ROOT="/data/app"  # 应用目录
-YAO_HOST="127.0.0.1" # 服务 HOST
-YAO_PORT="5099"  # 监听端口
-YAO_LOG="/data/app/logs/application.log"  # 日志文件位置
-YAO_LOG_MODE="TEXT"  # 日志模式 TEXT | JSON
-YAO_JWT_SECRET="bLp@bi!oqo-2U+hoTRUG"
-YAO_DB_DRIVER="mysql" # 数据库类型 mysql | sqlite3
-YAO_DB_PRIMARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local"  # 主库连接
-YAO_DB_SECONDARY="root:123456@tcp(db-server:3308)/xiang?charset=utf8mb4&parseTime=True&loc=Local" # 从库连接
-YAO_DB_AESKEY="ZLX=T&f6refeCh-ro*r@" # 加密存储字段密钥 MySQL Only
+cd /data/app
+tail -n 1000 logs/application.log
+```
+
+### Query DSL 调试
+
+在编写 Query DSL 时，可以开启 `debug` 参数, 在日志中查看解析后的 SQL 语句
+
+**在 Flow DSL 中开启 debug**
+
+`/data/app/flows/test.flow.json`
+
+```json
+{
+  "label": "类目树",
+  "version": "1.0.0",
+  "description": "类目树",
+  "nodes": [
+    {
+      "name": "类目",
+      "engine": "default",
+      "query": {
+        "debug": true,
+        "select": ["id", "name", "name as label", "id as value", "parent_id"],
+        "wheres": [{ ":deleted_at": "删除", "=": null }],
+        "from": "category",
+        "limit": 1000
+      }
+    }
+  ],
+  "output": "{{$res.类目}}"
+}
+```
+
+```bash
+yao run flows.test
+```
+
+**在 Script 开启 Debug**
+
+`/data/app/scripts/test.js`
+
+```javascript
+function DD() {
+  let qb = new Query();
+  return qb.Get({
+    debug: true,
+    select: ["id", "name", "name as label", "id as value", "parent_id"],
+    wheres: [{ ":deleted_at": "删除", "=": null }],
+    from: "category",
+    limit: 1000,
+  });
+}
+```
+
+```bash
+yao run scripts.test.DD
+```
+
+### Script 调试
+
+可以使用 `console.log` 和 `log` 打印调试信息
+
+`/data/app/scripts/test.js`
+
+```javascript
+function Debug() {
+  console.log("Hello", { foo: "bar" }); // 在控制台打印
+  log.Info("Foo %d %s", 1, "hello");
+  log.Debug("Foo");
+  log.Trace("Foo");
+  log.Error("Foo");
+}
+```
+
+```bash
+yao run scripts.test.Debug
 
 ```
 

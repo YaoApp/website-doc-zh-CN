@@ -1,519 +1,364 @@
-# 数据图表
+# Chart 图表界面
 
-<Detail title="查看源码">
+<blockquote>
+  Chart Widget 用于图表界面制作。 Chart DSL 文件放在 charts 目录中, 文件扩展名为
+  .chart.json。
+</blockquote>
+
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
+**命名**
+
+DSL 文件命名:
+
+1. 由 **小写字母**, **下划线 “\_”**, **横杠 "-"** 组成,
+2. 必须由 **小写字母** 开头,
+3. Widget ID 为文件名称(不含扩展名), 如包含多级目录用 **"."** 替代 **"\/"**
+
+| DSL 文件                                       | Widget ID            |
+| ---------------------------------------------- | -------------------- |
+| /data/app/charts/dashboard.chart.json          | `dashboard`          |
+| /data/app/charts/user/dashboard.chart.json     | `user.dashboard`     |
+| /data/app/charts/user/pet/dashboard.chart.json | `user.pet.dashboard` |
+
+**路由**
+
+默认:
+
+`http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/x/Chart/<Widget ID>`
+
+Query 参数:
+
+`http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/x/Chart/<Widget ID>?<URLQuery Params>`
+
+<Detail title="查看图表示例 /data/app/charts/dashboard.chart.json">
 
 ```json
 {
-  "label": "Kanban",
-  "version": "1.0.0",
-  "description": "Kanban",
-  "nodes": [
-    {
-      "name": "Industries",
-      "process": "flows.chart.industries"
-    },
-    {
-      "name": "Fields",
-      "process": "flows.chart.fields"
-    },
-    {
-      "name": "Trails",
-      "process": "flows.chart.trail"
-    },
-    {
-      "name": "Projects",
-      "process": "flows.chart.project"
-    },
-    {
-      "name": "Tasks",
-      "process": "flows.chart.task"
-    }
-  ],
-  "output": {
-    "data": "{{$res}}",
-    "query": "{{$in}}"
-  },
-  "apis": {
-    "data": {
-      "default": [{ "from": "1980-01-02", "to": "2050-12-31" }]
-    }
-  },
-  "filters": {},
-  "page": {
-    "primary": "name",
-    "layout": {
-      "filters": [],
-      "charts": [
-        {
-          "name": "Industries",
-          "width": 9,
-          "type": "pie",
-          "props": {
-            "height": 240,
-            "x_key": "name",
-            "tooltip": {
-              "textStyle": { "color": "#a2a5b9", "fontSize": 12 },
-              "backgroundColor": "#232326",
-              "borderRadius": 6
-            },
-            "legend": {
-              "show": true
-            },
-            "series": [
-              {
-                "name": "CNT",
-                "type": "pie",
-                "roseType": "area",
-                "radius": [10, 100],
-                "center": ["50%", "50%"],
-                "itemStyle": { "borderRadius": 3 }
-              }
-            ]
-          }
-        },
-        {
-          "name": "Fields",
-          "width": 9,
-          "type": "bar",
-          "props": {
-            "height": 240,
-            "x_key": "name",
-            "tooltip": {
-              "textStyle": { "color": "#a2a5b9", "fontSize": 12 },
-              "backgroundColor": "#232326",
-              "borderRadius": 6
-            },
-            "legend": {
-              "show": true
-            },
-            "series": [
-              {
-                "name": "CNT",
-                "type": "bar",
-                "roseType": "area",
-                "radius": [10, 100],
-                "center": ["60%", "50%"],
-                "itemStyle": { "borderRadius": 3 }
-              }
-            ]
-          }
-        },
-        {
-          "name": "Tasks",
-          "width": 6,
-          "type": "table",
-          "props": {
-            "height": 240,
-            "columns": [
-              {
-                "title": "Task",
-                "dataIndex": "name"
-              },
-              {
-                "title": "Status",
-                "dataIndex": "status"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Trails",
-          "width": 24,
-          "type": "table",
-          "props": {
-            "height": 240,
-            "columns": [
-              {
-                "title": "Customer",
-                "dataIndex": "customer_name"
-              },
-              {
-                "title": "Project",
-                "dataIndex": "name"
-              },
-              {
-                "title": "Contact",
-                "dataIndex": "contact_name"
-              },
-              {
-                "title": "Mobile",
-                "dataIndex": "contact_mobile"
-              }
-            ]
-          }
-        },
-        {
-          "name": "Projects",
-          "width": 24,
-          "type": "table",
-          "props": {
-            "height": 240,
-            "columns": [
-              {
-                "title": "Priority",
-                "dataIndex": "priority"
-              },
-              {
-                "title": "Project",
-                "dataIndex": "name"
-              },
-              {
-                "title": "Process",
-                "dataIndex": "process"
-              },
-              {
-                "title": "Customer",
-                "dataIndex": "customer_name"
-              }
-            ]
-          }
-        }
-      ]
-    }
-  }
+  "name": "dashboard"
 }
 ```
 
 </Detail>
 
-查看 [代码示例](https://github.com/YaoApp/demo-crm/blob/master/kanban/index.kan.json)
+## Chart DSL
 
-分析图表(`Chart`) 主要用于编排数据统计分析查询逻辑，支持使用 JavaScript 脚本处理各查询节点结果，可在数据管理后台直接查阅分析图表，亦可作为处理器 (`process`) 来使用，引用方式为 `charts.<分析图表名称>`。分析图表(`Chart`)支持基于 `ElasticSearch` 、`MySQL` 实现的数据分析引擎用于各种业务场景。
+| 字段   | 类型   | 必填项 | 默认值 | 示例                       | 说明                                                                |
+| ------ | ------ | ------ | ------ | -------------------------- | ------------------------------------------------------------------- |
+| name   | String | 是     |        | `Pet Admin`                | 图表名称, 支持多语言                                                |
+| action | Object | 是     |        | [查看详情](#action-object) | 图表数据交互。用于指定统计数据读取处理器，设置数据 Hook，绑定模型等 |
+| layout | Object |        |        | [查看详情](#layout-object) | 图表界面布局。字段、筛选器等                                        |
+| fields | Object |        |        | [查看详情](#fields-object) | 图表字段定义。指定图表字段, 图表筛选器字段定义                      |
+| config | Object |        |        | [查看详情](#config-object) | 图表界面配置项。图表满屏显示等配置                                  |
 
-数据看板、数据大屏页面亦可采用同样方式编写。
+### action Object
 
-## 处理器清单
+图表数据交互。用于指定表检索、保存等操作的处理器，设置数据 Hook，绑定模型等
 
-数据看板、分析图表、数据大屏相关处理器。
+| 字段        | 类型   | 必填项 | 默认值 | 示例                                 | 说明                                                                        |
+| ----------- | ------ | ------ | ------ | ------------------------------------ | --------------------------------------------------------------------------- |
+| setting     | Object |        |        | [查看详情](#action关联处理器-object) | 关联处理器。返回图表页面配置                                                |
+| data        | Object |        |        | [查看详情](#action关联处理器-object) | 关联处理器。指定数据图表分析结果处理器，返回图表数据                        |
+| before:data | String |        |        | [查看详情](#before-hook)             | Before Hook。在关联处理器之前运行，输入用户输入的参数表，返回处理后的参数表 |
+| after:data  | String |        |        | [查看详情](#after-hook)              | After Hook。在关联处理器之后运行，输入关联处理器返回结果，返回处理后的结果  |
 
-| 处理器              | 说明                                   | 文档 |
-| ------------------- | -------------------------------------- | ---- |
-| xiang.chart.Data    | 返回图表查询结果。                     | -    |
-| xiang.chart.Setting | 读取数据表格配置信息, 用于前端界面渲染 | -    |
+#### action.关联处理器 Object
 
-## API 清单
+使用关联处理器指定图表数据读取、写入逻辑。
 
-| API                     | 说明                                       | 文档                                                                     |
-| ----------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
-| xiang.chart.XXX.Data    | 请求制定图表的数据                         | [文档](https://github.com/YaoApp/yao/blob/main/yao/apis/chart.http.json) |
-| xiang.chart.XXX.Setting | 读取制定数据表格配置信息, 用于前端界面渲染 | [文档](https://github.com/YaoApp/yao/blob/main/yao/apis/chart.http.json) |
+| 字段    | 类型   | 必填项 | 默认值     | 示例                | 说明                                    |
+| ------- | ------ | ------ | ---------- | ------------------- | --------------------------------------- |
+| guard   | String |        | bearer-jwt | `scripts.guard.Pet` | 数据接口鉴权方式                        |
+| process | String |        |            | `flows.pet.stat`    | 关联处理器名称                          |
+| default | Array  |        |            | `[null]`            | 关联处理器默认值，null 表示不设定默认值 |
 
-## 命名规范
+#### Before Hook
 
-分析图表描述文件是以 **小写英文字母** + `.chart.json` 扩展名命名的 JSON 文本文件, `<name>.chart.json`;
-结果处理脚本文件是以 `分析图表名称` + `.` + `脚本名称` + `.js` 扩展名，命名的 JavaScript 脚本文件 `<name>.<script>.js` 。
+在关联处理器之前运行，一般用于处理参数表数据。
 
-数据看板扩展名为 `.kan.json`, 数据大屏扩展名为 `.scr.json`
-
-| 文件夹 (相对分析图表根目录) | 文件名          | 分析图表名称         | 脚本名称 | Process (在 API /Flow 中引用) | API 路由地址                                   |
-| --------------------------- | --------------- | -------------------- | -------- | ----------------------------- | ---------------------------------------------- |
-| /                           | name.chart.json | `name`               |          | `charts.name`                 | `/api/xiang/chart/name/查询接口`               |
-| /                           | name.count.js   | `name`               | `count`  | -                             | -                                              |
-| /group                      | name.chart.json | `group.name`         |          | `charts.group.name`           | `/api/xiang/chart/group.name/查询接口`         |
-| /group                      | name.count.js   | `gorup.name`         | `count`  | -                             | -                                              |
-| /group1/group2              | name.chart.json | `group1.group2.name` |          | `charts.group1.group2.name`   | `/api/xiang/chart/group1.group2.name/查询接口` |
-| /group1/group2              | name.count.js   | `group1.group2.name` | `count`  | -                             | -                                              |
-
-## 文档结构
-
-分析图表编排文档由基础信息、查询节点、输出数据和分析页面渲染参数构成。
-
-```json
+```jsonc
 {
-  "lang": "gou",
-  "label": "最新信息",
-  "version": "1.0.0",
-  "description": "最新信息",
-  "nodes": [],
-  "output": {},
-  "apis": {},
-  "filters": {},
-  "page": {}
-}
-```
-
-| 字段        | 类型                         | 说明                                                                                                                                        | 必填项 |
-| ----------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| lang        | String                       | 数据查询条件描述语言。 许可值 `gou` 适用基于数据库实现的数据分析引擎。`tai` 适用基于 ElasticSearch 实现的分析引擎(单独挂载)。 默认值为`gou` | 是     |
-| label       | String                       | 分析图表呈现名称，用于开发平台呈现                                                                                                          | 是     |
-| version     | String                       | 版本号，用于依赖关系校验和开发平台呈现                                                                                                      | 是     |
-| description | String                       | 分析图表介绍，用于开发平台呈现                                                                                                              | 否     |
-| nodes       | Array<Object Node\>          | 查询节点                                                                                                                                    | 是     |
-| output      | Object \| `String`           | 输出结果定义, 同业务逻辑编排(`flow`) `output`                                                                                               | 是     |
-| apis        | \[key:String\]:Object API    | 分析图表查询 API， 可通过设置同 `key` 设置关闭接口、设置鉴权方式和默认值选项。                                                              | 否     |
-| filters     | \[key:String\]:Object Filter | 查询过滤器设置。 同数据表格(`talbe`) `fliters`。                                                                                            | 否     |
-| page        | Object Page                  | 分析图表查询页设置。                                                                                                                        | 是     |
-
-## 示例一：
-
-编写一个数据看板描述文件 pet.kan.json，放置在应用的 kanban 目录中。
-
-**描述文件内容:**
-
-<Detail title="查看源码">
-
-```json
-{
-  "label": "宠物统计",
-  "version": "1.0.0",
-  "description": "宠物统计",
-  "nodes": [
-    {
-      "name": "类型汇总",
-      "engine": "xiang",
-      "query": {
-        "select": [":COUNT(id) as 数量", "kind as 类型"],
-        "groups": "类型",
-        "from": "$pet"
-      }
-    }
-  ],
-  "output": {
+  "name": "::Pet Chart",
+  "action": {
+    "before:data": "scripts.stat.BeforeData",
     "data": {
-      "宠物类型分布": "{{$res.类型汇总}}"
-    }
-  },
-  "page": {
-    "primary": "kind",
-    "layout": {
-      "filters": [],
-      "charts": [
-        {
-          "name": "宠物类型分布",
-          "width": 24,
-          "type": "bar",
-          "props": {
-            "height": 240,
-            "x_key": "类型",
-            "axisLabel": {
-              "interval": 0,
-              "rotate": 45,
-              "textStyle": { "fontSize": 10 }
-            },
-            "tooltip": {
-              "textStyle": { "color": "#a2a5b9", "fontSize": 12 },
-              "backgroundColor": "#232326",
-              "borderRadius": 6
-            },
-            "series": [
-              {
-                "name": "数量",
-                "type": "bar",
-                "colorBy": "data",
-                "splitLine": { "show": false },
-                "label": { "show": true, "position": "top" },
-                "axisLabel": { "show": true }
-              }
-            ]
-          }
-        }
-      ]
-    }
+      "process": "scripts.stat.Data",
+      "default": ["2022-09-20"]
+    },
+    "after:data": "scripts.stat.AfterData"
   }
 }
 ```
 
-</Detail>
+/data/app/scripts/stat.js Hook 脚本
 
-**应用目录结构:**
-
-```bash
-├── apis        # 用于存放接口描述文件
-│   └── pet.http.json
-├── models        # 用于存放数据模型描述文件
-│   └── pet.mod.json
-├── tables        # 用于存放数据表格描述文件
-│   └── pet.tab.json
-├── kanban        # 用于存放数据看板描述文件
-│   └── pet.kan.json
-├── db
-└── ui
-└── app.json
+```javascript
+/**
+ * 在关联处理器 search 之前运行
+ * @param query 查询参数
+ * @param page 当前页面
+ * @param pagesize 每页显示记录数
+ */
+function BeforeData(query) {
+  return [query];
+}
 ```
 
-**访问看板界面:**
+#### After Hook
 
-页面路由: `/xiang/kanban/<Kanban Name>`
+在关联处理器之后运行，一般用于处理结果集数据。
 
-1. 在地址栏输入 `https://127.0.0.1:5099/xiang/kanban/pet`
-
-2. 建议将 `/xiang/kanban/pet` 路由添加为菜单项。
-
-## 示例二
-
-```json
+```jsonc
 {
-  "nodes": [
+  "name": "::Pet Chart",
+  "action": {
+    "before:data": "scripts.stat.BeforeData",
+    "data": {
+      "process": "scripts.stat.Data",
+      "default": ["2022-09-20"]
+    },
+    "after:data": "scripts.stat.AfterData"
+  }
+}
+```
+
+/data/app/scripts/stat.js Hook 脚本
+
+```javascript
+/**
+ * 在关联处理器 search 之后运行
+ * @param result 处理器运行结果
+ */
+function AfterData(result) {
+  return result;
+}
+```
+
+### layout Object
+
+图表界面布局。显示字段、筛选器、批量编辑等
+
+| 字段      | 类型   | 必填项 | 默认值 | 示例                                | 说明                                       |
+| --------- | ------ | ------ | ------ | ----------------------------------- | ------------------------------------------ |
+| primary   | String | 是     |        | `user_id`                           | 数据主键                                   |
+| operation | Object | 是     |        | [查看详情](#layoutoperation-object) | 图表界面头部布局。设置批量操作、导入配置等 |
+| filter    | Object | 是     |        | [查看详情](#layoutfilter-object)    | 图表筛选器。设置筛选条件和右上角操作按钮等 |
+| chart     | Object | 是     |        | [查看详情](#layoutchart-object)     | 图表布局。设置显示，行操作按钮等           |
+
+#### layout.operation Object
+
+图表界面头部布局。设置批量操作、导入配置等
+
+| 字段    | 类型  | 必填项 | 默认值 | 示例 | 说明           |
+| ------- | ----- | ------ | ------ | ---- | -------------- |
+| actions | Array |        |        |      | 自定义操作按钮 |
+
+```jsonc
+{
+  // 自定义操作按钮
+  "actions": [
     {
-      "name": "行业分布",
-      "query": {
-        "model": "service",
-        "select": ["city", ":COUNT(id) as cnt", "@industries.$ as industry"],
-        "wheres": [
-          { "column": "created_at", "value": "{{$query.from}}", "op": "ge" },
-          { "column": "created_at", "value": "{{$query.to}}", "op": "le" }
-        ],
-        "order": ["cnt.desc"],
-        "limit": 100,
-        "group": ["@industries.$", "city"]
+      "title": "页面跳转", // 按钮名称
+      "icon": "icon-airplay", // 按钮图标, 可用图标 https://feathericons.com/
+
+      // 按钮响应操作 KEY: 执行动作, VALUE: 参数表
+      "action": {
+        "History.push": { "payload": "/404" }
       }
     },
     {
-      "name": "计费方式",
-      "query": {
-        "model": "service",
-        "select": ["city", ":COUNT(id) as cnt", "@price_options.$ as option"],
-        "wheres": [
-          { "column": "created_at", "value": "{{$query.from}}", "op": "ge" },
-          { "column": "created_at", "value": "{{$query.to}}", "op": "le" }
-        ],
-        "order": ["cnt.desc"],
-        "limit": 100,
-        "group": ["@price_options.$", "city"]
+      "title": "云函数",
+      "icon": "icon-cloud",
+      "action": {
+        // 调用 /data/app/services/foo.js 中定义的 function Bar(...args){} 方法
+        "Service.foo": { "method": "Bar", "args": ["foo", "bar"] }
       }
     },
     {
-      "name": "合并结果",
-      "process": "xiang.chart.MergeData",
-      "args": [
-        ["城市", "行业", "计费"],
-        {
-          "行业": { "key": "city", "values": "{{$res.行业分布[*].industry}}" },
-          "计费": { "key": "city", "values": "{{$res.计费方式[*].option}}" }
-        }
-      ]
+      "title": "Studio 方法",
+      "icon": "icon-layers",
+      "action": {
+        // 调用 /data/app/studio/hello.js 中定义的 function World(...args){} 方法
+        // **仅开发模式下有效**
+        "Studio.hello": { "method": "World", "args": ["hello", "world"] }
+      }
     }
   ]
 }
 ```
 
-一个分析图表查询编排(`Chart`)可以有多个查询节点, 每个查询节点，也写设置对应数据引擎的 `query` 查询参数， 也可以调用一个处理器(`process`), 可以指定结果处理脚本和返回值，在查询节点用可以引用上下文信息。上下文数据引用、结果处理脚本具体与与业务逻辑编排(`Flow`)一致。
+**可用自定义操作 actions[*].action**
 
-`Object Node` 数据结构
+| KEY 执行动作   | VALUE 参数                                     | 说明                                    |
+| -------------- | ---------------------------------------------- | --------------------------------------- |
+| History.push   | `{ "payload": "<路由地址>"}`                   | 跳转到指定路由地址                      |
+| Service.<名称> | `{ "method": "<函数名>", "args": [<参数表>] }` | 调用云函数                              |
+| Studio.<名称>  | `{ "method": "<函数名>", "args": [<参数表>] }` | 调用 Studio 云函数 **仅开发模式下有效** |
+| ....           | ...                                            | ...                                     |
 
-| 字段    | 类型           | 说明                                                                                                      | 必填项 |
-| ------- | -------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| name    | String         | 查询节点名称                                                                                              | 是     |
-| query   | Query DSL      | 查询语言                                                                                                  | 否     |
-| process | String         | 调用处理器 `process` `query` 与 `process` 任选其一。 如同时存在忽略 `process` 设置。                      | 否     |
-| args    | Array<Any\>    | 处理器参数表.可以引用输入输出或上下文数据，与 `flow` 相同。                                               | 否     |
-| script  | String         | 结果处理脚本，支持 ES5，与 `flow` 相同。                                                                  | 否     |
-| outs    | Array<String\> | 查询节点结果输出.使用 `{{$out}}` 引用处理器返回结果，与 `flow` 相同。如不设置，返回值等于处理器返回结果。 | 否     |
-| next    | Object Next    | 当查询结果符合设定条件时跳转至指定查询节点(**尚未实现**)                                                  | 否     |
+#### layout.filter Object
 
-### 分析图表查询接口 `apis`
+图表筛选器。设置筛选条件和右上角操作按钮等
 
-分析图表默认开启数据和配置查询接口， 可通过设置同 `key` 设置关闭接口、设置鉴权方式和默认值选项。
+| 字段    | 类型  | 必填项 | 默认值 | 示例 | 说明                                            |
+| ------- | ----- | ------ | ------ | ---- | ----------------------------------------------- |
+| columns | Array |        |        |      | 筛选条件, 在 fields.filter 中定义的筛选条件字段 |
 
-```json
+```jsonc
 {
-  "apis": {
-    "data": {
-      "disable": true,
-      "guard": "bearer-jwt",
-      "default": {}
-    },
-    "setting": {
-      "guard": "-",
-      "default": {}
+  // 支持筛选的字段清单
+  "columns": [
+    { "name": "名称", "width": 4 }, // name: fields.filter.<KEY>; width: 字段宽度, 24 栅格
+    { "name": "状态", "width": 4 }
+  ]
+}
+```
+
+#### layout.chart Object
+
+图表布局。设置显示，行操作按钮等
+
+| 字段    | 类型  | 必填项 | 默认值 | 示例 | 说明     |
+| ------- | ----- | ------ | ------ | ---- | -------- |
+| columns | Array | 是     |        |      | 图表定义 |
+
+```jsonc
+{
+  "columns": [
+    { "name": "宠物数量", "width": 6 }, // name: fields.chart 中定义的字段名称; width: 字段宽度, 24栅格
+    { "name": "宠物类型", "width": 6 },
+    { "name": "收入_折线图", "width": 24 }
+  ]
+}
+```
+
+### fields Object
+
+图表字段定义。指定图表字段, 图表筛选器字段定义
+
+| 字段   | 类型   | 必填项 | 默认值 | 示例                             | 说明               |
+| ------ | ------ | ------ | ------ | -------------------------------- | ------------------ |
+| filter | Object | 是     |        | [查看详情](#fieldsfilter-object) | 图表筛选器字段定义 |
+| chart  | Object | 是     |        | [查看详情](#fieldschart-object)  | 图表字段定义       |
+
+#### fields.filter Object
+
+图表筛选器字段定义
+
+KEY: 筛选器字段名称, VALUE: 字段定义
+
+```jsonc
+{
+  "医生": {
+    "bind": "where.doctor_id.eq", // query 名称, 例: /api/__yao/chart/pet/search?where.doctor_id.eq=xxx
+
+    // 用户输入组件
+    "edit": {
+      "type": "Select", // 组件名称, 可用组件参考文档 https://yaoapps.com/components
+
+      // 组件参数表
+      "props": {
+        "placeholder": "请选择医生",
+        "xProps": {
+          // 在字段名称前加 $ 前缀, 并指定处理器，将自动将处理器解析为 API
+          "$remote": {
+            "process": "scripts.doctor.SelectOption",
+            "query": { "limit": 200 }
+          }
+        }
+      }
     }
   }
 }
 ```
 
-| 字段    | 类型   | 说明                                                                                    | 必填项 |
-| ------- | ------ | --------------------------------------------------------------------------------------- | ------ |
-| disable | Bool   | 关闭接口。 `true` 关闭接口                                                              | 否     |
-| guard   | String | 接口鉴权中间件, 多个用 `,` 分割， 设置为 `-` 不设置鉴权中间件, 不设置继承默认鉴权方式。 | 否     |
-| default | Object | 参数表默认值, `{"from":"2021-08-28"}`                                                   | 否     |
+#### fields.chart Object
 
-#### 接口列表
+图表字段定义
 
-| 管理接口(`key`) | 请求方式 | 路由(相对) | 说明                                   |
-| --------------- | -------- | ---------- | -------------------------------------- |
-| data            | `GET`    | `/data`    | 返回查询结果                           |
-| setting         | `GET`    | `/setting` | 读取分析图表配置信息, 用于前端界面渲染 |
+KEY: 图表字段名称, VALUE: 字段定义
 
-## 完整示例
-
-<Detail title="查看源码">
-
-```json
+```jsonc
 {
-  "lang": "gou",
-  "label": "指标对比",
-  "version": "1.0.0",
-  "decription": "指标对比",
-  "nodes": [
-    {
-      "name": "行业分布",
-      "process": "models.service.get",
-      "query": {
-        "select": ["city", ":COUNT(id) as cnt", "@industries.$ as industry"],
-        "wheres": [
-          { "column": "created_at", "value": "{{$query.from}}", "op": "ge" },
-          { "column": "created_at", "value": "{{$query.to}}", "op": "le" }
-        ],
-        "order": ["cnt.desc"],
-        "limit": 100,
-        "group": ["@industries.$", "city"]
+  "收入": {
+    "bind": "income", // 绑定API接口返回字段名称
+
+    // 字段数据呈现组件
+    "view": {
+      "type": "NumberChart", // 组件名称, 可用组件参考文档 https://yaoapps.com/components
+      "link": "/x/Table/pet", // 链接地址
+
+      // 数据数值计算
+      // 参数表:
+      //   $C(row) 当前行数据,
+      //   $C(value) 当前行当前字段数值,
+      //   $C(props) 当前组件 props,
+      //   $C(type) 当前组件 type,
+      //   $C(id) 当前 Widget ID
+      //   'hello' 字符串常量
+      //   1024 整形常量
+      //   0.618 浮点型常量
+      "compute": {
+        "process": "Concat", // 处理器名称
+        "args": ["$C(row.name)", "-", "$C(row.status)"]
+      },
+
+      "props": {
+        "chartHeight": 150,
+        "prefix": "¥",
+        "decimals": 2,
+        "nameKey": "date",
+        "valueKey": "value"
       }
-    },
-    {
-      "name": "计费方式",
-      "process": "models.service.get",
-      "query": {
-        "select": ["city", ":COUNT(id) as cnt", "@price_options.$ as option"],
-        "wheres": [
-          { "column": "created_at", "value": "{{$query.from}}", "op": "ge" },
-          { "column": "created_at", "value": "{{$query.to}}", "op": "le" }
-        ],
-        "order": ["cnt.desc"],
-        "limit": 100,
-        "group": ["@price_options.$", "city"]
-      }
-    },
-    {
-      "name": "合并结果",
-      "process": "xiang.chart.MergeData",
-      "args": [
-        ["城市", "行业", "计费"],
-        {
-          "行业": { "key": "city", "values": "{{$res.行业分布[*].industry}}" },
-          "计费": { "key": "city", "values": "{{$res.计费方式[*].option}}" }
-        }
-      ]
-    }
-  ],
-  "output": "{{$res.合并结果}}",
-  "apis": {
-    "data": {
-      "guard": "-"
-    },
-    "setting": {
-      "guard": "-"
     }
   },
-  "filters": {},
-  "page": {
-    "primary": "城市",
-    "layout": {
-      "filters": [
-        { "name": "开始时间", "width": 6 },
-        { "name": "结束时间", "width": 6 }
-      ],
-      "charts": [
-        { "type": "line", "props": {} },
-        { "type": "bar", "props": {} }
-      ]
+  "支出": {
+    "bind": "cost",
+    "link": "/x/Table/pet",
+    "view": {
+      "type": "NumberChart",
+      "props": {
+        "chartHeight": 150,
+        "color": "red",
+        "prefix": "¥",
+        "decimals": 2,
+        "nameKey": "date",
+        "valueKey": "value"
+      }
     }
   }
 }
 ```
 
-</Detail>
+[内建 Compute 处理器](../处理器/Compute.mdx)
 
-<Div style={{ display: "flex", justifyContent: "space-between" }}>
-  <Link type="prev" title="Table" link="手册/Widgets/Table"></Link>
-  <Link type="next" title="Import" link="手册/Widgets/Import"></Link>
-</Div>
+### config Object
+
+图表界面配置项。图表满屏显示等配置
+
+| 字段 | 类型    | 必填项 | 默认值 | 示例    | 说明             |
+| ---- | ------- | ------ | ------ | ------- | ---------------- |
+| full | Boolean | 否     | `true` | `false` | 是否满屏显示图表 |
+
+## API
+
+Chart Widget API
+
+| 请求方式 | 路由                                            | 鉴权               | query        | payload | 说明                                                            |
+| -------- | ----------------------------------------------- | ------------------ | ------------ | ------- | --------------------------------------------------------------- |
+| `GET`    | `/api/__yao/chart/:id/setting`                  | `关联处理器中指定` |              |         | 获取图表配置信息                                                |
+| `GET`    | `/api/__yao/chart/:id/component/:xpath/:method` | `关联处理器中指定` |              |         | 返回 `fields.chart\|filter.<key>.props.$xxx` 绑定处理器运行结果 |
+| `GET`    | `/api/__yao/chart/:id/data`                     | `关联处理器中指定` | Query String |         | 按条件查询统计数据, 返回各个图表统计结果                        |
+
+## 处理器
+
+Chart Widget 处理器
+
+| 处理器            | 参数表                             | 返回值               | 说明                                         |
+| ----------------- | ---------------------------------- | -------------------- | -------------------------------------------- |
+| yao.chart.Setting | `[<Widget ID>]`                    | 返回图表配置         | 返回图表 DSL 信息                            |
+| yao.chart.Xgen    | `[<Widget ID>]`                    | 返回图表配置         | 返回图表配置信息, 用于 XGEN 界面引擎页面渲染 |
+| yao.chart.Data    | `[<Widget ID>, ...<自定义参数表>]` | 返回各个图表统计结果 | 调用关联处理器，查询图表统计结果             |

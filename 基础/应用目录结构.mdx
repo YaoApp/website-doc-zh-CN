@@ -1,14 +1,14 @@
 # 应用目录结构
 
-开始执行 `yao init`命令后,会生成(部分)以下目录:
+YAO 应用目录结构说明
 
 ```
 ├─apis
 ├─data
 ├─db
 ├─flows
+├─certs
 ├─imports
-├─libs
 ├─logs
 ├─models
 ├─plugins
@@ -16,51 +16,47 @@
 ├─scripts
 ├─stores
 ├─tables
+├─forms
+├─charts
 ├─tasks
 |-langs
 |-sockets
 |-websockets
-├─ui
+├─public
+|-services
+|-studio
 ├─widgets
 │  └─dyform
-└─yao
-    └─icons
+└─icons
 
 ```
 
-| 目录名称   | 功能介绍                  | 文件后缀         | 备注             |
-| ---------- | ------------------------- | ---------------- | ---------------- |
-| apis       | 存放 api 定义路由的文件   | `.http.json`     |                  |
-| data       | 存放上传文件临时数据      | 文件/图片/视频   |                  |
-| db         | 存放一些数据              | `.db`            |                  |
-| flows      | 存放数据流描述文件        | `.flow.json`     |                  |
-| imports    | 存放导入数据处理器        | `.imp.json`      | 需要自己建文件夹 |
-| libs       | 存放一些扩展文件,公共组件 | `.json`          |                  |
-| logs       | 存放系统运行日志/调试信息 | `.log`           |                  |
-| models     | 存放模型描述文件          | `menu.mod.json`  |                  |
-| plugins    | 存放自己编写插件扩展      | `.so`            | 需要自己建文件夹 |
-| schedules  | 存放定时任务/计划任务     | `.sch.json`      | 需要自己建文件夹 |
-| scripts    | 存放 JS 处理器            | `.js`            |                  |
-| stores     | 存放缓存文件脚本          | `cache.lru.json` | 需要自己建文件夹 |
-| tables     | 存放表格描述文件          | `.table.json`    |                  |
-| tasks      | 存放延时任务/异步任务     | `.task.json`     | 需要自己建文件夹 |
-| langs      | 应用语言包                | `xxx.yml`        | 需要自己建文件夹 |
-| sockets    | Socket 连接               | `sock.json`      | 需要自己建文件夹 |
-| websockets | WebSocket 连接            | `ws.json`        | 需要自己建文件夹 |
-| ui         | 存放资源/内嵌 html 页面   | 多种文件格式     |                  |
-| widgets    | 存放自定义表单功能        | `.js`            | 需要自己建文件夹 |
-| yao        | 存放系统图标              |                  |                  |
-
-约定的术语:
-
-| 名称      | 功能介绍                                            | 备注 |
-| --------- | --------------------------------------------------- | ---- |
-| 数据流    | 指的是`flows`目录下的文件                           |      |
-| 表格      | 指的是`tables`目录下的文件                          |      |
-| 处理器    | 指的是`flows`或者`scripts`目录下的文件              |      |
-| 模型      | 指的是`models`下的文件                              |      |
-| Query DSL | 指的是查询语句,解析器将其转换为对应的 SQL 语句      |      |
-| Hooks     | 指的写在`tables`目录下 `.tab.json` 中的一个功能属性 |      |
+| 目录名称   | 功能介绍                           | 文件后缀         | 备注             |
+| ---------- | ---------------------------------- | ---------------- | ---------------- |
+| apis       | 存放 API DSL 文件                  | `.http.json`     |                  |
+| data       | 应用数据目录                       | 多种文件格式     |                  |
+| db         | 存放 SQLite 数据库文件             | `.db`            |                  |
+| flows      | 存放数据流 DSL 文件                | `.flow.json`     |                  |
+| certs      | PEM 证书文件                       | `.pem`           |                  |
+| imports    | 存放数据导入 DSL 文件              | `.imp.json`      | 需要自己建文件夹 |
+| logs       | 存放系统运行日志/调试信息          | `.log`           |                  |
+| models     | 存放模型 DSL 文件                  | `menu.mod.json`  |                  |
+| plugins    | 存放 GRPC 插件扩展                 | `.so`            | 需要自己建文件夹 |
+| schedules  | 存放定时任务/计划任务 DSL 文件     | `.sch.json`      | 需要自己建文件夹 |
+| scripts    | 存放 JavaScript 处理器             | `.js`            |                  |
+| stores     | 存放 KEY-VALUE 存储器 DSL 文件     | `cache.lru.json` | 需要自己建文件夹 |
+| tables     | 存放表格 DSL 文件                  | `.tab.json`      |                  |
+| forms      | 存放表单 DSL 文件                  | `.form.json`     |                  |
+| charts     | 存放图表 DSL 文件                  | `.chart.json`    |                  |
+| tasks      | 存放延时任务/异步任务 DSL 文件     | `.task.json`     | 需要自己建文件夹 |
+| langs      | 存放应用语言包                     | `xxx.yml`        | 需要自己建文件夹 |
+| sockets    | Socket 连接 DSL 文件               | `sock.json`      | 需要自己建文件夹 |
+| websockets | WebSocket 连接 DSL 文件            | `ws.json`        | 需要自己建文件夹 |
+| public     | 公开目录, 可作为静态资源服务器使用 | 多种文件格式     |                  |
+| services   | 云函数脚本                         | `.js`            | 需要自己建文件夹 |
+| studio     | Studio 脚本                        | `.js`            | 需要自己建文件夹 |
+| widgets    | 存放自定义 DSL 脚本                | `.js`            | 需要自己建文件夹 |
+| icons      | 存放系统图标                       |                  |                  |
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="YAO命令" link="基础/YAO命令"></Link>

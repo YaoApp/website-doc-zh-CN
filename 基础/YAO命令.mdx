@@ -1,21 +1,31 @@
 # Yao 命令
 
+<blockquote>Yao 命令用于启动服务、运行处理器、查看配置信息等操作。</blockquote>
+
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+
+## 手册
+
 ```bash
 yao <command> [options] [args...]
 ```
 
 | 命令      | 说明                |
 | --------- | ------------------- |
-| init      | 项目初始化          |
 | version   | 显示当前版本号      |
 | inspect   | 显示应用配置信息    |
-| migrate   | 更新数据表结构      |
+| get       | 下载应用代码        |
+| migrate   | 更新模型数据表结构  |
 | run       | 运行处理器          |
-| start     | 启动 WEB 服务       |
+| start     | 启动服务            |
 | socket    | 建立 Socket 连接    |
 | websocket | 建立 WebSocket 连接 |
 | dump      | 导出应用数据        |
 | restore   | 导入应用数据        |
+| studio    | Studio CLI          |
 
 全局选项:
 
@@ -25,7 +35,7 @@ yao <command> [options] [args...]
 | --env  | -e   | 指定环境变量文件 |
 | --help | -h   | 命令帮助         |
 
-## yao version
+### yao version
 
 显示 Yao 版本号
 
@@ -33,25 +43,27 @@ yao <command> [options] [args...]
 yao version
 ```
 
-## yao init
-
-项目初始化, 创建 app.json, data, models 等文件和目录。
-
-```bash
-cd /path/app
-yao init
-```
-
-## yao inspect
+### yao inspect
 
 显示应用配置信息
 
 ```bash
-cd /path/app
+cd /data/app
 yao inspect
 ```
 
-## yao migrate
+### yao get
+
+下载应用代码。从 [INFRA](https://letsinfra.com/) 应用库中下载代码。
+
+**注意: 当前应用目录必须为空目录**
+
+```bash
+cd /data/app
+yao get yaoapp/demo-app
+```
+
+### yao migrate
 
 更新数据库结构，创建应用引擎和 models 文件夹下定义的数据表。默认更新 models 下所数据模型关联的数据表。
 
@@ -69,34 +81,36 @@ yao inspect
 | --force |      | 在 production 模式下, 强制使用 migrate |
 
 ```bash
-cd /path/app
+cd /data/app
 yao migrate
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao migrate -n pet
 ```
 
-## yao run
+### yao run
 
 运行处理器, 第一个参数为处理器名称，其余参数为处理器参数表。
 
 如果需要输入复杂数据结构可以使用 `::` 前缀，声明参数为 JSON 格式， 例如: `'::{"foo":"bar"}'`
 
 ```bash
-cd /path/app
+cd /data/app
 yao run scripts.day.NextDay 2020-01-02
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao run xiang.flow.Return hello '::{"foo":"bar"}'
 ```
 
-## yao start
+### yao start
 
-启动 WEB 服务
+启动服务
+
+**注意: 如果未检测到应用配置信息, 将启动应用安装服务，根据提示完成安装配置。**
 
 选项:
 
@@ -106,49 +120,70 @@ yao run xiang.flow.Return hello '::{"foo":"bar"}'
 | --debug |      | 使用开发模式启动 |
 
 ```bash
-cd /path/app
+cd /data/app
 yao start
 ```
 
 ```bash
-cd /path/app
+cd /data/app
 yao start --debug
 ```
 
-## yao socket
+<Notice type="warning">
+  管理后台默认用户名: `xiang@iqka.com`， 密码: `A123456p+`
+</Notice>
+
+<Notice type="warning">
+  如果网络结构较为复杂，命令行提示的IP地址无法访问，可根据实际网络结构，更换为相应IP地址。
+</Notice>
+
+### yao socket
 
 建立 socket 连接。 [使用 Socket Widget DSL 建立 Socket 连接](../手册/Widgets/Socket)
 
 ```bash
-cd /path/app
+cd /data/app
 yao socket gate.g02
 ```
 
-## yao websocket
+### yao websocket
 
 建立 WebSocket 连接。 [使用 Socket Widget DSL 建立 WebSocket 连接](../手册/Widgets/WebSocket)
 
 ```bash
-cd /path/app
+cd /data/app
 yao websocket message
 ```
 
-## yao dump
+### yao dump
 
 导出应用数据
 
 ```bash
-cd /path/app
+cd /data/app
 yao dump
 ```
 
-## yao restore
+### yao restore
 
 导入应用数据, 参数为使用 `yao dump` 命令导出的应用数据包文件。
 
 ```bash
-cd /path/app
-yao restore /backup/path/edge-20220827151641.zip
+cd /data/app
+yao restore /backup/data/app/edge-20220827151641.zip
+```
+
+### yao studio
+
+命令:
+
+| 命令 | 说明                                            |
+| ---- | ----------------------------------------------- |
+| run  | 运行 Stuido 脚本 ( /data/app/studio 目录下脚本) |
+
+```bash
+cd /data/app
+yao studio run hello.Foo world '::{"foo":"bar"}'
 ```
 
 ## 环境变量
@@ -171,10 +206,12 @@ yao restore /backup/path/edge-20220827151641.zip
 | YAO_SESSION_HOST     | Redis 服务器 HOST (会话存储方式为 redis 有效)           | 127.0.0.1    | 127.0.0.1                                                                    |
 | YAO_SESSION_PORT     | Redis 服务器端口 (会话存储方式为 redis 有效)            | 6379         | 6379                                                                         |
 | YAO_SESSION_PASSWORD | Redis 密码 (会话存储方式为 redis 有效)                  | 空           | 123456                                                                       |
+| YAO_STUDIO_PORT      | YAO STUDIO 服务端口(仅开发模式下有效)                   | 5077         | 5077                                                                         |
+| YAO_STUDIO_SECRET    | YAO STUDIO 密钥                                         | 空, 自动生成 | 8A9932B141E16AE1FB58409C493E93471EA24D43BF31130FE3E5A600598D9FED             |
 
 Tips: 可以为应用单独设置环境变量。在应用根目录下添加 `.env`，服务启动时将优先使用 .env 声明的环境变量。
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="如何寻求帮助" link="基础/如何寻求帮助"></Link>
-  <Link type="next" title="应用目录结构" link="基础/应用目录结构"></Link>
+  <Link type="next" title="安装配置" link="基础/安装配置"></Link>
 </Div>

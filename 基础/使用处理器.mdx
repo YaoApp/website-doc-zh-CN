@@ -3,32 +3,65 @@
 <blockquote>
   <p>
     Yao
-    内建数据原子操作、网络请求、流程控制等一系列的处理器。这些处理器可以在数据接口、数据表格、数据图表、数据流等场景下使用，可以实现
-    80% 的业务逻辑处理需求。
+    提供一组数据原子操作、网络请求、流程控制等一系列的处理器。这些处理器可以在命令行、Widget、Script、云函数和
+    Studio 脚本中使用。
   </p>
-  <p>处理器支持使用数据流、JS脚本、GRPC插件编写。</p>
+  <p>
+    处理器支持自定义，可以通过编写 Flow、Script、 GRPC 插件或自定义 Widget
+    方式扩展。
+  </p>
 </blockquote>
+
+**约定**
+
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 示例中约定服务器地址为 `http://127.0.0.1:5099`, 实际编写时需自行替换。
+3. 示例中约定 Studio 服务器地址为 `http://127.0.0.1:5077`, 实际编写时需自行替换。
+4. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 
 ## 处理器
 
-处理器是完成特定功能的函数 `Process( ...args:any[] ) any`, 由处理器名称、参数表和返回值构成。处理器包含以下类型：
+处理器由名称、参数表和返回值构成。可以理解为是一个功能函数 `ProcessName( ...args:Any[] ) Any`,
 
-| 处理器                 | 说明                                       |
-| ---------------------- | ------------------------------------------ |
-| xiang.\*.\*            | 内建处理器                                 |
-| models.<模型名称\>.\*  | 内建处理器，数据模型原子操作               |
-| flows.<数据流名称\>    | 内建处理器，通过数据流编写的处理器         |
-| scripts.<脚本名称\>.\* | 内建处理器，通过 JavaScript 脚本编写处理器 |
-| plugins.<插件名称\>.\* | 通过 GRPC 插件编写处理器                   |
-| session.\*             | 系统内建，会话数据处理器                   |
+名称: `<命名空间>.<名称>`
 
-<Notice type="warning">
-  注意：应用引擎内建处理器命名空间为 <strong>xiang</strong> ,
-  防止在命令行使用时与
-  <strong>yao</strong> 混淆。 <strong>xiang</strong> 是应用引擎的内部研发代号, 名称源自周易
-  <strong>《象传》[xiàng zhuàn]</strong>
-  ，用来解释卦辞爻辞，取观测万象，预测趋势之意。
-</Notice>
+参数表: `[...Args]`
+
+返回值: `Any`
+
+**处理器清单:**
+
+| 处理器      | 说明                                                        |
+| ----------- | ----------------------------------------------------------- |
+| models.\*   | 数据模型原子操作 [查看文档](../手册/处理器/Model)           |
+| schemas.\*  | 数据表结构操作 [查看文档](../手册/处理器/Schema)            |
+| stores.\*   | 数据存储 [查看文档](../手册/处理器/Store)                   |
+| fs.\*       | 文件系统 [查看文档](../手册/处理器/Network)                 |
+| http.\*     | HTTP 请求 [查看文档](../手册/处理器/HTTP)                   |
+| session.\*  | 会话数据 [查看文档](../手册/处理器/Session)                 |
+| encoding.\* | 编码解码 [查看文档](../手册/处理器/Encoding)                |
+| crypto.\*   | 加密解密 [查看文档](../手册/处理器/Crypto)                  |
+| ssl.\*      | 签名校验 [查看文档](../手册/处理器/SSL)                     |
+| utils.\*    | 一组实用程序 [查看文档](../手册/处理器/Utils)               |
+| flows.\*    | 使用 Flow 编写的处理器 [查看文档](逻辑编排)                 |
+| scripts.\*  | 使用 Script 脚本编写的处理器 [查看文档](逻辑编排)           |
+| plugins.\*  | 使用 GRPC 插件编写处理器 [查看文档](../进阶/编写插件)       |
+| widgets.\*  | 自定义 Widget 导出的的处理器 [查看文档](../专家/编写Widget) |
+
+内建 Widgets 的处理器:
+
+| Widget   | 处理器       | 说明                                                               |
+| -------- | ------------ | ------------------------------------------------------------------ |
+| App      | yao.app.\*   | App Widget 处理器 [查看文档](../手册/处理器/App)                   |
+| Login    | yao.login.\* | Login Widget 处理器 [查看文档](../手册/处理器/Login)               |
+| Table    | yao.table.\* | Table Widget 处理器 [查看文档](../手册/处理器/Table)               |
+| Form     | yao.form.\*  | Form Widget 处理器 [查看文档](../手册/处理器/Form)                 |
+| Chart    | yao.chart.\* | Chart Widget 处理器 [查看文档](../手册/处理器/Chart)               |
+| Import   | imports.\*   | Import Widget 数据导入处理器 [查看文档](../手册/处理器/Chart)      |
+| Task     | tasks.\*     | Task Widget 并发任务处理器 [查看文档](../手册/处理器/Task)         |
+| Schedule | schedules.\* | Schedule Widget 异步任务处理器 [查看文档](../手册/处理器/Schedule) |
+
+[查看处理器手册](../手册/处理器/Index)
 
 ## 使用方式
 
@@ -37,130 +70,151 @@
 可以使用 `run` 命令，运行处理器 `yao run <process> [args...]`。
 
 ```bash
-yao run models.pet.Get '::{}'
+yao run models.product.Paginate '::{}' 1 2
 ```
 
-### 在 API 中使用
+### 在 DSL 中使用
 
-在 API 中指定 `process` 设置处理器。 `query` 设置处理器的参数表。
+可在 YAO DSL (API, Flow, Table, Chart 等) 中使用处理器, 可参考对应 Widget 手册。
 
-```json
+[查看 Widget 手册](../手册/Widgets/Index)
+
+**在 API DSL 中使用**
+
+```jsonc
 {
-  ...
+  // ...
   "paths": [
     {
       "path": "/search",
       "method": "GET",
-      "process": "models.pet.Paginate",
-      "query": [":query-param", "$query.page", "$quey.pagesize"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
+      "process": "models.product.Paginate",
+      "in": [":query-param", "$query.page", "$quey.pagesize"], // 参数表
+      "out": { "status": 200, "type": "application/json" }
     }
   ]
-  ...
+  // ...
 }
 ```
 
-### 在数据流节点中使用
+**在 Flow DSL 中使用**
 
-在数据流节点中通过 `process` 指定处理器， `args` 传入处理器参数表。
-
-```json
+```jsonc
 {
-  ...
+  // ...
   "nodes": [
     {
       "name": "宠物",
-      "process": "models.pet.Find",
-      "args": [1, { "select": ["id","name"] }]
+      "process": "models.product.Find",
+      "args": [1, { "select": ["id", "name"] }]
     },
     {
       "name": "打印",
-      "process": "yao.sys.Print",
+      "process": "utils.fmt.Print",
       "args": ["{{$res.宠物}}"]
     }
   ]
-  ...
+  // ...
 }
 ```
 
-同样方式也可以用在看板、大屏、图表的数据流节点上。
+**在 Table DSL 中使用**
 
-```json
+```jsonc
 {
-  ...
-  "nodes": [
-    {
-      "name": "类型汇总",
-      "process": "flows.stat.kind",
-       "args": [["狗","猫"]]
-    }
-  ]
-  ...
-}
-```
-
-### 在数据表格中使用
-
-使用 `process` 重载表格数据读取逻辑
-
-```json
-{
-  ...
-  "apis": {
+  // ...
+  "action": {
+    "bind": { "table": "product" },
     "search": {
-      "process": "flows.pet.latest"
+      "guard": "-",
+      "process": "scripts.product.Search",
+      "default": [null, 1, 2]
     },
-    "find": {
-      "process": "flows.pet.find"
-    }
-  }
-  ...
-}
-```
-
-用作表格 `Hook` ，处理上下文数据
-
-```json
-{
-  ...
-  "hooks": {
-    "after:search": "flows.pet.fliter.data",
-    "after:find": "flows.pet.fliter.row"
-  }
-  ...
-}
-```
-
-用作表格 `Guard` ，处理验证逻辑，在 table 的`apis`中写入以下内容：
-
-```json
-{
-  ...
-  "apis": {
     "save": {
-      "guard": "bearer-jwt,scripts.user.login"
+      "guard": "bearer-jwt,scripts.product.Guard"
     },
-    "delete": {
-      "guard": "bearer-jwt"
-    }
-  },
-  ...
+    "after:search": "scripts.hook.BeforeSearch",
+    "after:search": "scripts.hook.AfterSearch"
+  }
+  // ...
 }
 ```
 
-`scripts/user.js`内容,能够打印出请求的 url 路径，参数，以及请求头部，配合`Exception` 能够做到验证某些数据或者权限
+### 在脚本中使用
+
+可以在 Script, 云函数, Stuido 脚本中，使用 `Process(name, ...args)` 函数，调用处理器
+
+**在 Script 中使用**
+
+`/data/app/scripts/demo.js`
 
 ```javascript
-function login(path, params, query, payload, headers) {
-  console.log([path, params, query, payload, headers]);
-  throw new Exception("未登录", 403);
+function GetProduct(id) {
+  return Process("models.product.Find", id, { select: ["id", "name"] });
 }
 ```
 
+运行调试
+
+```bash
+yao run scripts.demo.GetProduct 1
+```
+
+**在云函数中使用**
+
+`/data/app/services/demo.js`
+
+```javascript
+function GetProduct(id) {
+  return Process("models.product.Find", id, { select: ["id", "name"] });
+}
+```
+
+运行调试
+
+```bash
+yao run utils.jwt.Make 1 '::{"id":1, "name":"Admin"}' '::{"issuer":"yao"}'
+```
+
+```bash
+curl -X POST http://127.0.0.1:5099/api/__yao/app/service/demo \
+   -H 'Content-Type: application/json' \
+   -H 'Authorization: Bearer <JWT>' \
+   -d '{ "method":"GetProduct", "args":[1]}'
+```
+
+**在 Studio 中使用**
+
+`/data/app/studio/demo.js`
+
+```javascript
+function GetProduct(id) {
+  return Process("models.product.Find", id, { select: ["id", "name"] });
+}
+```
+
+运行调试
+
+```bash
+yao studio run demo.GetProduct 1
+```
+
+```bash
+# Studio JWT 可以通过管理后台, 管理员登录接口获取
+curl -X POST http://127.0.0.1:5077/service/demo \
+   -H 'Content-Type: application/json' \
+   -H 'Authorization: Bearer <Studio JWT>' \
+   -d '{ "method":"GetProduct", "args":[1]}'
+
+```
+
+附: 如何获取 Studio Token
+
+![管理员登录](./assets/jwt-token-step1.jpg)
+
+![获取 Studio Token](./assets/jwt-token-step2.jpg)
+
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
-  <Link type="prev" title="快速上手" link="基础/开发业务系统"></Link>
+  <Link type="prev" title="编写图表" link="基础/编写图表"></Link>
   <Link type="next" title="使用Widgets" link="基础/使用Widgets"></Link>
 </Div>

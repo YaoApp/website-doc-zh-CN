@@ -1,41 +1,44 @@
 # 创建数据模型
 
-[查看 Widget 文档，字段类型，数据结构](../手册/Widgets/Model)
-
 <blockquote>
-  一个数据模型对应数据库中的一张数据表, 通过 JSON 文件描述数据表结构，放置在
-  models 目录中。使用 yao migrate 命令创建/更新数据表结构设计。
+  一个数据模型对应数据库中的一张数据表, 通过 Model DSL 文件描述数据表结构, 使用
+  `relations` 描述数据表之间关联关系， 使用 yao migrate
+  命令创建/更新数据表结构设计。
 </blockquote>
 
-## 数据模型描述
+**约定**
 
-编写一个数据模型描述文件 `pet.mod.json`，并放置在应用的 `models` 目录中。
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 
-描述文件内容:
+## 编写数据模型
+
+### 添加模型 DSL 文件
+
+在 `models` 目录下, 创建一个 Model DSL 文件, 设计一张 `product` 数据表。
+
+`/data/app/models/product.mod.json`
 
 ```json
 {
-  "name": "宠物模型",
-  "table": { "name": "pet", "comment": "宠物模型" },
+  "name": "产品",
+  "table": { "name": "product", "comment": "产品表" },
   "columns": [
-    {
-      "label": "ID",
-      "name": "id",
-      "type": "ID",
-      "comment": "ID",
-      "primary": true
-    },
-    {
-      "label": "日期",
-      "name": "day",
-      "type": "datetime",
-      "index": true
-    },
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    { "label": "日期", "name": "day", "type": "datetime", "index": true },
     {
       "label": "名称",
       "name": "name",
       "type": "string",
       "length": 128,
+      "index": true
+    },
+    {
+      "label": "上架状态",
+      "name": "online",
+      "type": "boolean",
+      "default": false,
+      "comment": "上架状态 true 上架 false 下架",
       "index": true
     },
     {
@@ -47,32 +50,17 @@
       "comment": "状态：enabled打开，disabled关闭",
       "index": true
     },
-    {
-      "label": "用户id",
-      "name": "user_id",
-      "type": "integer",
-      "index": true
-    },
-    {
-      "label": "总金额",
-      "name": "amount",
-      "type": "decimal",
-      "index": true
-    },
-    {
-      "label": "备注",
-      "name": "remark",
-      "type": "text",
-      "nullable": true
-    }
+    { "label": "用户ID", "name": "user_id", "type": "integer", "index": true },
+    { "label": "总金额", "name": "amount", "type": "decimal", "index": true },
+    { "label": "备注", "name": "remark", "type": "text", "nullable": true }
   ],
   "values": [],
   "relations": {
     "users": {
       "type": "hasOne",
-      "model": "user",
+      "model": "xiang.user",
       "key": "id",
-      "foreign": "user_-id",
+      "foreign": "user_id",
       "query": {}
     }
   },
@@ -84,75 +72,73 @@
   提示：<strong>option.timestamps</strong> 为 true, 自动创建
   <strong>created_at</strong> 和 <strong>updated_at</strong> 字段, 用于保存数据记录的创建时间和更新时间。
   <strong>option.soft_deletes</strong> 为 true, 自动创建
-  <strong>deleted_at</strong> 字段, 用于标记删除记录。详细说明参考数据模型 [文档](../手册/Widgets/Model)。
+  <strong>deleted_at</strong> 字段, 用于标记删除记录。
 </Notice>
 
-应用目录结构:
+[查看 Model Widget 手册，字段类型，数据结构](../手册/Widgets/Model)
 
-```bash
-├── models        # 用于存放数据模型描述文件
-│   └── pet.mod.json
-├── db
-└── ui
-└── app.json
-```
+### 更新数据表结构
 
-## Migrate 创建/更新数据表
-
-在项目根目录下运行 `Migrate` ，创建/更新数据表结构，并插入默认数据。
+进入应用目录，运行 `yao migrate` 命令创建数据表
 
 ```bash
 cd /data/app
-yao migrate -n pet
+yao migrate -n product
 ```
 
 <Notice type="warning">
-  注意：migrate 命令将删除数据库中同名数据表后重新创建，请注意数据备份。
+  注意：migrate 命令可能修改数据库中同名数据表结构，请注意数据备份。
 </Notice>
 
 ## 数据查询
 
-列表查询
-
-```bash
-yao run models.pet.Get '::{}'
-```
-
-按主键查询数据
-
-```bash
-yao run models.category.find 1 {}
-```
-
-删除一条数据
-
-```bash
-yao run models.pet.Delete 1 {}
-```
-
 新增一条数据
 
 ```bash
-yao run models.pet.Create '::{"name":"cat", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"cat ....."}'
+yao run models.product.Create '::{"name":"悉达多", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
 ```
 
 更新一条数据
 
 ```bash
-yao run models.pet.Update 1 '::{"remark":"一只可爱的三色猫"}'
+yao run models.product.Update 1 '::{"remark":"一本工具书"}'
 ```
 
 保存一条数据，指定主键则更新，不指定创建创建。
 
 ```bash
-yao run models.pet.Save '::{"name":"cat", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"cat ....."}'
+yao run models.product.Save '::{"name":"资治通鉴", "day":"2022-01-01 08:00:00", "status":"enabled", "user_id":1,"amount":1000,"remark":"Book ....."}'
 ```
 
 ```bash
-yao run models.pet.Save '::{"id":1,"remark":"一只可爱的三色猫"}'
+yao run models.product.Save '::{"id":1,"remark":"黑塞的小说"}'
+```
+
+列表查询
+
+```bash
+yao run models.product.Get '::{}'
+```
+
+列表查询(分页)
+
+```bash
+yao run models.product.Paginate '::{}' 1 2
+```
+
+按主键查询数据
+
+```bash
+yao run models.product.find 1 '::{}'
+```
+
+删除一条数据
+
+```bash
+yao run models.product.Delete 1 '::{}'
 ```
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
-  <Link type="prev" title="应用目录结构" link="基础/应用目录结构"></Link>
-  <Link type="next" title="数据查询" link="基础/数据查询"></Link>
+  <Link type="prev" title="安装配置" link="基础/安装配置"></Link>
+  <Link type="next" title="逻辑编排" link="基础/逻辑编排"></Link>
 </Div>

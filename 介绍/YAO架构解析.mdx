@@ -1,8 +1,8 @@
 # YAO 架构解析
 
-![架构图](https://release-sv-1252011659.cos.na-siliconvalley.myqcloud.com/docs/%E4%BB%8B%E7%BB%8D/architecture.png)
+![介绍](./assets/architecture.png)
 
-YAO 基于 flow-based 编程思想，将一系列原子操作封装成处理器；这些处理器可以在 YAO DSL 或 JavaScript 脚本中调用。
+YAO 是一款开源应用引擎，使用 Golang 编写，下载即用。适合用于开发业务系统、网站/APP API 接口、管理后台、自建低代码平台等。
 
 YAO 根据业务特征，定义了一套 YAO DSL，用来描述数据结构、数据流、API 接口、并发任务、计划任务、Socket 服务等功能模块，这些功能模块被定义为 Widget。
 
@@ -10,11 +10,80 @@ YAO 根据业务特征，定义了一套 YAO DSL，用来描述数据结构、�
 
 YAO DSL 和 YAO Widget 支持根据自身业务特征定义扩展，这让基于 YAO 构建符合自身业务特征的低代码平台变得更加容易。
 
+## YAO VS 低代码
+
+与大部分低代码平台相比，YAO 具有更好的通用性、应用独立发布（可申请软著)、非一次性代码，可持续迭代升级、不限于”托拉拽“, 有多种编写方式等优势。
+
+![架构图](./assets/architecture-tech.png)
+
+### 应用独立发布
+
+![应用结构](./assets/yaoapp.png)
+
+与大部分代码开发平台不同，YAO 的定位是给开发者提供快速构建应用的工具。
+
+使用 YAO 开发的应用代码独立发布，可申请软著，无缝对接云原生工具链，与使用 `PHP`, `NodeJS` 等脚本语言开发的应用无差别。
+
+### 非一次性代码
+
+不同于代码生成器, YAO DSL 开发者可阅读、可以编写, 开发者可精确掌控业务逻辑, 应用可持续迭代升级。
+
+应用引擎全量开源, 技术团队可完全掌控全部代码。
+
+Table DSL 示例:
+
+```jsonc
+{
+  "name": "::Bind Model",
+  "action": {
+    "bind": {
+      "model": "pet",
+      "option": { "form": "pet" } //
+    },
+
+    // 自定义关联处理器
+    "search": {
+      "guard": "-", // 鉴权方式
+      "process": "scripts.pet.Search", // 调用处理器
+      "default": [null, 1, 5] // 默认参数表
+    }
+  }
+}
+```
+
+### 可替代脚本语言
+
+YAO 内建 JavaScript Runtime, 可以使用脚本实现 95% 以上常见业务逻辑。
+
+这一特性使 YAO 具备脚本语言的基础能力，在一些场景下可以代替脚本语言使用。
+
+### 多种编写方式
+
+YAO 应用有多种编写方式，且这些编程方式可以随意切换。
+
+1. 支持手工编写， 开发者可以使用任意编程工具编写调试。
+2. 支持程序生成， 根据上下文逻辑，自动生成 DSL 或脚本代码，甚至可以接入 AI 让人工智能编程序。
+3. 支持可视化编程工具制作，使用 Studio 通过托拉拽图形化编程。
+
+通过这种编码方式，可以有效提升生产力, 降低复制粘贴错误率，同时也让自动化编程成为可能。
+
+<!-- 用程序生成的示例: https://github.com/YaoApp/yao-admin -->
+
+Yao Studio Preview:
+
+![studio](./assets/studio.jpg)
+
 ## 核心代码
 
 ### Yao App Engine
 
 应用引擎命令行工具 & 特定场景处理器 [Yao App Engine](https://github.com/yaoapp/yao)
+
+### Xgen 界面引擎
+
+界面引擎 [Xgen](https://github.com/YaoApp/xgen-next)
+
+[查看源码编译文档](../专家/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91.mdx)
 
 ### Gou Framework
 
@@ -27,8 +96,6 @@ YAO DSL 和 YAO Widget 支持根据自身业务特征定义扩展，这让基于
 ### Kun
 
 常用数据结构 & 工具包 [Kun](https://github.com/yaoapp/kun)
-
-[查看源码编译文档](../专家/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91.mdx)
 
 ## 添加处理器
 

@@ -1,438 +1,261 @@
 # 使用 Widgets
 
-YAO 基于 flow-based 编程思想，将一系列原子操作封装成处理器；这些处理器可以在 YAO DSL 或 JavaScript 脚本中调用。
+<blockquote>
+  <p>
+    Widget 抽象出一个功能模块的通用部分,使用 DSL 描述差异,
+    实现快速复制，有效提升开发效率。Yao 提供一组内建 Widgets,
+    覆盖大部分常用功能。
+  </p>
+  <p>Widget 支持自定义, 支持使用 Studio 脚本创建实例，可用于自建低代码平台。</p>
+</blockquote>
 
-YAO 根据业务特征，定义了一套 YAO DSL，用来描述数据结构、数据流、API 接口、并发任务、计划任务、Socket 服务等功能模块，这些功能模块被定义为 Widget。
+**约定**
 
-在引擎启动时，根据 Widget 逻辑，将其解析为一组 API 接口和一组处理器。 在应用开发中，编写 Widget DSL 描述差异，即可实现对应功能模块，从而提升编码效率。
+1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
+2. 示例中约定服务器地址为 `http://127.0.0.1:5099`, 实际编写时需自行替换。
+3. 示例中约定 Studio 服务器地址为 `http://127.0.0.1:5077`, 实际编写时需自行替换。
+4. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
 
-YAO DSL 和 YAO Widget 支持根据自身业务特征定义扩展，这让基于 YAO 构建符合自身业务特征的低代码平台变得更加容易。
+## Widget
 
-YAO 将通用功能模块抽象为 Widget，通过 YAO DSL 描述差异，快速复制各种功能。
+Widget 使用 YAO DSL 编写, 服务启动时, 应用引擎将其解析为一组处理器和 API 接口。
 
-在开发中，如果开发一个相似的功能模块，需要将已有的功能复制粘贴，批量替换差异内容。
+通常来说, 每种 Widget 对应一个 DSL 文件目录, 每个文件是一个 Widget 实例。
 
-YAO 提供一种新方式 ，使用 DSL 描述差异内容，快速“复制粘贴”一个功能模块，以此来提升开发效率。
+DSL 文件是一个 JSON 格式的文本, 编写体验与 HTML 相似, HTML 描述页面元素, DSL 用来描述功能。
 
-## Widget Model
+DSL 文件名(不含扩展名) 作为 `Widget ID`, 如包含目录，则将 `/` 替换为 `.`
 
-[查看文档](../手册/Widgets/Model)
+**内建 Widgets:**
 
-### 新增`models/category.mod.json`文件,写入以下内容:
+| Widget           | 目录(相对应用根目录) | 扩展名        | 说明                                                                                                                   |
+| ---------------- | -------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| App              | `/app.json`          | `-`           | APP Widget 每一个应用只有一个 [查看文档](../手册/Widgets/App)                                                          |
+| Model            | `/models`            | `.mod.json`   | 数据模型 用于描述数据表结构 [查看文档](../手册/Widgets/Model)                                                          |
+| Store            | `/stores`            | `.stor.json`  | Key-Value 存储 [查看文档](../手册/Widgets/Store)                                                                       |
+| Flow             | `/flows`             | `.flow.json`  | 数据流 用于编排处理器调用逻辑 [查看文档](../手册/Widgets/Flow)                                                         |
+| API              | `/apis`              | `.http.json`  | REST API 用于编写 RESTFul API [查看文档](../手册/Widgets/API)                                                          |
+| Connector        | `/connectors`        | `.conn.json`  | 连接器 用于连接 Redis, Mongo, MySQL, ES 等外部服务, 连接器可与 Model, Store 关联 [查看文档](../手册/Widgets/Connector) |
+| Task             | `/tasks`             | `.task.json`  | 并发任务 [查看文档](../手册/Widgets/Task)                                                                              |
+| Schedule         | `/schedules`         | `.sch.json`   | 计划任务 [查看文档](../手册/Widgets/Schedule)                                                                          |
+| WebSocket Server | `/apis`              | `.ws.json`    | WebSocket Server[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| WebSocket Client | `/websockets`        | `.ws.json`    | WebSocket Client[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| Socket           | `/sockets`           | `.sock.json`  | Socket Server/Client [查看文档](../手册/Widgets/Socket)                                                                |
+| Cert             | `/certs`             | `.pem`        | PEM 证书导入 [查看文档](../手册/Widgets/Cert)                                                                          |
+| Import           | `/imports`           | `.imp.json`   | 数据导入 可以与表格界面关联 [查看文档](../手册/Widgets/Import)                                                         |
+| Login            | `/logins`            | `.login.json` | 登录界面 [查看文档](../手册/Widgets/Login)                                                                             |
+| Table            | `/tables`            | `.tab.json`   | 表格界面 [查看文档](../手册/Widgets/Table)                                                                             |
+| Form             | `/forms`             | `.form.json`  | 表单界面 [查看文档](../手册/Widgets/Form)                                                                              |
+| Chart            | `/charts`            | `.chart.json` | 图表界面 [查看文档](../手册/Widgets/Chart)                                                                             |
 
-<Detail title="查看源码">
+[查看 Widget 手册](../手册/Widgets/Index)
+
+## 编写方式
+
+Widgets 有多种编写方式，且这些编程方式可以随意切换。
+
+### 手工编写
+
+使用 `Visual Studio Code` 等开发工具编写。
+
+**Model**
+
+`/data/app/models/product.mod.json`
 
 ```json
 {
-  "name": "书籍分类",
-  "table": {
-    "name": "category",
-    "comment": "书籍分类"
-  },
+  "name": "产品",
+  "table": { "name": "product", "comment": "产品表" },
   "columns": [
-    {
-      "label": "ID",
-      "name": "id",
-      "type": "ID",
-      "comment": "ID",
-      "primary": true
-    },
-    {
-      "label": "父级id",
-      "name": "parent_id",
-      "type": "integer",
-      "nullable": true
-    },
-    {
-      "label": "分类名称",
-      "name": "name",
-      "type": "string",
-      "length": 128,
-      "index": true
-    }
-  ],
-  "relations": {
-    "book": {
-      "type": "hasMany",
-      "model": "book",
-      "key": "category_id",
-      "foreign": "id",
-      "query": {}
-    },
-    "parent": {
-      "type": "hasOne",
-      "model": "category",
-      "key": "id",
-      "foreign": "parent_id",
-      "query": {}
-    }
-  },
-  "option": {
-    "timestamps": true,
-    "soft_deletes": true
-  },
-  "values": [
-    {
-      "id": 1,
-      "parent_id": null,
-      "name": "文史类"
-    },
-    {
-      "id": 2,
-      "parent_id": 1,
-      "name": "历史"
-    },
-    {
-      "id": 3,
-      "parent_id": 1,
-      "name": "古诗"
-    },
-    {
-      "id": 4,
-      "parent_id": null,
-      "name": "理工类"
-    },
-    {
-      "id": 5,
-      "parent_id": 4,
-      "name": "数学"
-    },
-    {
-      "id": 6,
-      "parent_id": 4,
-      "name": "物理"
-    }
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    { "label": "名称", "name": "name", "type": "string", "index": true }
   ]
 }
 ```
 
-</Detail>
+**Flow**
 
-使用 `yao migrate -n category`迁移数据表文件
-
-## Widget Table
-
-[查看文档](../手册/Widgets/Table)
-
-新建分类表格 `tables/category.tab.json`代码:
-
-<Detail title="查看源码">
+`/data/app/flows/query/product.flow.json`
 
 ```json
 {
-  "name": "分类列表",
+  "label": "演示",
   "version": "1.0.0",
-  "decription": "分类列表",
-  "bind": {
-    "model": "category",
-    "withs": {
-      "parent": {}
-    }
-  },
-  "apis": {},
-  "columns": {
-    "ID": {
-      "label": "ID",
-      "view": { "type": "label", "props": { "value": ":id" } }
-    },
-
-    "父类": {
-      "label": "父类",
-      "view": {
-        "type": "label",
-        "props": {
-          "value": ":parent.name"
-        }
-      },
-      "edit": {
-        "type": "input",
-        "props": {
-          "value": ":parent_id"
-        }
-      }
-    },
-    "分类名称": {
-      "label": "分类名称",
-      "view": {
-        "type": "label",
-        "props": {
-          "value": ":name"
-        }
-      },
-      "edit": {
-        "type": "input",
-        "props": {
-          "value": ":name"
-        }
-      }
-    }
-  },
-  "filters": {
-    "分类名称": {
-      "label": "分类名称",
-      "bind": "where.name.match",
-      "input": {
-        "type": "input",
-        "props": { "placeholder": "分类名称" }
-      }
-    }
-  },
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "父类", "width": 200 },
-        { "name": "分类名称", "width": 200 }
-      ],
-      "filters": [{ "name": "分类名称" }]
-    },
-    "actions": {
-      "pagination": { "props": { "showTotal": true } },
-      "create": {
-        "props": { "label": "添加分类" }
-      }
-    },
-    "option": { "operation": { "unfold": true } }
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [
-            { "name": "父类", "width": 200 },
-            { "name": "分类名称", "width": 200 }
-          ]
-        }
-      ]
-    },
-    "actions": {
-      "cancel": {},
-      "save": {},
-      "delete": { "type": "button", "props": { "label": "Delete" } }
-    },
-    "option": { "dev": false }
-  }
-}
-```
-
-</Detail>
-
-## Widget Flows
-
-[查看文档](../手册/Widgets/Flow)
-
-新建`flows/category.flow.json`
-
-```json
-{
-  "label": "类目树",
-  "version": "1.0.0",
-  "description": "类目树",
+  "description": "数据查询",
   "nodes": [
     {
-      "name": "类目",
-      "engine": "xiang",
-      "query": {
-        "select": ["id", "name", "name as label", "id as value", "parent_id"],
-        "wheres": [{ ":deleted_at": "删除", "=": null }],
-        "from": "category",
-        "limit": 1000
-      }
-    },
-    {
-      "name": "类目树",
-      "process": "xiang.helper.ArrayTree",
-      "args": ["{{$res.类目}}", { "parent": "parent_id" }]
+      "name": "产品",
+      "process": "models.product.Find",
+      "args": ["{{$in[0]}}", { "select": ["id", "name"] }]
     }
   ],
-  "output": "{{$res.类目树}}"
+  "output": "{{$res.产品}}"
 }
 ```
 
-## Widget API
+**API**
 
-[查看文档](../手册/Widgets/API)
-
-新建 `apis/select.http.json`
+`/data/app/apis/product.http.json`
 
 ```json
 {
-  "name": "下拉搜索",
+  "name": "产品",
   "version": "1.0.0",
-  "description": "下拉搜索",
-  "guard": "bearer-jwt",
-  "group": "select",
-  "paths": [
-    {
-      "path": "/category",
-      "method": "GET",
-      "process": "flows.category",
-      "in": [],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
-    }
-  ]
-}
-```
-
-运行`yao start`,访问 `127.0.0.1:5099/api/select/category`
-
-## Widget Task
-
-[查看文档](../手册/Widgets/Task)
-
-- 新建文件目录 `/tasks/test.task.js`:
-
-```json
-{
-  "name": "测试task",
-  "worker_nums": 10,
-  "attempts": 3,
-  "attempt_after": 200,
-  "timeout": 2,
-  "size": 1000,
-  "process": "scripts.task.Send",
-  "event": {
-    "next": "scripts.task.NextID",
-    "add": "scripts.task.OnAdd",
-    "success": "scripts.task.OnSuccess",
-    "error": "scripts.task.OnError",
-    "progress": "scripts.task.OnProgress"
-  }
-}
-```
-
-| 参数          | 含义                   | 说明 |
-| ------------- | ---------------------- | ---- |
-| name          | 任务名称               |      |
-| worker_nums   | 指定进程数             |      |
-| attempts      | 失败重试次数           |      |
-| attempt_after | 重试间隔               |      |
-| timeout       | 超时时间               |      |
-| process       | 该 task 绑定的处理器   |      |
-| next          | 生成任务唯一 id        |      |
-| add           | 添加任务时触发的方法   |      |
-| success       | 任务处理成功后触发方法 |      |
-| error         | 任务失败后触发方法     |      |
-| progress      | 任务处理中调用         |      |
-
-新建 `scripts/task.js`
-
-<Detail title="查看源码">
-
-```javascript
-var id = 1024;
-
-/**
- * Generate job id
- * @returns
- */
-function NextID() {
-  id = id + 1;
-  console.log(`NextID: ${id}`);
-  return id;
-}
-
-function Send(id, message) {
-  console.log(message);
-}
-
-/**
- * OnAdd add event
- * @param {*} id
- */
-function OnAdd(id) {
-  log.Error("进入add");
-  console.log(`OnAdd: #${id}`);
-}
-
-/**
- * OnProgress
- * @param {*} id
- * @param {*} current
- * @param {*} total
- * @param {*} message
- */
-function OnProgress(id, current, total, message) {
-  console.log(`OnProgress: #${id} ${message} ${current}/${total} `);
-}
-
-function OnSuccess(id, res) {
-  console.log(`OnSuccess: #${id} ${JSON.stringify(res)}`);
-}
-
-function OnError(id, err) {
-  console.log(`OnError: #${id} ${err}`);
-}
-```
-
-</Detail>
-
-新建路由`apis/task.http.json`
-
-```json
-{
-  "name": "任务",
-  "version": "1.0.0",
-  "description": "任务",
+  "description": "产品接口",
   "guard": "-",
-  "group": "task",
+  "group": "product",
   "paths": [
     {
-      "path": "/task",
-       "guard": "-",
+      "path": "/find/:id",
       "method": "GET",
-      "process": "scripts.test.task",
-      "in": [],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
+      "process": "flows.query.product",
+      "in": ["$param.id"],
+      "out": { "status": 200, "type": "application/json" }
     }
   ]
 }
 ```
 
-新建测试函数 `scripts/test.js`
+**Table**
 
-```javascript
-function task() {
-  for (i = 1; i < 100; i++) {
-    Process("tasks.test.Add", "进入任务" + i);
+`/data/app/tables/product.tab.json`
+
+```json
+{
+  "name": "产品",
+  "action": {
+    "bind": { "model": "product" }
   }
 }
 ```
 
-运行项目 `yao start` 访问 url `127.0.0.1:5099/api/task/task`可以看到打印信息
+**Form**
 
-## Widget Schedue
-
-[查看文档](../手册/Widgets/Schedule)
-
-- 新建 `/schedules/test.sch.json`，定时任务的写法和 Linux 的 crontab 是一样的，代码：
+`/data/app/forms/product.form.json`
 
 ```json
 {
-  "name": "每分钟调用一次",
-  "schedule": "*/1 * * * *",
-  "process": "scripts.schedules.Send",
-  "args": []
+  "name": "产品",
+  "action": { "bind": { "model": "product" } }
 }
 ```
 
-- 新建 `scripts/schedules.js`代码：
+### 程序生成
+
+创建一个 Studio 脚本, 根据已有数据模型, 自动生成 Flow, API, Table 和 Form。
+
+`/data/app/studio/demo.js`
 
 ```javascript
-function Send() {
-  console.log("进入定时任务！");
+function AutoMake(name) {
+  let fs = new FS("dsl");
+  let data = fs.ReadFile(`/models/${name}.mod.json`);
+  let mod = JSON.parse(data);
+  let title = mod.name || "未知";
+  fs.WriteFile(`/flows/query/${name}.flow.json`, makeFlow(name, title));
+  fs.WriteFile(`/apis/${name}.http.json`, makeApi(name, title));
+  fs.WriteFile(`/tables/${name}.tab.json`, makeTable(name, title));
+  fs.WriteFile(`/forms/${name}.form.json`, makeForm(name, title));
+}
+
+function makeForm(name, title) {
+  return JSON.stringify({
+    name: title,
+    action: { bind: { model: name } },
+  });
+}
+
+function makeTable(name, title) {
+  return JSON.stringify({
+    name: title,
+    action: { bind: { model: name } },
+  });
+}
+
+function makeFlow(name, title) {
+  return JSON.stringify({
+    label: "演示",
+    version: "1.0.0",
+    description: "数据查询",
+    nodes: [
+      {
+        name: title,
+        process: `models.${name}.Find`,
+        args: ["{{$in[0]}}", { select: ["id", "name"] }],
+      },
+    ],
+    output: `{{$res.${title}}}`,
+  });
+}
+
+function makeApi(name, title) {
+  return JSON.stringify({
+    name: title,
+    version: "1.0.0",
+    description: `${title}接口`,
+    guard: "-",
+    group: name,
+    paths: [
+      {
+        path: "/find/:id",
+        method: "GET",
+        process: `flows.query.${name}`,
+        in: ["$param.id"],
+        out: { status: 200, type: "application/json" },
+      },
+    ],
+  });
 }
 ```
 
-执行 `yao start`等待 1 分钟后可以看到打印信息
+运行调试
+
+新建一个测试用 Model
+
+`/data/app/models/category.mod.json`
+
+```json
+{
+  "name": "类目",
+  "table": { "name": "category", "comment": "类目" },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    { "label": "名称", "name": "name", "type": "string", "index": true }
+  ]
+}
+```
+
+```bash
+yao studio run demo.AutoMake category
+```
+
+验证结果
+
+```bash
+cat /data/app/flows/query/category.flow.json
+cat /data/app/apis/category.http.json
+cat /data/app/tables/category.tab.json
+cat /data/app/forms/category.form.json
+
+```
+
+也可以通过 Studio API 调用生成脚本
+
+```bash
+# Studio JWT 可以通过管理后台, 管理员登录接口获取
+curl -X POST http://127.0.0.1:5077/service/demo \
+   -H 'Content-Type: application/json' \
+   -H 'Authorization: Bearer <Studio JWT>' \
+   -d '{ "method":"AutoMake", "args":["category"]}'
+```
+
+### 可视化编程工具制作
+
+可以使用 Yao Studio 可视化编程 ”托拉拽“ 的方式制作。
+
+Yao Studio Preview:
+
+![studio](../介绍/assets/studio.jpg)
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="使用处理器" link="基础/使用处理器"></Link>
