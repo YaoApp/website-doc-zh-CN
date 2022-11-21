@@ -59,8 +59,8 @@ windows 用户请参考安装调试章节:
 新建一个应用目录，进入应用目录，运行 `yao start` 命令, 启动安装界面。
 
 ```bash
-mkdir -p /data/crm  # 创建应用目录
-cd /data/crm  # 进入应用目录
+mkdir -p /data/app  # 创建应用目录
+cd /data/app  # 进入应用目录
 yao start # 启动安装界面
 ```
 
@@ -68,14 +68,16 @@ yao start # 启动安装界面
   管理后台默认用户名: `xiang@iqka.com`， 密码: `A123456p+`
 </Notice>
 
+![安装界面](../基础/assets/yao-setup-step2.jpg)
+
 **下载应用**
 
 新建一个项目目录，进入项目目录，运行 `yao get` 命令, 下载应用代码。
 
 ```bash
-mkdir -p /data/demo  # 创建应用目录
-cd /data/demo  # 进入应用目录
-yao get yaoapp/demo-app # 下载应用代码
+mkdir -p /data/app  # 创建应用目录
+cd /data/app  # 进入应用目录
+yao get yaoapp/demo-app # 下载应用代码 (必须为空目录)
 yao start # 启动安装界面
 ```
 
@@ -86,9 +88,9 @@ yao start # 启动安装界面
 扩展阅读:
 
 <Extend
-  title="使用Widgets"
-  desc="了解如何使用 Yao Model Widget 创建数据表存储数据"
-  link="基础/使用Widgets"
+  title="安装配置"
+  desc="更详细的安装配置说明"
+  link="基础/安装配置"
 ></Extend>
 
 ## 开发交流
