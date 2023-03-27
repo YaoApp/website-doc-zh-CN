@@ -224,6 +224,15 @@ chmod +x ./feishu.so
 ```bash
 yao run plugins.feishu.AuthURL "https://127.0.0.1:5099/xiang/login/user?from=feishu" "login"
 ```
+## 在scripts中使用插件
+```js
+...
+Process("plugins.feishu.AuthURL",redirect,state);
+...
+```
+
+
+
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="编写云函数" link="进阶/编写云函数"></Link>
