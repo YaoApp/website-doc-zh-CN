@@ -22,7 +22,7 @@ YAO 设计的初衷，并非只为提升软件开发中的编码效率，我们�
 
 我们选改变了软件产品的粒度 - 将组件产品化 (广义组件的概念，非前端组件) 去迎合市场需要。通过 "组装" 开发应用，以此来达成快速开发、灵活定制的交付的目标，在过去一年的验证中，这个办法行之有效。
 
-### YAO 的设计理念
+### 1. YAO 的设计理念
 
 YAO 首先是一个应用引擎，作为应用引擎必须可以覆盖到 90% 常见业务场景，其次通过组装的方式，完成过去工程师不愿意做的重复性劳动。
 
@@ -32,13 +32,13 @@ YAO 同时内建了 V8 引擎，也可以把 YAO 当做一个 JavaScript Runtime
 
 **你可能需要一周左右去适应 YAO 的开发方式，按过往经验，一旦掌握很难再用回 Node/PHP。**
 
-### 最快的学习方式
+### 2. 最快的学习方式
 
 **精力有限，YAO 的文档和线上的示例，更新的很不及时，也有不少疏漏。 我们尽量在 v0.10.3 正式发布后，完善文档和示例。**
 
 YAO 上手也并不困难，最佳的学习路线是，在了解 YAO 的设计思路和架构设计后，参考已发布的应用，一般来说写两三个应用即可掌握。
 
-**推荐按一下顺序阅读文档:**
+**推荐按以下顺序阅读文档:**
 
 [YAO 编程基础](../基础/YAO%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80)
 
@@ -60,7 +60,7 @@ YAO 上手也并不困难，最佳的学习路线是，在了解 YAO 的设计�
 
 [yao-chatgpt](https://github.com/wwsheng009/yao-chatgpt) **(非官方)**
 
-**YAO 开发交流群**
+**YAO 3. 开发交流群**
 
 微信交流群
 
@@ -68,11 +68,11 @@ YAO 上手也并不困难，最佳的学习路线是，在了解 YAO 的设计�
 
 ![QR Code](./assets/wechat-bg.jpg)
 
-### YAO 为什么开源
+### 4. YAO 为什么开源
 
 参考阅读: [YAO 为什么开源](../%E4%B8%93%E5%AE%B6/%E5%8F%82%E4%B8%8E%E8%B4%A1%E7%8C%AE.mdx)
 
-### YAO 为什么没有 "拖拉拽"
+### 5. YAO 为什么没有 "拖拉拽"
 
 可视化编程在一些场景下能够解决不少问题，我们在做过一些尝试和探索后发现，软件设计和软件开发的心流完全不同，强行整合一起还不如手写 DSL 快。
 
@@ -80,11 +80,11 @@ AIGC 时代以来，让大模型生成程序或许更实用，这也是 YAO 设�
 
 基于以上原因，我们 **调低了 Studio 优先级（不是不做）**，优先实现借助大模型的能力开发应用。 如果可视化编排在你的项目中是刚需，可借助 Studio API，自由扩展或实现可视化工具链。
 
-![ChatGPT + YAO](./assets/aigc.jpg)
-
 **推荐阅读**
 
 [使用 ChatGPT 开发 Yao 应用](https://wwsheng009.github.io/yao-docs/ChatGPT/%E4%BD%BF%E7%94%A8ChatGPT%E5%BC%80%E5%8F%91YAO%E5%BA%94%E7%94%A8.html) **(非官方)**
+
+![ChatGPT + YAO](./assets/aigc.jpg)
 
 ## v0.10.3-pre 安装下载
 
@@ -101,7 +101,7 @@ AIGC 时代以来，让大模型生成程序或许更实用，这也是 YAO 设�
 | Linux | X86      | [yao-0.10.3-pre-linux-amd64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-linux-amd64)   |
 | Linux | ARM64    | [yao-0.10.3-pre-linux-arm64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-linux-arm64)   |
 
-以 MacOS M2 芯片为例:
+以 MacOS **M2** 芯片为例:
 
 ```bash
 curl https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-darwin-arm64 --output /usr/local/bin/yao
