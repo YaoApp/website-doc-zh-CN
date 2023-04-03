@@ -1,0 +1,147 @@
+# 入门指南
+
+<blockquote>
+  YAO 是一款开源应用引擎，使用 Golang
+  编写，仅一个命令行工具，下载即用。适合用于开发业务系统、网站/APP API
+  接口、管理后台、自建低代码平台等。
+</blockquote>
+
+<Notice type="warning">
+  YAO 不是低代码平台，低代码构建能力仅为 YAO 的众多特性的一小部分。 YAO
+  有完整的逻辑表达和常规编程扩展能力，你完全可以当做 JavaScript
+  快速开发框架使用，使用方式与 Node / PHP 相似。
+</Notice>
+
+## 开始前你需要了解
+
+软件设计开发，是一个复杂的系统工程，开发编码也仅仅是其中最容易的一环。
+
+YAO 设计的初衷，并非只为提升软件开发中的编码效率，我们思考更多的是软件如何更好的工程化，如何大幅提升组件的复用率，如何降低沟通成本，软件产品化到底应该怎样做。
+
+定制需求和私有化部署，一直是影响国内 SaaS 产品起飞的重要原因，SaaS 厂商做定制成本居高不下，不做定制客户难以成功。
+
+我们选改变了软件产品的粒度 - 将组件产品化 (广义组件的概念，非前端组件) 去迎合市场需要。通过 "组装" 开发应用，以此来达成快速开发、灵活定制的交付的目标，在过去一年的验证中，这个办法行之有效。
+
+### YAO 的设计理念
+
+YAO 首先是一个应用引擎，作为应用引擎必须可以覆盖到 90% 常见业务场景，其次通过组装的方式，完成过去工程师不愿意做的重复性劳动。
+
+YAO 将常见的功能组件化，抽象为 `Widget` - 组件即产品。 同时定义了一套 `YAO DSL` （ 类似 `HTML` ），通过描述的方式将各个 `Widget` 组装成应用。
+
+YAO 同时内建了 V8 引擎，也可以把 YAO 当做一个 JavaScript Runtime 来使用。 对于特别复杂的逻辑，可以通过编写 JavaScript 脚本来完成。
+
+你可能需要一周左右去适应 YAO 的开发方式，按过往经验，一旦掌握很难再用回 Node/PHP。
+
+### 最快的学习方式
+
+**精力有限，YAO 的文档和线上的示例，更新的很不及时，也有不少疏漏。 我们尽量在 v0.10.3 正式发布后，完善文档和示例。**
+
+YAO 上手也并不困难，最佳的学习路线是，在了解 YAO 的设计思路和架构设计后，参考已发布的应用，一般来说写两三个应用即可掌握。
+
+**推荐按一下顺序阅读文档:**
+
+[YAO 编程基础](../基础/YAO%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80)
+
+[YAO 架构解析](./YAO%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.mdx)
+
+[创建数据模型](../%E5%9F%BA%E7%A1%80/%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.mdx)
+
+[逻辑编排](../%E5%9F%BA%E7%A1%80/%E9%80%BB%E8%BE%91%E7%BC%96%E6%8E%92.mdx)
+
+[编写接口](../%E5%9F%BA%E7%A1%80/%E7%BC%96%E5%86%99%E6%8E%A5%E5%8F%A3.mdx)
+
+[编写界面](../%E5%9F%BA%E7%A1%80/%E7%BC%96%E5%86%99%E7%95%8C%E9%9D%A2.mdx)
+
+[yao-docs](https://wwsheng009.github.io/yao-docs/) (非官方)
+
+**推荐参考应用:**
+
+[xgen-dev-app](https://github.com/YaoApp/xgen-dev-app)
+
+[yao-chatgpt](https://github.com/wwsheng009/yao-chatgpt) (非官方)
+
+**YAO 开发交流群**
+
+微信交流群
+
+微信添加 `17192175099` 为好友，备注(YAO 开发交流)
+
+![QR Code](./assets/wechat.jpg)
+
+### YAO 为什么开源
+
+参考阅读: [YAO 为什么开源](../%E4%B8%93%E5%AE%B6/%E5%8F%82%E4%B8%8E%E8%B4%A1%E7%8C%AE.mdx)
+
+### YAO 为什么没有 "拖拉拽"
+
+可视化编程在一些场景下能够解决不少问题，我们在做过一些尝试和探索后发现，软件设计和软件开发的心流完全不同，强行整合一起还不如手写 DSL 快。
+
+AIGC 时代以来，让大模型生成程序或许更实用，这也是 YAO 设想的终极目标和倡导的 **让程序编程序** 的理念。 [参考博文](https://yaoapps.com/blog/2)
+
+基于以上原因，我们 **调低了 Studio 优先级（不是不做）**，优先实现借助大模型的能力开发应用。 如果可视化编排在你的项目中是刚需，可借助 Studio API，自由扩展或实现可视化工具链。
+
+![QR Code](./assets/aigc.jpg)
+
+**推荐阅读**
+
+[使用 ChatGPT 开发 Yao 应用](https://wwsheng009.github.io/yao-docs/ChatGPT/%E4%BD%BF%E7%94%A8ChatGPT%E5%BC%80%E5%8F%91YAO%E5%BA%94%E7%94%A8.html) (非官方)
+
+## 安装下载
+
+最新版本下载地址 `https://github.com/YaoApp/yao/releases/tag/v0.10.3-pre` (推荐)
+
+### Mac & Linux
+
+下载制品到本地，推荐下载至 /usr/local/bin 目录。
+
+| 系统  | 芯片架构 | 制品                                                                                                                   |
+| ----- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| MacOS | M1/M2    | [yao-0.10.3-pre-darwin-arm64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-darwin-arm64) |
+| MacOS | Intel    | [yao-0.10.3-pre-darwin-amd64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-darwin-amd64) |
+| Linux | X86      | [yao-0.10.3-pre-linux-amd64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-linux-amd64)   |
+| Linux | ARM64    | [yao-0.10.3-pre-linux-arm64](https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-linux-arm64)   |
+
+以 MacOS M2 芯片为例:
+
+```bash
+curl https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-darwin-arm64 --output /usr/local/bin/yao
+chmod +x /usr/local/bin/yao
+yao version --all
+```
+
+yao version 命令返回信息
+
+```bash
+Version:	  0.10.3
+Go version:	  go1.19.2
+Git commit:	  868ca0132eae
+Built:	      2023-04-02T10:12:50+0000
+OS/Arch:	  darwin/amd64
+```
+
+<Notice type="warning">
+  如果 yao 存放路径未在环境变量 $PATH 中声明，需要添加至环境变量。
+</Notice>
+
+```bash
+mkdir -p /somepath/bin/
+curl https://github.com/YaoApp/yao/releases/download/v0.10.3-pre/yao-0.10.3-pre-darwin-arm64 --output /somepath/bin/yao
+chmod +x /somepath/bin/yao
+export PATH=/somepath/bin:$PATH
+```
+
+### Windows & Docker
+
+在 Windows 系统下，推荐使用 Docker 安装
+
+```bash
+# <yao_app_root> 应用程序目录, 为宿主机本地目录
+docker run -d --name yao -v <yao_app_root>:/data/app -p 5099:5099 yaoapp/yao:0.10.3-amd64-dev
+docker exec -it yao /bin/bash
+```
+
+在容器内使用 yao 命令
+
+```bash
+yao version --all
+```
