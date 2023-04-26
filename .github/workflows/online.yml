@@ -1,0 +1,22 @@
+name: Online
+
+on:
+      push:
+            branches:
+                  - master
+
+jobs:
+      build-and-deploy:
+            runs-on: ubuntu-latest
+            steps:
+                  - name: Sync
+                    uses: appleboy/ssh-action@master
+                    with:
+                          host: ${{ secrets.HOST_228 }}
+                          username: ${{ secrets.USERNAME }}
+                          key: ${{ secrets.SSH_KEY_228 }}
+                          port: ${{ secrets.PORT }}
+                          command_timeout: 20m
+                          script: |
+                                cd /app/website/website-doc-zh-CN
+                                sudo git pull
