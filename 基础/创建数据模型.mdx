@@ -10,6 +10,7 @@
 
 1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
 2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+3. 文件`.yao`的后缀和格式和`.json`结构是一样的，不影响使用都可以兼容。
 
 ## 编写数据模型
 
@@ -17,7 +18,7 @@
 
 在 `models` 目录下, 创建一个 Model DSL 文件, 设计一张 `product` 数据表。
 
-`/data/app/models/product.mod.json`
+`/data/app/models/product.mod.yao`
 
 ```json
 {

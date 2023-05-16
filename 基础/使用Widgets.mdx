@@ -28,25 +28,25 @@ DSL 文件名(不含扩展名) 作为 `Widget ID`, 如包含目录，则将 `/` 
 
 **内建 Widgets:**
 
-| Widget           | 目录(相对应用根目录) | 扩展名        | 说明                                                                                                                   |
-| ---------------- | -------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| App              | `/app.json`          | `-`           | APP Widget 每一个应用只有一个 [查看文档](../手册/Widgets/App)                                                          |
-| Model            | `/models`            | `.mod.json`   | 数据模型 用于描述数据表结构 [查看文档](../手册/Widgets/Model)                                                          |
-| Store            | `/stores`            | `.stor.json`  | Key-Value 存储 [查看文档](../手册/Widgets/Store)                                                                       |
-| Flow             | `/flows`             | `.flow.json`  | 数据流 用于编排处理器调用逻辑 [查看文档](../手册/Widgets/Flow)                                                         |
-| API              | `/apis`              | `.http.json`  | REST API 用于编写 RESTFul API [查看文档](../手册/Widgets/API)                                                          |
-| Connector        | `/connectors`        | `.conn.json`  | 连接器 用于连接 Redis, Mongo, MySQL, ES 等外部服务, 连接器可与 Model, Store 关联 [查看文档](../手册/Widgets/Connector) |
-| Task             | `/tasks`             | `.task.json`  | 并发任务 [查看文档](../手册/Widgets/Task)                                                                              |
-| Schedule         | `/schedules`         | `.sch.json`   | 计划任务 [查看文档](../手册/Widgets/Schedule)                                                                          |
-| WebSocket Server | `/apis`              | `.ws.json`    | WebSocket Server[查看文档](../手册/Widgets/WebSocket)                                                                  |
-| WebSocket Client | `/websockets`        | `.ws.json`    | WebSocket Client[查看文档](../手册/Widgets/WebSocket)                                                                  |
-| Socket           | `/sockets`           | `.sock.json`  | Socket Server/Client [查看文档](../手册/Widgets/Socket)                                                                |
-| Cert             | `/certs`             | `.pem`        | PEM 证书导入 [查看文档](../手册/Widgets/Cert)                                                                          |
-| Import           | `/imports`           | `.imp.json`   | 数据导入 可以与表格界面关联 [查看文档](../手册/Widgets/Import)                                                         |
-| Login            | `/logins`            | `.login.json` | 登录界面 [查看文档](../手册/Widgets/Login)                                                                             |
-| Table            | `/tables`            | `.tab.json`   | 表格界面 [查看文档](../手册/Widgets/Table)                                                                             |
-| Form             | `/forms`             | `.form.json`  | 表单界面 [查看文档](../手册/Widgets/Form)                                                                              |
-| Chart            | `/charts`            | `.chart.json` | 图表界面 [查看文档](../手册/Widgets/Chart)                                                                             |
+| Widget           | 目录(相对应用根目录) | 扩展名       | 说明                                                                                                                   |
+| ---------------- | -------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| App              | `/app.yao`           | `-`          | APP Widget 每一个应用只有一个 [查看文档](../手册/Widgets/App)                                                          |
+| Model            | `/models`            | `.mod.yao`   | 数据模型 用于描述数据表结构 [查看文档](../手册/Widgets/Model)                                                          |
+| Store            | `/stores`            | `.store.yao` | Key-Value 存储 [查看文档](../手册/Widgets/Store)                                                                       |
+| Flow             | `/flows`             | `.flow.yao`  | 数据流 用于编排处理器调用逻辑 [查看文档](../手册/Widgets/Flow)                                                         |
+| API              | `/apis`              | `.http.yao`  | REST API 用于编写 RESTFul API [查看文档](../手册/Widgets/API)                                                          |
+| Connector        | `/connectors`        | `.conn.yao`  | 连接器 用于连接 Redis, Mongo, MySQL, ES 等外部服务, 连接器可与 Model, Store 关联 [查看文档](../手册/Widgets/Connector) |
+| Task             | `/tasks`             | `.task.yao`  | 并发任务 [查看文档](../手册/Widgets/Task)                                                                              |
+| Schedule         | `/schedules`         | `.sch.yao`   | 计划任务 [查看文档](../手册/Widgets/Schedule)                                                                          |
+| WebSocket Server | `/apis`              | `.ws.yao`    | WebSocket Server[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| WebSocket Client | `/websockets`        | `.ws.yao`    | WebSocket Client[查看文档](../手册/Widgets/WebSocket)                                                                  |
+| Socket           | `/sockets`           | `.sock.yao`  | Socket Server/Client [查看文档](../手册/Widgets/Socket)                                                                |
+| Cert             | `/certs`             | `.pem`       | PEM 证书导入 [查看文档](../手册/Widgets/Cert)                                                                          |
+| Import           | `/imports`           | `.imp.yao`   | 数据导入 可以与表格界面关联 [查看文档](../手册/Widgets/Import)                                                         |
+| Login            | `/logins`            | `.login.yao` | 登录界面 [查看文档](../手册/Widgets/Login)                                                                             |
+| Table            | `/tables`            | `.tab.yao`   | 表格界面 [查看文档](../手册/Widgets/Table)                                                                             |
+| Form             | `/forms`             | `.form.yao`  | 表单界面 [查看文档](../手册/Widgets/Form)                                                                              |
+| Chart            | `/charts`            | `.chart.yao` | 图表界面 [查看文档](../手册/Widgets/Chart)                                                                             |
 
 [查看 Widget 手册](../手册/Widgets/Index)
 
@@ -60,7 +60,7 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 
 **Model**
 
-`/data/app/models/product.mod.json`
+`/data/app/models/product.mod.yao`
 
 ```json
 {
@@ -75,7 +75,7 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 
 **Flow**
 
-`/data/app/flows/query/product.flow.json`
+`/data/app/flows/query/product.flow.yao`
 
 ```json
 {
@@ -95,7 +95,7 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 
 **API**
 
-`/data/app/apis/product.http.json`
+`/data/app/apis/product.http.yao`
 
 ```json
 {
@@ -118,7 +118,7 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 
 **Table**
 
-`/data/app/tables/product.tab.json`
+`/data/app/tables/product.tab.yao`
 
 ```json
 {
@@ -131,7 +131,7 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 
 **Form**
 
-`/data/app/forms/product.form.json`
+`/data/app/forms/product.form.yao`
 
 ```json
 {
@@ -149,13 +149,13 @@ Widgets 有多种编写方式，且这些编程方式可以随意切换。
 ```javascript
 function AutoMake(name) {
   let fs = new FS("dsl");
-  let data = fs.ReadFile(`/models/${name}.mod.json`);
+  let data = fs.ReadFile(`/models/${name}.mod.yao`);
   let mod = JSON.parse(data);
   let title = mod.name || "未知";
-  fs.WriteFile(`/flows/query/${name}.flow.json`, makeFlow(name, title));
-  fs.WriteFile(`/apis/${name}.http.json`, makeApi(name, title));
-  fs.WriteFile(`/tables/${name}.tab.json`, makeTable(name, title));
-  fs.WriteFile(`/forms/${name}.form.json`, makeForm(name, title));
+  fs.WriteFile(`/flows/query/${name}.flow.yao`, makeFlow(name, title));
+  fs.WriteFile(`/apis/${name}.http.yao`, makeApi(name, title));
+  fs.WriteFile(`/tables/${name}.tab.yao`, makeTable(name, title));
+  fs.WriteFile(`/forms/${name}.form.yao`, makeForm(name, title));
 }
 
 function makeForm(name, title) {
@@ -212,30 +212,50 @@ function makeApi(name, title) {
 
 新建一个测试用 Model
 
-`/data/app/models/category.mod.json`
+`/data/app/models/url.mod.yao`
 
 ```json
 {
-  "name": "类目",
-  "table": { "name": "category", "comment": "类目" },
+  "name": "::url",
+  "table": { "name": "url", "label": "url表" },
   "columns": [
-    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
-    { "label": "名称", "name": "name", "type": "string", "index": true }
-  ]
+    { "name": "id", "label": "ID", "type": "ID" },
+    {
+      "name": "name",
+      "label": "名称",
+      "type": "string",
+      "length": 80,
+      "index": true,
+      "nullable": true
+    },
+    {
+      "name": "url",
+      "label": "路径",
+      "type": "string",
+      "nullable": true
+    }
+  ],
+  "relations": {},
+  "values": [],
+  "indexes": [],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  }
 }
 ```
 
 ```bash
-yao studio run demo.AutoMake category
+yao studio run demo.AutoMake url
 ```
 
 验证结果
 
 ```bash
-cat /data/app/flows/query/category.flow.json
-cat /data/app/apis/category.http.json
-cat /data/app/tables/category.tab.json
-cat /data/app/forms/category.form.json
+cat /data/app/flows/query/url.flow.yao
+cat /data/app/apis/url.http.yao
+cat /data/app/tables/url.tab.yao
+cat /data/app/forms/url.form.yao
 
 ```
 
@@ -246,7 +266,7 @@ cat /data/app/forms/category.form.json
 curl -X POST http://127.0.0.1:5077/service/demo \
    -H 'Content-Type: application/json' \
    -H 'Authorization: Bearer <Studio JWT>' \
-   -d '{ "method":"AutoMake", "args":["category"]}'
+   -d '{ "method":"AutoMake", "args":["url"]}'
 ```
 
 ### 可视化编程工具制作

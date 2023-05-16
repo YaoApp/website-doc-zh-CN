@@ -20,7 +20,7 @@
 
 `http://<IP>:<YAO_PORT>/<管理后台路由前缀>/x/Table/product`
 
-`/data/app/tables/product.tab.json`
+`/data/app/tables/product.tab.yao`
 
 ```json
 {
@@ -35,7 +35,7 @@
 
 修改 Table DSL, 刷新页面预览效果。 (如未开启 `watch` 需手动重启服务)
 
-`/data/app/tables/product.tab.json`
+`/data/app/tables/product.tab.yao`
 
 ```json
 {
@@ -57,7 +57,7 @@
 
 修改 Table DSL, 刷新页面预览效果。 (如未开启 `watch` 需手动重启服务)
 
-`/data/app/tables/product.tab.json`
+`/data/app/tables/product.tab.yao`
 
 ```json
 {
@@ -113,7 +113,7 @@
 
 `http://<IP>:<YAO_PORT>/<管理后台路由前缀>/x/Form/product/0/edit`
 
-`/data/app/forms/product.form.json`
+`/data/app/forms/product.form.yao`
 
 ```json
 {
@@ -128,7 +128,7 @@
 
 修改 Table DSL 文件，新增添加按钮、行编辑按钮。刷新页面预览效果。(如未开启 `watch` 需手动重启服务)
 
-`/data/app/tables/product.tab.json`
+`/data/app/tables/product.tab.yao`
 
 ```json
 {
@@ -213,7 +213,7 @@
 
 ## 添加菜单
 
-编辑 `/data/app/flows/app/menu.flow.json` 添加菜单项
+编辑 `/data/app/flows/app/menu.flow.yao` 添加菜单项
 
 <Detail title="查看源码">
 
@@ -221,87 +221,98 @@
 {
   "name": "APP Menu",
   "nodes": [],
-  "output": [
-    {
-      "blocks": 0,
-      "icon": "icon-activity",
-      "id": 1,
-      "name": "图表",
-      "parent": null,
-      "path": "/x/Chart/dashboard",
-      "visible_menu": 0
-    },
-    {
-      "blocks": 0,
-      "icon": "icon-book",
-      "id": 2,
-      "name": "表格",
-      "parent": null,
-      "path": "/x/Table/pet",
-      "visible_menu": 1,
-      "children": [
-        {
-          "blocks": 0,
-          "icon": "icon-book",
-          "name": "宠物列表",
-          "id": 2010,
-          "parent": 2,
-          "path": "/x/Table/pet",
-          "visible_menu": 1
-        },
-        {
-          "blocks": 0,
-          "icon": "icon-book",
-          "name": "产品管理",
-          "id": 2010,
-          "parent": 2,
-          "path": "/x/Table/product",
-          "visible_menu": 1
-        }
-      ]
-    },
-    {
-      "blocks": 0,
-      "icon": "icon-clipboard",
-      "id": 2,
-      "name": "表单",
-      "parent": null,
-      "path": "/x/Form/pet/1/edit",
-      "visible_menu": 1,
-      "children": [
-        {
-          "blocks": 0,
-          "icon": "icon-clipboard",
-          "name": "编辑模式",
-          "id": 2010,
-          "parent": 2,
-          "path": "/x/Form/pet/1/edit",
-          "visible_menu": 1
-        },
-        {
-          "blocks": 0,
-          "icon": "icon-clipboard",
-          "name": "查看模式",
-          "id": 2010,
-          "parent": 2,
-          "path": "/x/Form/pet/1/view",
-          "visible_menu": 1
-        }
-      ]
-    }
-  ]
+  "output": {
+    "setting": [
+      {
+        "blocks": 0,
+        "icon": "icon-user",
+        "name": "管理员",
+        "path": "/x/Table/admin.user",
+        "visible_menu": 0
+      },
+      {
+        "icon": "icon-settings",
+        "id": 999999,
+        "name": "设置",
+        "path": "/x/Form/demo.pet/1/edit",
+        "dot": true,
+        "children": [
+          {
+            "name": "设置项演示",
+            "badge": 24,
+            "path": "/x/Form/demo.pet/1/edit"
+          },
+          { "name": "系统设置", "path": "/setting" }
+        ]
+      }
+    ],
+    "items": [
+      {
+        "blocks": 0,
+        "icon": "icon-book",
+        "name": "演示",
+        "path": "/x/Dashboard/kanban",
+        "visible_menu": 0,
+        "badge": 6,
+        "children": [
+          {
+            "blocks": 0,
+            "icon": "icon-activity",
+            "name": "看板",
+            "path": "/x/Dashboard/kanban",
+            "visible_menu": 1
+          },
+          {
+            "blocks": 0,
+            "icon": "icon-activity",
+            "name": "图表",
+            "path": "/x/Chart/pet",
+            "visible_menu": 1
+          },
+          {
+            "blocks": 0,
+            "name": "表格",
+            "path": "/x/Table/demo.pet",
+            "visible_menu": 1
+          },
+          {
+            "blocks": 0,
+            "name": "表单(编辑)",
+            "path": "/x/Form/demo.pet/1/edit",
+            "visible_menu": 1
+          },
+          {
+            "name": "表单(查看)",
+            "path": "/x/Form/demo.pet/1/view",
+            "visible_menu": 1
+          },
+          {
+            "name": "自定义页面",
+            "path": "/iframe?src=/demo/pet.html",
+            "visible_menu": 1
+          },
+          {
+            "blocks": 0,
+            "name": "产品管理",
+            "path": "/x/Table/product",
+            "visible_menu": 1
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
 </Detail>
 
-点击菜单栏下方设置图标，点击更新菜单，或退出后台重新登录。
+退出后台重新登录。
 
-![更新菜单](./assets/admin-menu.jpg)
+<!-- ![更新菜单](./assets/admin-menu.jpg) -->
 
 通过菜单访问
 
-![通过菜单访问](./assets/admin-menu-done.jpg)
+![通过菜单访问](./assets/admin-menu-done.png)
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="编写接口" link="基础/编写接口"></Link>

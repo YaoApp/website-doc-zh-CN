@@ -82,7 +82,7 @@ yao migrate -n product
 
 ### Upload & Image 组件
 
-给 `product` Table 添加图集字段, 实现图片上传管理。
+给 `product` Table 添加图集字段,在`fields["table"]`加入以下代码, 实现图片上传管理。
 
 使用 `Cloud Props` 生成一个文件上传接口。
 
@@ -103,6 +103,24 @@ yao migrate -n product
     }
   }
 }
+```
+
+把`layout`改成以下代码:
+
+```jsonc
+  "layout": {
+    "header": { "preset": {} },
+    "table": {
+      "columns": [
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
+        { "name": "上架状态", "width": 200 },
+        { "name": "图集", "width": 200 }
+      ]
+    }
+  }
+
 ```
 
 使用 `Downalod` 和 `Upload` Compute 处理器转换图片预览 URL
@@ -219,7 +237,7 @@ yao migrate -n product
 
 使用 API Widget 创建一个文件上传接口, 将处理器指定为 fs.system.Upload。
 
-`/data/app/apis/upload.http.json`
+`/data/app/apis/upload.http.yao`
 
 ```jsonc
 {
@@ -249,10 +267,10 @@ mkdir -p /data/app/data/ # 如 data 目录不存在, 创建一个 data 目录
 echo "Upload Test" > /data/app/data/upload-test.txt
 ```
 
-```bash
+<!-- ```bash
 curl http://127.0.0.1:5099/api/upload/file \
   -F file=@data/upload-test.txt
-```
+``` -->
 
 ## 自定义上传逻辑
 
@@ -260,7 +278,7 @@ curl http://127.0.0.1:5099/api/upload/file \
 
 #### 使用 Flow
 
-新建一个 Flow DSL 文件编排上传逻辑
+新建一个 Flow DSL 文件编排上传逻辑,`/flows/upload/file.flow.yao`
 
 ```jsonc
 {
@@ -314,7 +332,7 @@ yao run flows.upload.file '::{"tempFile":"<tempfile>"}'
 
 #### 使用 Script
 
-新建一个 Script 脚本编排上传逻辑
+新建一个 Script 脚本编排上传逻辑`/scripts/upload.js`
 
 ```javascript
 /**
@@ -330,9 +348,10 @@ function File(temp) {
 
   var fs = new FS("system");
   let tempFile = temp.tempFile || null;
+  console.log([tempFile, temp]);
   var data = fs.ReadFile(tempFile);
   let now = new Date().getTime();
-  let file = `/texts/${now}.txt`;
+  let file = `/texts/${temp.name}`;
   fs.WriteFile(file, data, 0644);
   return file;
 }
@@ -354,7 +373,7 @@ yao run scripts.upload.File '::{"tempFile":"<tempfile>"}'
 
 ### 在接口中使用
 
-`/data/app/apis/upload.http.json`
+`/data/app/apis/upload.http.yao`
 
 ```jsonc
 {

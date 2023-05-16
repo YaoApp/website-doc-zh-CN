@@ -8,6 +8,7 @@
 
 1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
 2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+3. 文件`.yao`的后缀和格式和`.json`结构是一样的，不影响使用都可以兼容。
 
 ## 使用 Flow
 
@@ -17,7 +18,7 @@
 
 在 `flows` 目录下, 创建一个 Flow DSL 文件，编排数据查询逻辑。
 
-`/data/app/flows/product.flow.json`
+`/data/app/flows/product.flow.yao`
 
 ```json
 {
@@ -68,7 +69,7 @@ yao run flows.product
 
 在 `flows/query` 目录下, 新建一个 Flow DSL 文件。
 
-`/data/app/flows/query/search.flow.json`
+`/data/app/flows/query/search.flow.yao`
 
 ```json
 {
@@ -95,7 +96,7 @@ yao run flows.product
     },
     {
       "name": "用户",
-      "process": "models.xiang.user.Find",
+      "process": "models.admin.user.Find",
       "args": ["{{$res.产品.data[0].user_id}}", { "select": ["id", "name"] }]
     }
   ],
@@ -120,7 +121,7 @@ yao run flows.query.search
 
 在 `flows/query` 目录下, 新建一个 Flow DSL 文件。
 
-`/data/app/flows/query/args.flow.json`
+`/data/app/flows/query/args.flow.yao`
 
 ```json
 {
@@ -130,7 +131,7 @@ yao run flows.query.search
   "nodes": [
     {
       "name": "用户",
-      "process": "models.xiang.user.Find",
+      "process": "models.admin.user.Find",
       "args": ["{{$in[0]}}", { "select": ["id", "name"] }]
     }
   ],
@@ -153,7 +154,7 @@ yao run flows.query.args 1
 
 在 `flows/query` 目录下, 新建一个 Flow DSL 文件。
 
-`/data/app/flows/query/args_map.flow.json`
+`/data/app/flows/query/args_map.flow.yao`
 
 ```json
 {
@@ -163,7 +164,7 @@ yao run flows.query.args 1
   "nodes": [
     {
       "name": "用户",
-      "process": "models.xiang.user.Find",
+      "process": "models.admin.user.Find",
       "args": ["{{$id}}", { "select": ["id", "name"] }]
     }
   ],

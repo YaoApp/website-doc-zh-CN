@@ -10,6 +10,7 @@
 
 1. 示例中约定应用根目录为 `/data/app`, 实际编写时需替换为应用根目录。
 2. 使用 `<>` 标识自行替换的内容。 例如: `icon-<图标名称>`, 实际编写时应替换为: `icon-foo`, `icon-bar` ...
+3. 文件`.yao`的后缀和格式和`.json`结构是一样的，不影响使用都可以兼容。
 
 ## 安装
 
@@ -28,7 +29,7 @@ curl -fsSL https://website.yaoapps.com/install.sh | bash
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
 
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.2-amd64-dev`
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.3-dev-amd64-dev`
 
 进入容器:
 
@@ -44,12 +45,12 @@ yao version
 
 **Yao Docker Images**
 
-| 镜像                        | 环境     | 使用场景                                                   |
-| --------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-| yaoapp/yao:0.10.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.2-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| 镜像                            | 环境     | 使用场景                                                   |
+| ------------------------------- | -------- | ---------------------------------------------------------- |
+| yaoapp/yao:0.10.3-dev-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.3-dev-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| yaoapp/yao:0.10.3-dev-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.3-dev-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 
 </TabPane>
 
@@ -57,7 +58,7 @@ yao version
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
 
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.2-amd64-dev`
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 yaoapp/yao:0.10.3-dev-amd64-dev`
 
 进入容器:
 
@@ -73,12 +74,12 @@ yao version
 
 **Yao Docker Images**
 
-| 镜像                        | 环境     | 使用场景                                                   |
-| --------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.2-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-| yaoapp/yao:0.10.2-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.2-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.2-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| 镜像                            | 环境     | 使用场景                                                   |
+| ------------------------------- | -------- | ---------------------------------------------------------- |
+| yaoapp/yao:0.10.3-dev-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.3-dev-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| yaoapp/yao:0.10.3-dev-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.3-dev-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 
 </TabPane>
 
@@ -103,10 +104,10 @@ yao start
 
 参数表:
 
-| 参数    | 必填 | 说明                                                               |
-| ------- | ---- | ------------------------------------------------------------------ |
-| --alpha | 否   | 如果希望试用 Yao 的一些内测功能，使用 `yao start --alpha` 命令启动 |
-| --debug | 否   | 强制开启开发模式 `yao start --debug` 命令启动                      |
+| 参数               | 必填 | 说明                                                           |
+| ------------------ | ---- | -------------------------------------------------------------- |
+| --disable-watching | 否   | 禁止使用 watching 监听 `yao start --disable-watching` 命令启动 |
+| --debug            | 否   | 强制开启开发模式 `yao start --debug` 命令启动                  |
 
 ## 调试命令
 
@@ -143,8 +144,40 @@ tail -n 1000 logs/application.log
 在编写 Query DSL 时，可以开启 `debug` 参数, 在日志中查看解析后的 SQL 语句
 
 **在 Flow DSL 中开启 debug**
+新建模型：`/data/app/models/category.mod.yao`然后执行命令 `yao migrate && yao start`
 
-`/data/app/flows/test.flow.json`
+```json
+{
+  "name": "::category",
+  "table": { "name": "category", "label": "类目表" },
+  "columns": [
+    { "name": "id", "label": "ID", "type": "ID" },
+    {
+      "name": "name",
+      "label": "名称",
+      "type": "string",
+      "length": 80,
+      "index": true,
+      "nullable": true
+    },
+    {
+      "name": "parent_id",
+      "label": "上级类目",
+      "type": "integer",
+      "nullable": true
+    }
+  ],
+  "relations": {},
+  "values": [],
+  "indexes": [],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  }
+}
+```
+
+在目录新增`/data/app/flows/test.flow.yao`，如下代码：
 
 ```json
 {
@@ -168,13 +201,11 @@ tail -n 1000 logs/application.log
 }
 ```
 
-```bash
-yao run flows.test
-```
+运行命令 `yao run flows.test`
 
 **在 Script 开启 Debug**
 
-`/data/app/scripts/test.js`
+新建文件：`/data/app/scripts/test.js`
 
 ```javascript
 function DD() {

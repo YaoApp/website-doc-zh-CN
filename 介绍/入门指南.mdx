@@ -18,13 +18,14 @@ Yao 的名字源于汉字**爻(yáo)**，是构成八卦的基本符号。八卦
 
 使用 YAO 开发的典型应用
 
-| 应用                | 简介                       | 代码仓库                               |
-| ------------------- | -------------------------- | -------------------------------------- |
-| yaoapp/yao-admin    | 一个通用管理后台           | https://github.com/yaoapp/yao-admin    |
-| yaoapp/demo-app     | 演示应用 (演示)            | https://github.com/yaoapp/demo-app     |
-| yaoapp/demo-project | 工程项目管理演示应用(演示) | https://github.com/yaoapp/demo-project |
-| yaoapp/demo-finance | 财务管理演示应用(演示)     | https://github.com/yaoapp/demo-finance |
-| yaoapp/demo-plm     | 生产项目管理演示应用(演示) | https://github.com/yaoapp/demo-plm     |
+| 应用                 | 简介                       | 代码仓库                                |
+| -------------------- | -------------------------- | --------------------------------------- |
+| yaoapp/yao-knowledge | 基于 AIGC 的知识管理库     | https://github.com/YaoApp/yao-knowledge |
+| yaoapp/yao-admin     | 一个通用管理后台           | https://github.com/yaoapp/yao-admin     |
+| yaoapp/xgen-dev-app  | 演示应用 (演示)            | https://github.com/YaoApp/xgen-dev-app  |
+| yaoapp/demo-project  | 工程项目管理演示应用(演示) | https://github.com/yaoapp/demo-project  |
+| yaoapp/demo-finance  | 财务管理演示应用(演示)     | https://github.com/yaoapp/demo-finance  |
+| yaoapp/demo-plm      | 生产项目管理演示应用(演示) | https://github.com/yaoapp/demo-plm      |
 
 ## 起步
 
@@ -65,7 +66,8 @@ yao start # 启动安装界面
 ```
 
 <Notice type="warning">
-  管理后台默认用户名: <strong>xiang@iqka.com</strong>， 密码:{" "}
+  浏览器访问<strong>http://127.0.0.1:5099/</strong> ,管理后台默认用户名:{" "}
+  <strong>xiang@iqka.com</strong>， 密码:
   <strong>A123456p+</strong>
 </Notice>
 
@@ -78,12 +80,12 @@ yao start # 启动安装界面
 ```bash
 mkdir -p /data/app  # 创建应用目录
 cd /data/app  # 进入应用目录
-yao get yaoapp/demo-app # 下载应用代码 (必须在空目录下运行)
+yao get yaoapp/demo-project # 下载应用代码 (必须在空目录下运行)
 yao start # 启动安装界面
 ```
 
 <Notice type="warning">
-  管理后台默认用户名: <strong>xiang@iqka.com</strong>， 密码:{" "}
+  管理后台默认用户名: <strong>xiang@iqka.com</strong>， 密码:
   <strong>A123456p+</strong>
 </Notice>
 

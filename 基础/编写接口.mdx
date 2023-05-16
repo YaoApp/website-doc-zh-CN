@@ -12,12 +12,12 @@
 
 **文件系统路由**
 
-API 采用文件系统路由。 例如 DSL 文件名称为 `product.http.json` 则对应接口路由地址为 `http://127.0.0.1:5099/api/procuct/<path>`
+API 采用文件系统路由。 例如 DSL 文件名称为 `product.http.yao` 则对应接口路由地址为 `http://127.0.0.1:5099/api/procuct/<path>`
 
 | DSL 文件                              | 路由地址                                        |
 | ------------------------------------- | ----------------------------------------------- |
-| /data/app/apis/product.http.json      | `http://127.0.0.1:5099/api/procuct/<path>`      |
-| /data/app/apis/project/task.http.json | `http://127.0.0.1:5099/api/project/task/<path>` |
+| /data/app/apis/product.http.yao      | `http://127.0.0.1:5099/api/procuct/<path>`      |
+| /data/app/apis/project/task.http.yao | `http://127.0.0.1:5099/api/project/task/<path>` |
 
 ## 编写 REST API
 
@@ -25,7 +25,7 @@ API 采用文件系统路由。 例如 DSL 文件名称为 `product.http.json` �
 
 在 `apis` 目录下, 创建一个 API DSL 文件, 关联 `models.product.Paginate` 处理器
 
-`/data/app/apis/product.http.json`
+`/data/app/apis/product.http.yao`
 
 ```json
 {
@@ -71,7 +71,7 @@ curl 'http://127.0.0.1:5099/api/product/search?where.name.match=沙丘&page=1&pa
 
 Yao 提供 `bearer-jwt` 和 `cross-origin` Guard 用于 API JWT 鉴权和响应跨域请求。
 
-修改 `/data/app/apis/product.http.json` DSL 文件，添加 Guard。
+修改 `/data/app/apis/product.http.yao` DSL 文件，添加 Guard。
 
 ```json
 {
@@ -159,7 +159,7 @@ function User(path, params, query, payload, headers) {
 
 **添加自定义 Guard**
 
-修改 `/data/app/apis/product.http.json` DSL 文件，添加 Guard。
+修改 `/data/app/apis/product.http.yao` DSL 文件，添加 Guard。
 
 ```json
 {
@@ -227,7 +227,7 @@ tail -n 100 logs/application.log
 
 **添加文件下载接口**
 
-修改 `/data/app/apis/product.http.json` DSL 文件，添加 Guard。
+修改 `/data/app/apis/product.http.yao` DSL 文件，添加 Guard。
 
 ```jsonc
 {
@@ -304,7 +304,7 @@ curl -vv http://127.0.0.1:5099/api/product/download?name=/test.html
 
 **添加文件下载接口**
 
-修改 `/data/app/apis/product.http.json` DSL 文件，添加 Guard。
+修改 `/data/app/apis/product.http.yao` DSL 文件，添加 Guard。
 
 ```jsonc
 {
