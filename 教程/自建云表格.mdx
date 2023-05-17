@@ -133,7 +133,7 @@ cd /your/project/root
 mkdir dyforms
 ```
 
-将上面 DSL 保存到 **dyforms/demo.form.json **文件，用于调试。
+将上面 DSL 保存到 **dyforms/demo.form.yao **文件，用于调试。
 
 ### 第二步: 创建 dyform Widget
 
@@ -160,7 +160,7 @@ touch widgets/dyform/export.js    # dyform 导出内建 Widget 定义
   "description": "A form widget. users can design forms online",
   "version": "0.1.0",
   "root": "dyforms",
-  "extension": ".form.json",
+  "extension": ".form.yao",
   "modules": ["Models", "Tables"]
 }
 ```
@@ -190,10 +190,10 @@ function Export() {
 
 实现 Model & Table 处理器逻辑
 
-| **处理器** | **说明**                                                                                 | **源码链接**                                                                              |
-| ---------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Model      | 将 dyform DSL 转换为 model DSL, 等效于在 models 文件夹手动编写一个 xxx.mod.json DSL 文件 | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L11) |
-| Table      | 将 dyform DSL 转换为 table DSL, 等效于在 tables 文件夹手动编写一个 xxx..json DSL 文件    | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L27) |
+| **处理器** | **说明**                                                                                | **源码链接**                                                                              |
+| ---------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Model      | 将 dyform DSL 转换为 model DSL, 等效于在 models 文件夹手动编写一个 xxx.mod.yao DSL 文件 | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L11) |
+| Table      | 将 dyform DSL 转换为 table DSL, 等效于在 tables 文件夹手动编写一个 xxx..json DSL 文件   | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L27) |
 
 提示: 建议使用 yao run 命令调试处理器，参考源码注释文档。
 
@@ -208,7 +208,7 @@ function Export() {
 
 ### 效果预览
 
-在 dyforms 文件夹下，添加 **xxx.form.json **文件, 编写 dyform DSL 描述文件，即可快速创建一组表格管理模块、表格 API、表格处理器和模型处理器。
+在 dyforms 文件夹下，添加 **xxx.form.yao **文件, 编写 dyform DSL 描述文件，即可快速创建一组表格管理模块、表格 API、表格处理器和模型处理器。
 
 ![demo.png](https://release-bj.yaoapps.com/docs/%E6%95%99%E7%A8%8B/demo.png)
 
@@ -221,8 +221,8 @@ function Export() {
 
 ### 第一步: 创建一个 template model, 存储 dyform DSL
 
-如何创建使用数据模型 models/template.mod.json 和管理表格 tables/template.tab.json， 参考[Model 文档](https://yaoapps.com/doc/b.%E5%9F%BA%E7%A1%80%E7%89%B9%E6%80%A7/a.%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B) 和 [Table 文档](https://yaoapps.com/doc/b.%E5%9F%BA%E7%A1%80%E7%89%B9%E6%80%A7/c.%E6%8F%8F%E8%BF%B0%E7%95%8C%E9%9D%A2#%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC)
-**models/template.mod.json 如下**
+如何创建使用数据模型 models/template.mod.yao 和管理表格 tables/template.tab.yao， 参考[Model 文档](https://yaoapps.com/doc/b.%E5%9F%BA%E7%A1%80%E7%89%B9%E6%80%A7/a.%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B) 和 [Table 文档](https://yaoapps.com/doc/b.%E5%9F%BA%E7%A1%80%E7%89%B9%E6%80%A7/c.%E6%8F%8F%E8%BF%B0%E7%95%8C%E9%9D%A2#%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC)
+**models/template.mod.yao 如下**
 
 ```json
 {
@@ -263,9 +263,9 @@ function Export() {
 | Save       | 根据 dyform DSL 转换为 model DSL, 更新对应数据模型结构，同时重新加载对应实例。 | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L43) |
 | Delete     | 删除数据模型对应数据表                                                         | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L76) |
 
-编辑 tables/template.tab.json，添加 hooks 脚本，在表格保存和删除时，更新/删除数据表，创建/删除菜单。
+编辑 tables/template.tab.yao，添加 hooks 脚本，在表格保存和删除时，更新/删除数据表，创建/删除菜单。
 
-**修改 tables/template.tab.json 添加 Hook **[**查看源码**](https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.json#L7)\*\* \*\*
+**修改 tables/template.tab.yao 添加 Hook **[**查看源码**](https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.yao#L7)\*\* \*\*
 
 ```json
   "hooks": {
@@ -336,11 +336,11 @@ function Source() {
 
 ### 第一步: 适配编辑器组件输入输出
 
-为 template 表格添加 Hook, 用来转换 DSL 结构。 编辑 `tables/template.tab.json` 文件、 `scripts/template.js`文件
+为 template 表格添加 Hook, 用来转换 DSL 结构。 编辑 `tables/template.tab.yao` 文件、 `scripts/template.js`文件
 
 **添加 **`**before:save**`** hook **
 将编辑器组件输出，转换为 form DSL  
-tables/template.tab.json
+tables/template.tab.yao
 
 ```json
 {
@@ -388,7 +388,7 @@ yao run scripts.template.BeforeSave '::{"dsl":...}'
 **添加 **`**after:find**`** hook**
 将 form DSL 转换为组件输入结构
 
-tables/template.tab.json
+tables/template.tab.yao
 
 ```json
 {
@@ -438,8 +438,8 @@ function AfterFind(template, id) {
 
 ### 第二步: 更新 DSL 绑定的组件
 
-编辑 `tables/template.tab.json` 文件， 将 DSL 字段编辑组件设定为 FormPrinter。
-源码地址: [https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.json](https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.json)
+编辑 `tables/template.tab.yao` 文件， 将 DSL 字段编辑组件设定为 FormPrinter。
+源码地址: [https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.yao](https://github.com/YaoApp/demo-widget/blob/main/tables/template.tab.yao)
 
 ```json
 {

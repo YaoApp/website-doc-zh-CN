@@ -89,7 +89,7 @@ touch widgets/dyform/export.js    # dyform 导出内建 Widget 定义
   "description": "A form widget. users can design forms online",
   "version": "0.1.0",
   "root": "dyforms",
-  "extension": ".form.json",
+  "extension": ".form.yao",
   "modules": ["Models", "Tables"]
 }
 ```
@@ -119,10 +119,10 @@ function Export() {
 
 实现 Model & Table 处理器逻辑
 
-| **处理器** | **说明**                                                                                 | **源码链接**                                                                              |
-| ---------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Model      | 将 dyform DSL 转换为 model DSL, 等效于在 models 文件夹手动编写一个 xxx.mod.json DSL 文件 | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L11) |
-| Table      | 将 dyform DSL 转换为 table DSL, 等效于在 tables 文件夹手动编写一个 xxx..json DSL 文件    | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L27) |
+| **处理器** | **说明**                                                                                | **源码链接**                                                                              |
+| ---------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Model      | 将 dyform DSL 转换为 model DSL, 等效于在 models 文件夹手动编写一个 xxx.mod.yao DSL 文件 | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L11) |
+| Table      | 将 dyform DSL 转换为 table DSL, 等效于在 tables 文件夹手动编写一个 xxx..json DSL 文件   | [查看源码](https://github.com/YaoApp/demo-widget/blob/main/widgets/dyform/process.js#L27) |
 
 提示: 建议使用 yao run 命令调试处理器，参考源码注释文档。
 
@@ -137,7 +137,7 @@ function Export() {
 
 ## 效果预览
 
-在 dyforms 文件夹下，添加 **xxx.form.json **文件, 编写 dyform DSL 描述文件，即可快速创建一组表格管理模块、表格 API、表格处理器和模型处理器。
+在 dyforms 文件夹下，添加 **xxx.form.yao **文件, 编写 dyform DSL 描述文件，即可快速创建一组表格管理模块、表格 API、表格处理器和模型处理器。
 
 ![demo.png](https://release-sv-1252011659.cos.na-siliconvalley.myqcloud.com/docs/%E4%B8%93%E5%AE%B6/demo%20%281%29.png)
 

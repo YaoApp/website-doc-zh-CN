@@ -2,7 +2,7 @@
 
 <blockquote>
   Table Widget 用于列表界面制作。 Table DSL 文件放在 tables 目录中, 文件扩展名为
-  .tab.json。
+  .tab.yao。
 </blockquote>
 
 **约定**
@@ -18,11 +18,11 @@ DSL 文件命名:
 2. 必须由 **小写字母** 开头,
 3. Widget ID 为文件名称(不含扩展名), 如包含多级目录用 **"."** 替代 **"\/"**
 
-| DSL 文件                                 | Widget ID        |
-| ---------------------------------------- | ---------------- |
-| /data/app/tables/user.tab.json           | `user`           |
-| /data/app/tables/user/tasks.tab.json     | `user.tasks`     |
-| /data/app/tables/user/stat/list.tab.json | `user.stat.list` |
+| DSL 文件                                | Widget ID        |
+| --------------------------------------- | ---------------- |
+| /data/app/tables/user.tab.yao           | `user`           |
+| /data/app/tables/user/tasks.tab.yao     | `user.tasks`     |
+| /data/app/tables/user/stat/list.tab.yao | `user.stat.list` |
 
 **路由**
 
@@ -34,7 +34,7 @@ Query 参数:
 
 `http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/x/Table/<Widget ID>?<URLQuery Params>`
 
-<Detail title="查看表格示例 /data/app/tables/pet.tab.json">
+<Detail title="查看表格示例 /data/app/tables/pet.tab.yao">
 
 ```json
 {

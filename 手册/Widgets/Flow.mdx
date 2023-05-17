@@ -47,17 +47,17 @@
 
 ## 命名规范
 
-数据流描述文件是以 **小写英文字母** + `.flow.json` 扩展名命名的 JSON 文本文件, `<name>.flow.json`;
+数据流描述文件是以 **小写英文字母** + `.flow.yao` 扩展名命名的 JSON 文本文件, `<name>.flow.yao`;
 结果处理脚本文件是以 `数据流名称` + `.` + `脚本名称` + `.js` 扩展名，命名的 JavaScript 脚本文件 `<name>.<script>.js` 。
 
-| 文件夹 (相对数据流根目录) | 文件名         | 数据流名称           | 脚本名称 | Process (在 API /Flow 中引用) |
-| ------------------------- | -------------- | -------------------- | -------- | ----------------------------- |
-| /                         | name.flow.json | `name`               |          | `flows.name`                  |
-| /                         | name.count.js  | `name`               | `count`  | -                             |
-| /group                    | name.flow.json | `group.name`         |          | `flows.group.name`            |
-| /group                    | name.count.js  | `gorup.name`         | `count`  | -                             |
-| /group1/group2            | name.flow.json | `group1.group2.name` |          | `flows.group1.group2.name`    |
-| /group1/group2            | name.count.js  | `group1.group2.name` | `count`  | -                             |
+| 文件夹 (相对数据流根目录) | 文件名        | 数据流名称           | 脚本名称 | Process (在 API /Flow 中引用) |
+| ------------------------- | ------------- | -------------------- | -------- | ----------------------------- |
+| /                         | name.flow.yao | `name`               |          | `flows.name`                  |
+| /                         | name.count.js | `name`               | `count`  | -                             |
+| /group                    | name.flow.yao | `group.name`         |          | `flows.group.name`            |
+| /group                    | name.count.js | `gorup.name`         | `count`  | -                             |
+| /group1/group2            | name.flow.yao | `group1.group2.name` |          | `flows.group1.group2.name`    |
+| /group1/group2            | name.count.js | `group1.group2.name` | `count`  | -                             |
 
 ## 文档结构
 
@@ -259,7 +259,7 @@ Helper 函数表
 
 #### 示例一
 
-新建`models/category.mod.json`写入以下代码:
+新建`models/category.mod.yao`写入以下代码:
 
 <Detail title="查看源码">
 
@@ -315,7 +315,7 @@ Helper 函数表
 
 执行命令 `yao migrate -n category`在数据库中可以看到生成了对应的数据表和数据
 
-编写`flows/category.flow.json`写入以下代码:
+编写`flows/category.flow.yao`写入以下代码:
 
 <Detail title="查看源码">
 

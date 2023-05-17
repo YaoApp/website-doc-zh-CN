@@ -44,7 +44,7 @@ function WriteFile() {
 ```javascript
 function ReadFile() {
   let fs = new FS("dsl");
-  let data = fs.ReadFile("/models/f1.mod.json"); // /data/app/models/f1.mod.json
+  let data = fs.ReadFile("/models/f1.mod.yao"); // /data/app/models/f1.mod.yao
   return data;
 }
 
@@ -55,7 +55,7 @@ function WriteFile() {
     table: { name: "f1" },
     columns: [{ label: "ID", name: "id", type: "ID" }],
   };
-  let length = fs.WriteFile("/models/f2.mod.json", data, 0644); //  /data/app/models/f2.mod.json
+  let length = fs.WriteFile("/models/f2.mod.yao", data, 0644); //  /data/app/models/f2.mod.yao
   return length;
 }
 ```

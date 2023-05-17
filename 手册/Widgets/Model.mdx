@@ -81,13 +81,13 @@ Yao 可以读取数据模型定义，实现数据迁移、元数据原子操作�
 
 ## 命名规范
 
-数据模型描述文件是以 **小写英文字母** 命名的 JSON 文本文件 `<name>.mod.json`
+数据模型描述文件是以 **小写英文字母** 命名的 JSON 文本文件 `<name>.mod.yao`
 
-| 文件夹 (相对应用模型根目录) | 文件名        | 模型名称             | Process (在 API /Flow 中引用)         |
-| --------------------------- | ------------- | -------------------- | ------------------------------------- |
-| /                           | name.mod.json | `name`               | `models.name.<process>`               |
-| /group/                     | name.mod.json | `gorup.name`         | `models.gorup.name.<process>`         |
-| /group1/group2/             | name.mod.json | `gorup1.gorup2.name` | `models.gorup1.group2.name.<process>` |
+| 文件夹 (相对应用模型根目录) | 文件名       | 模型名称             | Process (在 API /Flow 中引用)         |
+| --------------------------- | ------------ | -------------------- | ------------------------------------- |
+| /                           | name.mod.yao | `name`               | `models.name.<process>`               |
+| /group/                     | name.mod.yao | `gorup.name`         | `models.gorup.name.<process>`         |
+| /group1/group2/             | name.mod.yao | `gorup1.gorup2.name` | `models.gorup1.group2.name.<process>` |
 
 ## 文档结构
 

@@ -54,7 +54,7 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 
 ## Part II: 新建模型
 
-### 第一步：新增`models/category.mod.json`文件,写入以下内容:
+### 第一步：新增`models/category.mod.yao`文件,写入以下内容:
 
 <Detail title="查看源码">
 
@@ -144,7 +144,7 @@ YAO_DB_SECONDARY="root:123456@tcp(127.0.0.1.100:3306)/test?charset=utf8mb4&parse
 
 </Detail>
 
-### 第二步：新增 `models/book.mod.json`模型文件,并且关联模型分类`category`:
+### 第二步：新增 `models/book.mod.yao`模型文件,并且关联模型分类`category`:
 
 <Detail title="查看源码">
 
@@ -261,7 +261,7 @@ Update schema model: book (book)
 
 ## Part III: 菜单配置
 
-### 第一步：接下来初始化一下菜单,新建`/flows/menu.flow.json`:
+### 第一步：接下来初始化一下菜单,新建`/flows/menu.flow.yao`:
 
 <Detail title="查看源码">
 
@@ -362,7 +362,7 @@ flows.menu Response
 
 ## Part IV: 新建表格
 
-### 第一步：新建 `tables/book.tab.json`代码如下:
+### 第一步：新建 `tables/book.tab.yao`代码如下:
 
 <Detail title="查看源码">
 
@@ -544,7 +544,7 @@ Watching: /mnt/shared/test/tables
 输入默认账号 `xiang@iqka.com` 和密码`A123456p+`登录到后台可以看到书籍列表效果图:
 ![书籍列表](https://release-sv-1252011659.cos.na-siliconvalley.myqcloud.com/docs/%E5%9F%BA%E7%A1%80/overview-search.png)
 
-### 第三步：新建书籍分类表格 `tables/category.tab.json`代码:
+### 第三步：新建书籍分类表格 `tables/category.tab.yao`代码:
 
 <Detail title="查看源码">
 
@@ -680,7 +680,7 @@ Watching: /mnt/shared/test/tables
 }
 ```
 
-### 第二步：新建`flows/category.flow.json`文件:
+### 第二步：新建`flows/category.flow.yao`文件:
 
 ```json
 {
@@ -708,7 +708,7 @@ Watching: /mnt/shared/test/tables
 }
 ```
 
-### 第三步：修改 `tables/book.tab.json`的 columns 分类组件，并且调整一下表单和添加页面的布局:
+### 第三步：修改 `tables/book.tab.yao`的 columns 分类组件，并且调整一下表单和添加页面的布局:
 
 <Detail title="查看源码">
 
