@@ -1,0 +1,90 @@
+{
+  "name": "用户",
+  "table": { "name": "user", "comment": "用户表" },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    {
+      "label": "供应商",
+      "name": "supplier_id",
+      "type": "bigInteger",
+      "index": true,
+      "comment": "所属供应商ID"
+    },
+    {
+      "label": "邮箱",
+      "name": "email",
+      "type": "string",
+      "index": true,
+      "comment": "用户邮箱地址",
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "email",
+          "args": [],
+          "message": "{{input}}不是邮箱地址"
+        }
+      ]
+    },
+    {
+      "label": "登录密码",
+      "name": "password",
+      "type": "string",
+      "crypt": "PASSWORD",
+      "index": true,
+      "nullable": true,
+      "validations": [
+        {
+          "method": "typeof",
+          "args": ["string"],
+          "message": "{{input}}类型错误, {{label}}应该为字符串"
+        },
+        {
+          "method": "minLength",
+          "args": [8],
+          "message": "{{label}}不能少于8位。"
+        }
+      ]
+    },
+    {
+      "label": "姓名",
+      "name": "name",
+      "type": "string",
+      "index": true,
+      "comment": "用户姓名"
+    }
+  ],
+  "values": [
+    {
+      "id": 1,
+      "supplier_id": 1,
+      "name": "张无忌",
+      "email": "zhang@yaoapps.com",
+      "password": "5MCIXQYrR"
+    },
+    {
+      "id": 2,
+      "supplier_id": 1,
+      "name": "李光富",
+      "email": "li@yaoapps.com",
+      "password": "VHP79MBKf"
+    },
+    {
+      "id": 3,
+      "supplier_id": 2,
+      "name": "李木婷",
+      "email": "mu@yaoapps.com",
+      "password": "Ert6a1Ub8"
+    },
+    {
+      "id": 4,
+      "supplier_id": 2,
+      "name": "赵长青",
+      "email": "zhao@yaoapps.com",
+      "password": "7CDcn4pcU"
+    }
+  ]
+}

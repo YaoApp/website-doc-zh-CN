@@ -1,0 +1,16 @@
+{
+  "label": "Validate Test",
+  "version": "1.0.0",
+  "description": "Test",
+  "nodes": [
+    {
+      "name": "test",
+      "process": "xiang.helper.PasswordValidate",
+      "args": [
+        "{{$in.0}}",
+        "$2a$04$TS/rWBs66jADjQl8fa.w..ivkNAjH8d4sI1OPGvEB9Leed6EpzIF2"
+      ]
+    }
+  ],
+  "output": "{{$res.test}}"
+}

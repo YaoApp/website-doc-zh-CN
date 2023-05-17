@@ -1,0 +1,20 @@
+{
+  "label": "演示",
+  "version": "1.0.0",
+  "description": "数据查询",
+  "nodes": [
+    {
+      "name": "用户",
+      "process": "models.admin.user.Find",
+      "args": ["{{$id}}", { "select": ["id", "name"] }]
+    }
+  ],
+  "output": {
+    "参数表": "{{$in}}",
+    "用户": "{{$res.用户}}",
+    "ID": {
+      "$id": "{{$id}}",
+      "$in[0].id": "{{$in[0].id}}"
+    }
+  }
+}

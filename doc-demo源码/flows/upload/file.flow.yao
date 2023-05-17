@@ -1,0 +1,33 @@
+{
+  "label": "文件上传",
+  "version": "1.0.0",
+  "description": "文件上传",
+  "nodes": [
+    {
+      "name": "文件",
+      "process": "fs.system.ReadFile",
+      "args": ["{{$in[0].tempFile}}"]
+    },
+    {
+      "name": "当前时刻",
+      "process": "utils.now.Timestampms",
+      "args": []
+    },
+    {
+      "name": "名称",
+      "process": "utils.str.Concat",
+      "args": ["{{$res.当前时刻}}", ".txt"]
+    },
+    {
+      "name": "文件名",
+      "process": "utils.str.JoinPath",
+      "args": ["/", "texts", "{{$res.名称}}"]
+    },
+    {
+      "name": "保存文件",
+      "process": "fs.system.WriteFile",
+      "args": ["{{$res.文件名}}", "{{$res.文件}}", "0644"]
+    }
+  ],
+  "output": "{{$res.文件名}}"
+}

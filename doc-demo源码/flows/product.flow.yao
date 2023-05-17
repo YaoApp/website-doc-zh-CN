@@ -1,0 +1,34 @@
+{
+  "label": "演示",
+  "version": "1.0.0",
+  "description": "数据查询",
+  "nodes": [
+    {
+      "name": "添加数据",
+      "process": "models.product.Insert",
+      "args": [
+        ["name", "remark", "user_id"],
+        [
+          ["遗落的南境三部曲一", "(美) 杰夫·范德米尔", 1],
+          ["遗落的南境三部曲二", "(美) 杰夫·范德米尔", 1],
+          ["遗落的南境三部曲三", "(美) 杰夫·范德米尔", 1],
+          ["没药花园案件：罪恶", "没药花园 著,博集天", 1],
+          ["那不勒斯四部曲", "【意】埃莱娜·费兰特", 1]
+        ]
+      ]
+    },
+    {
+      "name": "分页查询",
+      "process": "models.product.Paginate",
+      "args": [
+        {
+          "select": ["id", "name", "remark", "user_id"],
+          "wheres": [{ "column": "name", "op": "match", "value": "三部曲" }]
+        },
+        1,
+        2
+      ]
+    }
+  ],
+  "output": "{{$res}}"
+}

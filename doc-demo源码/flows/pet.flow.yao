@@ -1,0 +1,31 @@
+{
+  "label": "查询最新数据",
+  "version": "1.0.0",
+  "description": "查询系统最新数据",
+  "nodes": [
+    {
+      "name": "宠物",
+      "process": "models.pet.Get",
+      "args": [
+        {
+          "select": ["id", "name", "created_at"],
+          "wheres": [{ "column": "online", "value": "{{$in.0}}" }],
+          "orders": [{ "column": "created_at", "option": "desc" }],
+          "limit": 10
+        }
+      ]
+    },
+    {
+      "name": "宠物最新数据",
+      "engine": "xiang",
+      "query": {
+        "select": ["id", "name", "online", "created_at"],
+        "from": "$pet",
+        "wheres": [{ ":kind": "类型", "=": "?:$in.0" }],
+        "orders": "created_at desc",
+        "limit": 10
+      }
+    }
+  ],
+  "output": ["{{$res.宠物}}", "{{$res.宠物最新数据}}"]
+}

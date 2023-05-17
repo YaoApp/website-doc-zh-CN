@@ -1,0 +1,47 @@
+{
+  "name": "::ticket",
+  "action": {
+    "bind": {
+      "model": "ticket"
+    }
+  },
+  "layout": {
+    "primary": "id",
+    "header": {
+      "preset": {}
+    },
+    "filter": {
+      "columns": [],
+      "actions": [
+        {
+          "icon": "icon-plus",
+          "width": 3,
+          "action": {
+            "Common.openModal": {
+              "width": 1200,
+              "Form": {
+                "type": "edit",
+                "model": "upload"
+              }
+            }
+          },
+          "title": "导入"
+        },
+        {
+          "icon": "icon-plus",
+          "title": "导出",
+          "action": [
+            {
+              "name": "HistoryPush",
+              "type": "Common.historyPush",
+              "payload": {
+                "pathname": "/api/utils/export/ticket",
+                "public": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

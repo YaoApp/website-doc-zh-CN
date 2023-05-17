@@ -1,0 +1,21 @@
+{
+  "label": "演示",
+  "version": "1.0.0",
+  "description": "数据查询",
+  "nodes": [
+    {
+      "name": "::url",
+      "process": "models.url.Find",
+      "args": [
+        "{{$in[0]}}",
+        {
+          "select": [
+            "id",
+            "name"
+          ]
+        }
+      ]
+    }
+  ],
+  "output": "{{$res.::url}}"
+}

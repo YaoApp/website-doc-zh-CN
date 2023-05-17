@@ -1,0 +1,21 @@
+{
+  "name": "::url",
+  "version": "1.0.0",
+  "description": "::url接口",
+  "guard": "-",
+  "group": "url",
+  "paths": [
+    {
+      "path": "/find/:id",
+      "method": "GET",
+      "process": "flows.query.url",
+      "in": [
+        "$param.id"
+      ],
+      "out": {
+        "status": 200,
+        "type": "application/json"
+      }
+    }
+  ]
+}

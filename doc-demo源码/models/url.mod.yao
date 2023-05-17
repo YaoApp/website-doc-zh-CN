@@ -1,0 +1,28 @@
+{
+  "name": "::url",
+  "table": { "name": "url", "label": "url表" },
+  "columns": [
+    { "name": "id", "label": "ID", "type": "ID" },
+    {
+      "name": "name",
+      "label": "名称",
+      "type": "string",
+      "length": 80,
+      "index": true,
+      "nullable": true
+    },
+    {
+      "name": "url",
+      "label": "路径",
+      "type": "string",
+      "nullable": true
+    }
+  ],
+  "relations": {},
+  "values": [],
+  "indexes": [],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  }
+}

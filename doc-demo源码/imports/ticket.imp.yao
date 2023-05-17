@@ -1,0 +1,40 @@
+{
+  "title": "导入工单",
+  "process": "scripts.imports.ticket.Import",
+  "output": "scripts.imports.ticket.Output",
+  "columns": [
+    {
+      "label": "昵称",
+      "name": "name",
+      "match": ["昵称", "昵称", "name"],
+      "rules": []
+    },
+    {
+      "label": "手机",
+      "name": "phone",
+      "match": ["手机", "手机", "phone"],
+      "rules": []
+    },
+    {
+      "label": "性别",
+      "name": "gender",
+      "match": ["性别", "性别", "gender"],
+      "rules": []
+    },
+    {
+      "label": "地区",
+      "name": "area",
+      "match": ["地区", "地区", "area"],
+      "rules": []
+    }
+  ],
+  "option": {
+    "autoMatching": true,
+    "chunkSize": 200,
+    "logging": "error",
+    "mappingPreview": "auto",
+    "dataPreview": "auto",
+    "templateLink": "/somelinke/download/xxx"
+  },
+  "rules": {}
+}

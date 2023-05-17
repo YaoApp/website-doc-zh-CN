@@ -24,7 +24,7 @@
 | 1   | 象传智慧       |
 | 2   | Yao App Engine |
 
-`supplier.mod.json`
+`/models/supplier.mod.yao`
 
 ```json
 {
@@ -73,7 +73,7 @@
 | 3   | 2      | 李木婷 |
 | 4   | 2      | 赵长青 |
 
-`user.mod.json`
+`/models/user.mod.yao`
 
 ```json
 {
@@ -130,7 +130,7 @@ Object Relation 数据结构:
 
 ## hasOne
 
-查询用户时，同时返回该用户所属供应商的信息。修改用户模型描述文件 `user.mod.json`，添加 `hasOne` 关联关系声明。
+查询用户时，同时返回该用户所属供应商的信息。修改用户模型描述文件 `user.mod.yao`，添加 `hasOne` 关联关系声明。
 
 <Detail title="查看源码">
 
@@ -197,7 +197,7 @@ yao run models.user.Find 1 '::{"withs":{ "supplier": {"query":{ "select":["name"
 yao run models.user.Get '::{"withs":{ "supplier": {} }, "wheres":[{"rel":"supplier", "column":"name", "value":"Yao App Engine" }]}'
 ```
 
-在 JS 中使用任意关联关系：
+在 JS 中使用任意关联关系 `/scripts/test.js`：
 
 ```javascript
 function test() {
@@ -213,12 +213,17 @@ function test() {
     orders: [{ column: "id", option: "desc" }],
     limit: 1,
   });
+  return user;
 }
+```
+
+```bash
+yao run scripts.test.test
 ```
 
 ## hasMany
 
-查询供应商时，同时返回该供应商的用户信息。修改用户模型描述文件 `supplier.mod.json`，添加 `hasMany` 关联关系声明。
+查询供应商时，同时返回该供应商的用户信息。修改用户模型描述文件 `supplier.mod.yao`，添加 `hasMany` 关联关系声明。
 
 <Detail title="查看源码">
 
@@ -276,7 +281,7 @@ yao run models.supplier.Find 1 '::{"withs":{ "users": { "query":{"select":["name
 yao run models.supplier.Find 1 '::{"withs":{ "users": { "wheres":[{"column":"name", "value":"张无忌"}] } }}'
 ```
 
-## 嵌套查询
+<!-- ## 嵌套查询
 
 关联关系支持嵌套查询，通过 `withs` 查询参数指定。
 
@@ -286,7 +291,7 @@ yao run models.supplier.Find 1 '::{"withs":{ "users": { "withs": {"supplier":{} 
 
 ```bash
 yao run models.supplier.Get '::{"withs":{ "users": { "withs": {"supplier":{} } } }}'
-```
+``` -->
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="编写处理器" link="进阶/编写处理器"></Link>

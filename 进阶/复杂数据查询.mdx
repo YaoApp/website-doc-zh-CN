@@ -215,8 +215,8 @@ ORDER BY `high_score` DESC
       "process": "models.pet.Get",
       "args": [
         {
-          "select": ["id", "name", "kind", "created_at"],
-          "wheres": [{ "column": "kind", "value": "{{$in.0}}" }],
+          "select": ["id", "name", "created_at"],
+          "wheres": [{ "column": "online", "value": "{{$in.0}}" }],
           "orders": [{ "column": "created_at", "option": "desc" }],
           "limit": 10
         }
@@ -236,10 +236,10 @@ ORDER BY `high_score` DESC
   "description": "查询系统最新数据",
   "nodes": [
     {
-      "name": "宠物",
+      "name": "宠物最新数据",
       "engine": "xiang",
       "query": {
-        "select": ["id", "name", "kind", "created_at"],
+        "select": ["id", "name", "online", "created_at"],
         "from": "$pet",
         "wheres": [{ ":kind": "类型", "=": "?:$in.0" }],
         "orders": "created_at desc",
@@ -247,26 +247,25 @@ ORDER BY `high_score` DESC
       }
     }
   ],
-  "output": "{{$res.宠物}}"
+  "output": "{{$res.宠物最新数据}}"
 }
 ```
 
 ## 在 Script 中使用
 
 ```javascript
-function test(id) {
+function test(online) {
   var query = new Query();
   var data = query.Get({
-    name: "宠物",
-    engine: "xiang",
-    query: {
-      select: ["id", "name", "kind", "created_at"],
-      from: "$pet",
-      wheres: [{ ":kind": "类型", "=": id }],
-      orders: "created_at desc",
-      limit: 10,
-    },
+    select: ["id", "name", "online", "created_at"],
+    wheres: [
+      { ":deleted_at": "删除", "=": null },
+      { ":online": "类型", "=": online },
+    ],
+    orders: "created_at desc",
+    from: "$pet",
   });
+  return data;
 }
 ```
 

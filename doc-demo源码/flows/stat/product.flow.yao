@@ -1,0 +1,40 @@
+{
+  "label": "产品",
+  "version": "1.0.0",
+  "description": "产品统计",
+  "nodes": [
+    {
+      "name": "总数",
+      "engine": "default",
+      "query": {
+        "select": [":COUNT(id) as 数量"],
+        "from": "$product",
+        "wheres": [
+          { "field": ":TIME(created_at)", ">=": "?:$range[0]" },
+          { "field": ":TIME(created_at)", "<=": "?:$range[1]" }
+        ],
+        "first": true
+      }
+    },
+    {
+      "name": "分布",
+      "engine": "default",
+      "query": {
+        "debug": true,
+        "select": [":COUNT(id) as 数量", ":TIME(created_at) as 时刻"],
+        "from": "$product",
+        "wheres": [
+          { "field": ":TIME(created_at)", ">=": "?:$range[0]" },
+          { "field": ":TIME(created_at)", "<=": "?:$range[1]" }
+        ],
+        "orders": "时刻",
+        "groups": "时刻"
+      }
+    }
+  ],
+  "output": {
+    "IN": "{{$in}}",
+    "数量": "{{$res.总数.数量}}",
+    "分布": "{{$res.分布}}"
+  }
+}

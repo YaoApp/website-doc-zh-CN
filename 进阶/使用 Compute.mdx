@@ -1,1 +1,56 @@
-使用 Compute
+# 使用 Compute
+
+<blockquote>
+  Computec处理器可以在数据展示之前对数据进行处理 ，变成想要的格式,注意同时使用 </strong>after:search<strong>和</strong>compute<strong>时,数据格式会被</strong>after:search<strong>覆盖
+</blockquote>
+
+系统自带 compute:
+
+| 参数名称 | 说明           |
+| -------- | -------------- |
+| Trim     | 去除两边空格   |
+| Concat   | 连接两个字符串 |
+| Empty    | 变成空         |
+| Download | 图片展示       |
+| Upload   | 文件上传       |
+
+## 使用方法
+
+在组件中的`view/edit`里面添加`compute`使用`process`指定处理器,使用系统自带的处理器可以直接写` "compute": "Download"`
+
+```json
+      "名称": {
+        "edit": {
+          "props": {},
+          "type": "Input"
+        },
+        "bind": "name",
+        "view": {
+          "type": "Text",
+          "props": {},
+          "compute": {
+            "process": "scripts.test.Compute",
+            "args": ["$C(row.name)"]
+          }
+        }
+      }
+
+```
+
+在`/scripts/test.js`新增`Compute`方法
+
+```javascript
+function Compute(row) {
+  console.log(row);
+  return row;
+}
+```
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link type="prev" title="使用会话数据" link="进阶/使用会话数据"></Link>
+  <Link
+    type="next"
+    title="使用 Cloud Props"
+    link="进阶/使用 Cloud Props"
+  ></Link>
+</Div>

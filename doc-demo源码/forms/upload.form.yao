@@ -1,0 +1,97 @@
+{
+  "action": {
+    "guard": "bearer-jwt",
+    "bind": {
+      "model": "ticket",
+      "option": {
+        "withs": {}
+      }
+    },
+    "find": {
+      "process": "scripts.upload.Find"
+    },
+    "delete": {
+      "process": "scripts.upload.Find"
+    },
+    "save": {
+      "process": "scripts.upload.UploadSave"
+    }
+  },
+  "layout": {
+    "form": {
+      "sections": [
+        {
+          "columns": [
+            {
+              "width": 24,
+              "name": "文件"
+            }
+          ]
+        }
+      ],
+      "props": {}
+    },
+    "actions": [
+      {
+        "title": "上传",
+        "icon": "icon-check",
+        "showWhenAdd": true,
+        "showWhenView": true,
+        "style": "primary",
+        "action": [
+          {
+            "name": "Submit",
+            "type": "Form.submit",
+            "payload": {}
+          },
+          {
+            "name": "Back",
+            "type": "Common.closeModal",
+            "payload": {}
+          }
+        ]
+      },
+      {
+        "title": "返回",
+        "divideLine": true,
+        "showWhenAdd": true,
+        "showWhenView": true,
+        "icon": "icon-arrow-left",
+        "action": [
+          {
+            "name": "closeModal",
+            "type": "Common.closeModal",
+            "payload": {}
+          }
+        ]
+      }
+    ],
+    "primary": "id",
+    "operation": {
+      "preset": {
+        "save": {
+          "back": true
+        },
+        "back": {}
+      },
+      "actions": []
+    }
+  },
+  "fields": {
+    "form": {
+      "文件": {
+        "edit": {
+          "props": {
+            "filetype": "file",
+            "$api": { "process": "fs.system.Upload" }
+          },
+          "type": "Upload",
+
+          "bind": "file"
+        },
+        "bind": "file"
+      }
+    }
+  },
+  "name": "上传"
+}

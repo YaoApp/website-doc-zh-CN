@@ -1,0 +1,56 @@
+{
+  "name": "产品",
+  "version": "1.0.0",
+  "description": "产品接口",
+  "guard": "bearer-jwt",
+  "group": "product",
+  "paths": [
+    {
+      "path": "/search",
+      "guard": "-",
+      "method": "GET",
+      "process": "models.product.Paginate",
+      "in": [":query-param", "$query.page", "$query.pagesize"],
+      "out": { "status": 200, "type": "application/json" }
+    },
+    {
+      "path": "/save",
+      "guard": "bearer-jwt,scripts.guard.User",
+      "method": "POST",
+      "process": "models.product.Save",
+      "in": [":payload"],
+      "out": { "status": 200, "type": "application/json" }
+    },
+    {
+      "path": "/download",
+      "guard": "-",
+      "method": "GET",
+      "process": "fs.system.Download",
+      "in": ["$query.name"],
+      "out": {
+        "status": 200,
+        "body": "{{content}}",
+        "headers": { "Content-Type": "{{type}}" }
+      }
+    },
+    {
+      "path": "/redirect",
+      "guard": "-",
+      "method": "GET",
+      "process": "utils.app.ping",
+      "in": [],
+      "out": {
+        "status": 200,
+        "redirect": { "code": 301, "location": "https://yaoapps.com" } // 重定向到 yaoapps.com
+      }
+    },
+    {
+      "path": "/validate",
+      "guard": "scripts.guard.Validate",
+      "method": "POST",
+      "process": "models.product.Save",
+      "in": [":payload"],
+      "out": { "status": 200, "type": "application/json" }
+    }
+  ]
+}

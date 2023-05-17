@@ -1,0 +1,8 @@
+{
+  "name": "::url",
+  "action": {
+    "bind": {
+      "model": "url"
+    }
+  }
+}

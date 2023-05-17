@@ -1,1 +1,92 @@
 # 使用 Hook
+
+<blockquote>
+  <p>
+    通过修改<strong>默认值描述</strong>，指定表格预制API查询条件；
+  </p>
+  <p>
+    通过设置
+    <strong>Hooks</strong>处理器，实现对表格查询的输入和输出数据预处理。
+  </p>
+</blockquote>
+
+### Hooks 一览表
+
+| Hook          | 说明                     | 输入                          | 输出规范                                      |
+| ------------- | ------------------------ | ----------------------------- | --------------------------------------------- |
+| before:find   | 在 Find 处理器之前调用   | Find 接口传入数据             | 输出结果作为 Find 关联处理器输入参数          |
+| after:find    | 在 Find 处理器之后调用   | Find 接口关联处理器执行结果   | 自定义(输出结果作为 Find 处理器的最终输出)    |
+| before:search | 在 Search 处理器之前调用 | Search 接口传入数据           | 输出结果作为 Search 关联处理器输入参数        |
+| after:search  | 在 Search 处理器之后调用 | Search 接口关联处理器执行结果 | 自定义 (输出结果作为 Search 处理器的最终输出) |
+| before:save   | 在 Save 处理器之前调用   | Save 接口传入数据             | 输出结果作为 Save 关联处理器输入参数          |
+| after:save    | 在 Save 处理器之后调用   | Save 接口关联处理器执行结果   | 自定义 (输出结果作为 Save 接口的最终输出)     |
+
+## 使用 Hooks
+
+可以使用 Hooks 处理表格 API 输入输出数据。Hook 分为 `before` 和 `after` 两类， before hook，在 API 调用前运行，可以用来处理传入参数，after hook，在 API 调用后运行，可用来处理查询结果。
+
+在描述数据表格时，在 `action` 字段，声明 **Hook 关联的处理器**，例如：
+
+```json
+
+  "action": {
+    "bind": { "model": "product" },
+    "save": {
+      "guard": "scripts.guard.Validate"
+    },
+   "before:find": "flows.hooks.before_find",
+    "after:find": "flows.hooks.after_find",
+    "before:search": "flows.hooks.before_search",
+    "after:search": "flows.hooks.after_search",
+    "before:save": "flows.hooks.before_save",
+    "after:save": "flows.hooks.after_save",
+    "search": {
+      "default": [
+        {
+          "orders": [{ "column": "id", "options": "desc" }]
+        },
+        1,
+        10
+      ]
+    }
+  },
+```
+
+### before hook
+
+使用 Before Hook 锁定搜索条件，过滤掉 `search` API 越界输入。
+
+修改 `product.tab.yao` 将 `before:search` hook 指定为 `scripts.test.BefofreSearch` 处理器。
+
+```javascript
+function BefofreSearch(data, page, pagesize) {
+  console.log([data, page, pagesize]);
+}
+```
+
+### after hook
+
+使用 After Hook 处理数据。
+
+修改 `product.tab.yao` 将 `after:search` hook 指定为 `scripts.test.AfterSearch` 处理器,把`name`字段改为 `111`
+
+```javascript
+function AfterSearch(data) {
+  var temp = data.data;
+  for (var i in temp) {
+    temp[i]["name"] = "111";
+  }
+  data.data = temp;
+  console.log(data);
+  return data;
+}
+```
+
+<Div style={{ display: "flex", justifyContent: "space-between" }}>
+  <Link
+    type="prev"
+    title="使用 Cloud Props"
+    link="进阶/使使用 Cloud Props"
+  ></Link>
+  <Link type="next" title="编写云函数" link="进阶/编写云函数"></Link>
+</Div>

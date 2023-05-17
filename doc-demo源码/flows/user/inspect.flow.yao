@@ -1,0 +1,18 @@
+{
+  "label": "当前用户信息",
+  "version": "1.0.0",
+  "description": "当前用户信息",
+  "nodes": [
+    {
+      "name": "会话",
+      "process": "session.Get",
+      "args": ["user"]
+    },
+    {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$res.会话}}"]
+    }
+  ],
+  "output": "{{$res.会话}}"
+}

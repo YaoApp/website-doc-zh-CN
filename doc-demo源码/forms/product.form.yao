@@ -1,0 +1,78 @@
+{
+  "name": "产品",
+  "action": { "bind": { "model": "product" } },
+  "layout": {
+    "header": { "preset": {} },
+    "filter": {
+      "columns": [{ "name": "名称", "width": 4 }],
+      "actions": [
+        {
+          "title": "添加产品",
+          "icon": "icon-plus",
+          "width": 3,
+          "action": {
+            "Common.openModal": {
+              "Form": { "type": "edit", "model": "product" }
+            }
+          }
+        }
+      ]
+    },
+    "table": {
+      "columns": [
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
+        { "name": "上架状态", "width": 200 }
+      ],
+      "operation": {
+        "fold": false,
+        "width": 255,
+        "actions": [
+          {
+            "title": "查看",
+            "icon": "icon-eye",
+            "action": {
+              "Common.openModal": {
+                "Form": { "type": "view", "model": "product" }
+              }
+            }
+          },
+          {
+            "title": "编辑",
+            "icon": "icon-edit-2",
+            "action": {
+              "Common.openModal": {
+                "Form": { "type": "edit", "model": "product" }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "fields": {
+    "table": {
+      "联动": {
+        "bind": "online",
+        "view": {
+          "bind": "new_field",
+          "type": "Text",
+          "compute": {
+            "process": "Concat",
+            "args": ["$C(row.name)", "(", "$C(row.remark)", ")"]
+          }
+        },
+        "edit": {
+          "type": "Select",
+          "props": {
+            "options": [
+              { "label": "已上架", "value": true },
+              { "label": "已下架", "value": false }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "统计",
+  "action": {
+    "before:data": "scripts.hook.FormatTime",
+    "data": { "process": "flows.stat.product" }
+  },
+  "layout": {
+    "operation": { "actions": [] },
+    "filter": {
+      "columns": [{ "name": "时间区间", "width": 6 }]
+    },
+    "chart": {
+      "columns": [
+        { "name": "产品数量", "width": 6 },
+        { "name": "时刻分布", "width": 24 }
+      ]
+    }
+  },
+  "fields": {
+    "filter": {
+      "时间区间": {
+        "bind": "range",
+        "edit": { "type": "TimePicker", "props": { "range": true } }
+      }
+    },
+    "chart": {
+      "产品数量": {
+        "bind": "数量",
+        "link": "/x/Table/product",
+        "view": { "type": "Number", "props": { "unit": "个" } }
+      },
+      "时刻分布": {
+        "bind": "分布",
+        "link": "/x/Table/product",
+        "view": {
+          "type": "Bar",
+          "props": {
+            "height": 240,
+            "nameKey": "时刻",
+            "axisLabel": { "interval": 0, "fontSize": 12 },
+            "series": [
+              {
+                "valueKey": "数量",
+                "type": "bar",
+                "colorBy": "data",
+                "itemStyle": { "borderRadius": 6 },
+                "splitLine": { "show": false },
+                "axisLabel": { "show": false }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "config": { "full": false }
+}

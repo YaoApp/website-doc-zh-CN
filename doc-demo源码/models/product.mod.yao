@@ -1,0 +1,52 @@
+{
+  "name": "产品",
+  "table": { "name": "product", "comment": "产品表" },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    { "label": "日期", "name": "day", "type": "datetime", "index": true },
+    {
+      "label": "名称",
+      "name": "name",
+      "type": "string",
+      "length": 128,
+      "index": true
+    },
+    {
+      "label": "图集",
+      "name": "images",
+      "type": "json",
+      "nullable": true
+    },
+    {
+      "label": "上架状态",
+      "name": "online",
+      "type": "boolean",
+      "default": false,
+      "comment": "上架状态 true 上架 false 下架",
+      "index": true
+    },
+    {
+      "label": "状态",
+      "name": "status",
+      "type": "enum",
+      "default": "enabled",
+      "option": ["enabled", "disabled"],
+      "comment": "状态：enabled打开，disabled关闭",
+      "index": true
+    },
+    { "label": "用户ID", "name": "user_id", "type": "integer", "index": true },
+    { "label": "总金额", "name": "amount", "type": "decimal", "index": true },
+    { "label": "备注", "name": "remark", "type": "text", "nullable": true }
+  ],
+  "values": [],
+  "relations": {
+    "users": {
+      "type": "hasOne",
+      "model": "xiang.user",
+      "key": "id",
+      "foreign": "user_id",
+      "query": {}
+    }
+  },
+  "option": { "timestamps": true, "soft_deletes": true }
+}

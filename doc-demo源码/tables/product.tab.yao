@@ -1,0 +1,85 @@
+{
+  "name": "产品",
+  "action": {
+    "bind": { "model": "product" },
+    "save": {
+      "guard": "scripts.guard.Validate"
+    },
+    //"before:search": "flows.user.inspect",
+    "after:search": "scripts.test.AfterSearch",
+    "before:search": "scripts.test.BefofreSearch",
+    "search": {
+      "default": [
+        {
+          // "wheres": [{ "column": "id", "value": "{{$user.id}}" }],
+          "orders": [{ "column": "id", "options": "desc" }]
+        },
+        1,
+        10
+      ]
+    }
+  },
+  "layout": {
+    "header": { "preset": {} },
+    "table": {
+      "columns": [
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
+        { "name": "上架状态", "width": 200 },
+        { "name": "图集", "width": 200 }
+      ]
+    }
+  },
+  "fields": {
+    "table": {
+      "联动": {
+        "bind": "online",
+        "view": {
+          "bind": "new_field",
+          "type": "Text",
+          "compute": {
+            "process": "Concat",
+            "args": ["$C(row.name)", "(", "$C(row.remark)", ")"]
+          }
+        },
+        "edit": {
+          "type": "Select",
+          "props": {
+            "options": [
+              { "label": "已上架", "value": true },
+              { "label": "已下架", "value": false }
+            ]
+          }
+        }
+      },
+      "图集": {
+        "bind": "images",
+        "view": { "type": "Image", "compute": "Download" },
+        "edit": {
+          "type": "Upload",
+          "compute": "Upload",
+          "props": {
+            "filetype": "image",
+            "$api": { "process": "fs.system.Upload" }
+          }
+        }
+      },
+      "名称": {
+        "edit": {
+          "props": {},
+          "type": "Input"
+        },
+        "bind": "name",
+        "view": {
+          "type": "Text",
+          "props": {},
+          "compute": {
+            "process": "scripts.test.Compute",
+            "args": ["$C(row.name)"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # 数据导出
 
-导出 Excel 操作，新建路由文件：`/apis/utils.http.json`代码如下：
+导出 Excel 操作，新建路由文件：`/apis/utils.http.yao`代码如下：
 
 ```json
 {
@@ -28,7 +28,7 @@
 }
 ```
 
-新建文件：`/flows/utils/export.flow.json`代码如下：
+新建文件：`/flows/utils/export.flow.yao`代码如下：
 
 ```json
 {
@@ -37,13 +37,23 @@
   "description": "下载",
   "nodes": [
     {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$in}}"]
+    },
+    {
       "name": "文件",
-      "process": "xiang.table.Export",
-      "args": ["{{$in.0}}", {}, 20]
+      "process": "yao.table.export",
+      "args": ["{{$in.0}}", { "wheres": [{ "column": "id", "value": 1 }] }, 100]
+    },
+    {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$res.文件}}"]
     },
     {
       "name": "数据",
-      "process": "xiang.fs.ReadFile",
+      "process": "fs.system.ReadFile",
       "args": ["{{$res.文件}}", false]
     }
   ],
@@ -51,7 +61,24 @@
 }
 ```
 
-假如有一个表格名字叫：`/tables/pet.tab.json`，导出表格的列表数据只需要请求：`/utils/export/pet`
+在`/tables/ticket.tab.yao`的`layout["filter"]["actions"]`数组中加入导出按钮
+
+```json
+{
+  "icon": "icon-plus",
+  "title": "导出",
+  "action": [
+    {
+      "name": "HistoryPush",
+      "type": "Common.historyPush",
+      "payload": {
+        "pathname": "/api/utils/export/ticket",
+        "public": true
+      }
+    }
+  ]
+}
+```
 
 <Div style={{ display: "flex", justifyContent: "space-between" }}>
   <Link type="prev" title="数据导入" link="进阶/数据导入"></Link>

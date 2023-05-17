@@ -1,1 +1,25 @@
 # 编写云函数
+
+<blockquote>
+  云函数用于表单`form`调用按钮,经常用于数据审核,或者更改数据状态等操作,使表单可以通过按钮直接调用api接口
+</blockquote>
+
+在 `/forms/demo/pet.form.yao`中有云函数
+
+```json
+      {
+        "title": "测试云函数",
+        "icon": "icon-cloud",
+        "action": [
+          { "name": "Submit", "type": "Form.submit", "payload": {} },
+          {
+            "name": "Foo",
+            "type": "Service.foo",
+            "payload": { "method": "Bar", "args": ["[[$Submit]]"] }
+          }
+        ]
+      },
+
+```
+
+其中`"name": "Foo",`是云函数的名称,`"type": "Service.foo",`为:调用`/services/foo.js`文件,`"method": "Bar"`调用`foo.js`文件的`Bar`函数,`"[[$Submit]]"`为上一步 Submit 返回的参数,可以用于下一步的传参

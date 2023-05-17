@@ -1,0 +1,28 @@
+{
+  "label": "下载",
+  "version": "1.0.0",
+  "description": "下载",
+  "nodes": [
+    {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$in}}"]
+    },
+    {
+      "name": "文件",
+      "process": "yao.table.export",
+      "args": ["{{$in.0}}", { "wheres": [{ "column": "id", "value": 1 }] }, 100]
+    },
+    {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$res.文件}}"]
+    },
+    {
+      "name": "数据",
+      "process": "fs.system.ReadFile",
+      "args": ["{{$res.文件}}", false]
+    }
+  ],
+  "output": "{{$res.数据.content}}"
+}

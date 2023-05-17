@@ -1,0 +1,28 @@
+{
+  "name": "供应商",
+  "table": { "name": "supplier", "comment": "供应商表" },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
+    {
+      "label": "名称",
+      "name": "name",
+      "type": "string",
+      "index": true,
+      "comment": "供应商名称"
+    }
+  ],
+  "relations": {
+    "users": {
+      "name": "users",
+      "type": "hasMany",
+      "model": "user",
+      "key": "supplier_id",
+      "foreign": "id",
+      "query": { "select": ["id", "name"] }
+    }
+  },
+  "values": [
+    { "id": 1, "name": "象传智慧" },
+    { "id": 2, "name": "Yao App Engine" }
+  ]
+}

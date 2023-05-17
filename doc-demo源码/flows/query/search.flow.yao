@@ -1,0 +1,33 @@
+{
+  "label": "演示",
+  "version": "1.0.0",
+  "description": "数据查询",
+  "nodes": [
+    {
+      "name": "产品",
+      "process": "models.product.Paginate",
+      "args": [
+        {
+          "select": ["id", "name", "remark", "user_id"],
+          "wheres": [{ "column": "name", "op": "match", "value": "三部曲" }]
+        },
+        1,
+        2
+      ]
+    },
+    {
+      "name": "打印",
+      "process": "utils.fmt.Print",
+      "args": ["{{$res.产品.data[0]}}"]
+    },
+    {
+      "name": "用户",
+      "process": "models.admin.user.Find",
+      "args": ["{{$res.产品.data[0].user_id}}", { "select": ["id", "name"] }]
+    }
+  ],
+  "output": {
+    "产品": "{{$res.产品}}",
+    "用户": "{{$res.用户}}"
+  }
+}

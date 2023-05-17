@@ -1,0 +1,33 @@
+{
+  "name": "文件上传",
+  "version": "1.0.0",
+  "description": "文件上传",
+  "guard": "bearer-jwt",
+  "group": "upload",
+  "paths": [
+    {
+      "path": "/file",
+      "method": "POST",
+      "guard": "-",
+      "process": "fs.system.Upload",
+      "in": ["$file.file"],
+      "out": { "status": 200, "type": "application/json" }
+    },
+    {
+      "path": "/flow",
+      "method": "POST",
+      "guard": "-",
+      "process": "flows.upload.file",
+      "in": ["$file.file"],
+      "out": { "status": 200, "type": "application/json" }
+    },
+    {
+      "path": "/script",
+      "method": "POST",
+      "guard": "-",
+      "process": "scripts.upload.File",
+      "in": ["$file.file"],
+      "out": { "status": 200, "type": "application/json" }
+    }
+  ]
+}

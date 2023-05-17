@@ -29,7 +29,7 @@
 
 ### 第一步: 用户数据模型
 
-编写 `user.mod.json` 放置在应用 `models` 目录。
+编写 `user.mod.yao` 放置在应用 `models` 目录。
 
 <Detail title="查看源码">
 
@@ -131,107 +131,83 @@
 **创建数据表 & 添加默认用户:**
 
 ```bash
-yao migrate -n user
+yao migrate -n user --reset
 ```
 
 ### 第二步: 登录处理器
 
-编写 `password.flow.json` 和 `token.flow.json` 放置在应用 `flows/login/` 目录。 分别实现密码校验逻辑和签发 JWT 令牌逻辑。
+编写 `/scripts/login.js`处理登录逻辑:
 
 <Detail title="查看源码">
 
-password.flow.json:
+```javascript
+/**
+ * 登录处理
+ * @param {*} payload
+ * @returns
+ */
+function Login(payload) {
+  // 验证验证码
+  var captcha = Process(
+    "xiang.helper.CaptchaValidate",
+    payload.captcha.id,
+    payload.captcha.code
+  );
 
-```json
-{
-  "label": "用户账号密码登录",
-  "version": "1.0.0",
-  "description": "用户账号密码登录",
-  "nodes": [
-    {
-      "name": "验证码校验",
-      "process": "xiang.helper.CaptchaValidate",
-      "args": ["{{$captcha.id}}", "{{$captcha.code}}"]
-    },
-    {
-      "name": "用户",
-      "process": "models.user.Get",
-      "args": [
-        {
-          "select": ["id", "email", "password", "supplier_id", "name"],
-          "wheres": [{ "column": "email", "value": "?:$mobile" }],
-          "limit": 1
-        }
-      ]
-    },
-    {
-      "name": "密码校验",
-      "process": "xiang.helper.PasswordValidate",
-      "args": ["{{$password}}", "{{$res.用户.0.password}}"]
-    },
-    {
-      "name": "签发JWT",
-      "process": "flows.login.Token",
-      "args": ["{{$res.用户.0}}"]
-    }
-  ],
-  "output": "{{$res.签发JWT}}"
-}
-```
-
-token.flow.json:
-
-```json
-{
-  "label": "Token",
-  "version": "1.0.0",
-  "description": "签发JWT & 设置会话数据",
-  "nodes": [
-    {
-      "name": "SID",
-      "process": "session.start"
-    },
-    {
-      "name": "JWT",
-      "process": "xiang.helper.JWTMake",
-      "args": [
-        "{{$in.0.id}}",
-        {},
-        {
-          "timeout": 3600,
-          "sid": "{{$res.SID}}"
-        }
-      ]
-    },
-    {
-      "name": "设置会话数据",
-      "process": "session.set",
-      "args": ["user", "{{$in.0}}", 3600]
-    },
-    {
-      "name": "设置会话用户ID",
-      "process": "session.set",
-      "args": ["user_id", "{{$in.0.id}}", 3600]
-    }
-  ],
-  "output": {
-    "sid": "{{$res.SID}}",
-    "user": "{{$res.用户.0}}",
-    "token": "{{$res.JWT.token}}",
-    "expires_at": "{{$res.JWT.expires_at}}",
-    "menus": [{ "注释": "根据应用逻辑，读取用户对应的菜单列表" }]
+  if (captcha !== true) {
+    throw new Exception("验证码不正确!", 400);
   }
+  var account = payload.mobile;
+  if (!account) {
+    account = payload.email;
+  }
+  var user = Process("models.user.get", {
+    wheres: [{ column: "email", value: account }],
+    limit: 1,
+  });
+  if (!user || !user.length) {
+    throw new Exception("用户不存在", 400);
+  }
+  // 验证密码
+  var password_validate = Process(
+    "xiang.helper.PasswordValidate",
+    payload.password,
+    user[0].password
+  );
+  if (password_validate !== true) {
+    throw new Exception("密码不正确!", 400);
+  }
+
+  // 增加token等信息
+  const session_id = payload.sid;
+  var jwt = Process(
+    "xiang.helper.JWTMake",
+    user[0].id,
+    { user_name: user[0].name },
+    {
+      timeout: 28800,
+      sid: session_id,
+    }
+  );
+  Process("session.set", "user", user[0], 28800);
+  Process("session.set", "token", jwt.token, 28800);
+  Process("session.set", "user_id", user[0].id, 28800);
+  delete user[0].password;
+  return {
+    sid: session_id,
+    user: user[0],
+    menus: Process("flows.app.menu"),
+    token: jwt.token,
+    expires_at: jwt.expires_at,
+  };
 }
 ```
 
 </Detail>
 
 <Notice type="success">
-  技巧：将<strong>密码校验</strong>和<strong>签发令牌</strong>
-  拆分为两个处理器，签发令牌处理器可以在OAuth第三方登录、短信验证码登录等场景下复用。
+  技巧：通过js来处理复杂逻辑,把验证密码,签发令牌等复杂操作写在js脚本中.
 </Notice>
-
-**运行处理器调试:**
 
 <Notice type="success">
   技巧: 为便于调试，可在登录逻辑调试成功后，添加验证码校验节点。
@@ -242,13 +218,9 @@ token.flow.json:
   <strong>mobile</strong>, 在后续的版本中将允许在应用描述文件中定义。
 </Notice>
 
-```bash
-yao run flows.login.password '::{"mobile":"zhang@yaoapps.com", "password": "5MCIXQYrR"}'
-```
+### 第三步: 设置登录 API
 
-### 第三步: 登录 API
-
-编写接口描述文件 `user.http.json`，添加 `/captcha` 和 `/login/password` 两个接口，分别用于验证码图片和用户名密码登录接口，放置在应用的 `api` 目录中。
+编写接口描述文件 `/logins/user.login.yao`,把登录处理器指定为刚刚写的`scripts.login.Login`
 
 描述文件内容:
 
@@ -256,35 +228,16 @@ yao run flows.login.password '::{"mobile":"zhang@yaoapps.com", "password": "5MCI
 
 ```json
 {
-  "name": "用户",
-  "version": "1.0.0",
-  "description": "用户接口",
-  "guard": "bearer-jwt",
-  "group": "user",
-  "paths": [
-    {
-      "path": "/captcha",
-      "method": "GET",
-      "guard": "-",
-      "process": "xiang.helper.Captcha",
-      "in": [":query"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
-    },
-    {
-      "path": "/login/password",
-      "method": "POST",
-      "guard": "-",
-      "process": "flows.login.password",
-      "query": [":payload"],
-      "out": {
-        "status": 200,
-        "type": "application/json"
-      }
-    }
-  ]
+  "name": "::User Login",
+  "action": {
+    "process": "scripts.login.Login",
+    "args": [":payload"]
+  },
+  "layout": {
+    "entry": "/x/Dashboard/kanban",
+    "slogan": "::Make Your Dream With Yao App Engine",
+    "site": "https://yaoapps.com/?from=instance-user-login"
+  }
 }
 ```
 
@@ -301,7 +254,7 @@ yao start
 读取验证码接口:
 
 ```bash
-curl http://127.0.0.1:5099/api/user/captcha
+curl http://127.0.0.1:5099/api/__yao/login/user/captcha?type=digit
 ```
 
 <Notice type="success">
@@ -312,33 +265,9 @@ curl http://127.0.0.1:5099/api/user/captcha
 登录接口:
 
 ```bash
-curl -X POST http://127.0.0.1:5099/api/user/login/password \
+curl -X POST http://127.0.0.1:5099/api/__yao/login/user \
     -H 'Content-Type: application/json' \
     -d '{"mobile":"zhang@yaoapps.com", "password": "5MCIXQYrR", "captcha":{"id":1024, "code":"xv98"}}'
-```
-
-### 第四步: 应用描述
-
-编辑 `app.json` 设置用户登录 API。登录界面路由为 `/xiang/login/user/:is` , `is` 为自定义变量，随登录表单一并提交给登录接口，用来识别用户来源，一般用于多租户系统。
-
-```json
-{
-  "name": "象传应用",
-  "short": "象传",
-  "description": "象传应用后台",
-  "option": {
-    "nav_user": "xiang.user",
-    "nav_menu": "menu",
-    "hide_user": true,
-    "hide_menu": true,
-    "login": {
-      "password": {
-        "captcha": "/api/xiang/user/captcha",
-        "login": "/api/user/login/password"
-      }
-    }
-  }
-}
 ```
 
 ## 使用会话数据
@@ -347,7 +276,7 @@ curl -X POST http://127.0.0.1:5099/api/user/login/password \
 
 ### 在数据流中使用
 
-编写 `inspect.flow.json` 放置在应用 `flows/user/` 目录。
+编写 `inspect.flow.yao` 放置在应用 `flows/user/` 目录。
 
 ```json
 {
@@ -359,6 +288,11 @@ curl -X POST http://127.0.0.1:5099/api/user/login/password \
       "name": "会话",
       "process": "session.Get",
       "args": ["user"]
+    },
+    {
+      "name": "打印",
+      "process": "xiang.helper.Print",
+      "args": ["{{$res.会话}}"]
     }
   ],
   "output": "{{$res.会话}}"
@@ -367,23 +301,39 @@ curl -X POST http://127.0.0.1:5099/api/user/login/password \
 
 **运行调试:**
 
+修改`/tables/product.tab.yao`的 `action`,加入 刚刚写好的`before:search`
+
+```json
+  "action": {
+    "bind": { "model": "product" },
+    "save": {
+      "guard": "scripts.guard.Validate"
+    },
+    "before:search": "flows.user.inspect"
+  },
+
+```
+
 启动服务，开启调试模式:
 
 ```bash
 yao start --debug
 ```
 
-新建一个命令控制台:
+登录后,访问菜单产品列表 `http://127.0.0.1:5099/admin/x/Table/product`可以看到控制台打印的用户信息:
 
-<Notice type="warning">
-  注意：启用 run@ 命令，需开启<strong>调试模式</strong>或将环境变量
-  <strong>XIANG_REMOTE_RUN</strong>
-  设置为IP白名单。 例如： XIANG_REMOTE_RUN=127.0.0.1
-</Notice>
-
-```bash
-yao run@127.0.0.1:5099 login
-yao run@127.0.0.1:5099 flows.user.inspect
+```json
+{
+  "email": "xiang@iqka.com",
+  "extra": {
+    "sex": "男"
+  },
+  "id": 1,
+  "mobile": null,
+  "name": "管理员",
+  "status": "enabled",
+  "type": "admin"
+}
 ```
 
 ### 在 JS 脚本中使用
@@ -396,11 +346,6 @@ function Inspect() {
 }
 ```
 
-```bash
-yao run@127.0.0.1:5099 login
-yao run@127.0.0.1:5099 scripts.user.Inspect
-```
-
 ### 在数据表格中使用
 
 可直接在数据表格 `apis.*.default` 中引用会话变量。
@@ -409,90 +354,71 @@ yao run@127.0.0.1:5099 scripts.user.Inspect
 
 ```json
 {
-  "name": "用户",
-  "version": "1.0.0",
-  "decription": "用户管理表格",
-  "bind": {
-    "model": "user",
-    "withs": { "supplier": { "select": ["id", "name"] } }
-  },
-  "hooks": {
-    "before:search": "scripts.user.SearchFilter"
-  },
-  "apis": {
+  "name": "产品",
+  "action": {
+    "bind": { "model": "product" },
+    "save": {
+      "guard": "scripts.guard.Validate"
+    },
+    "before:search": "flows.user.inspect",
     "search": {
       "default": [
         {
-          "withs": { "supplier": { "select": ["id", "name"] } },
-          "wheres": [
-            { "column": "supplier_id", "value": "{{$user.supplier_id}}" }
-          ],
-          "orders": [{ "column": "updated_at", "options": "desc" }]
+          "wheres": [{ "column": "id", "value": "{{$user.id}}" }],
+          "orders": [{ "column": "id", "options": "desc" }]
         },
         1,
         10
       ]
     }
   },
-  "columns": {
-    "ID": {
-      "label": "ID",
-      "view": { "type": "label", "props": { "value": ":id" } }
-    },
-    "所属供应商": {
-      "label": "供应商",
-      "view": { "type": "label", "props": { "value": ":supplier.name" } },
-      "edit": {
-        "type": "select",
-        "props": {
-          "value": ":supplier_id",
-          "allowClear": true,
-          "remote": {
-            "api": "/api/xiang/table/supplier/select",
-            "query": { "select": ["id", "name"] }
+  "layout": {
+    "header": { "preset": {} },
+    "table": {
+      "columns": [
+        { "name": "联动", "width": 200 },
+        { "name": "名称", "width": 200 },
+        { "name": "备注", "width": 200 },
+        { "name": "上架状态", "width": 200 },
+        { "name": "图集", "width": 200 }
+      ]
+    }
+  },
+  "fields": {
+    "table": {
+      "联动": {
+        "bind": "online",
+        "view": {
+          "bind": "new_field",
+          "type": "Text",
+          "compute": {
+            "process": "Concat",
+            "args": ["$C(row.name)", "(", "$C(row.remark)", ")"]
+          }
+        },
+        "edit": {
+          "type": "Select",
+          "props": {
+            "options": [
+              { "label": "已上架", "value": true },
+              { "label": "已下架", "value": false }
+            ]
+          }
+        }
+      },
+      "图集": {
+        "bind": "images",
+        "view": { "type": "Image", "compute": "Download" },
+        "edit": {
+          "type": "Upload",
+          "compute": "Upload",
+          "props": {
+            "filetype": "image",
+            "$api": { "process": "fs.system.Upload" }
           }
         }
       }
     }
-  },
-  "filters": {
-    "关键词": {
-      "label": "关键词",
-      "bind": "where.name.match",
-      "input": { "type": "input", "props": { "placeholder": "请输入关键词" } }
-    },
-    "所属供应商": {
-      "label": "供应商",
-      "bind": "where.supplier.name.match",
-      "input": { "type": "input", "props": { "placeholder": "请输入供应商" } }
-    }
-  },
-  "list": {
-    "primary": "id",
-    "layout": {
-      "columns": [
-        { "name": "ID", "width": 80 },
-        { "name": "名称", "width": 100 },
-        { "name": "所属供应商", "width": 200 }
-      ],
-      "filters": [{ "name": "关键词" }, { "name": "所属供应商" }]
-    },
-    "actions": { "pagination": { "props": { "showTotal": true } } },
-    "option": {}
-  },
-  "edit": {
-    "primary": "id",
-    "layout": {
-      "fieldset": [
-        {
-          "columns": [
-            { "name": "名称", "width": 12 },
-            { "name": "所属供应商", "width": 12 }
-          ]
-        }
-      ]
-    },
-    "actions": { "cancel": {}, "save": {}, "delete": {} }
   }
 }
 ```

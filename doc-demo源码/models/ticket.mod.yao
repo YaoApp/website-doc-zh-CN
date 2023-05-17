@@ -1,0 +1,45 @@
+{
+  "name": "工单表",
+  "table": {
+    "name": "ticket",
+    "comment": "工单表"
+  },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID" },
+    {
+      "label": "昵称",
+      "name": "name",
+      "type": "string",
+      "length": 20,
+      "comment": "昵称",
+      "index": true
+    },
+    {
+      "label": "电话号码",
+      "name": "phone",
+      "type": "string",
+      "comment": "电话号码",
+      "nullable": true
+    },
+    {
+      "label": "用户性别",
+      "comment": "用户性别",
+      "name": "gender",
+      "type": "string",
+      "default": ""
+    },
+
+    {
+      "label": "区域",
+      "name": "area",
+      "type": "string",
+      "nullable": true,
+      "comment": "区域"
+    }
+  ],
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": []
+}
