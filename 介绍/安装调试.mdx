@@ -29,7 +29,7 @@ curl -fsSL https://website.yaoapps.com/install.sh | bash
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
 
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-dev-amd64-dev`
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-amd64`
 
 进入容器:
 
@@ -45,12 +45,12 @@ yao version
 
 **Yao Docker Images**
 
-| 镜像                            | 环境     | 使用场景                                                   |
-| ------------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.3-dev-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.3-dev-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
-| yaoapp/yao:0.10.3-dev-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.3-dev-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| 镜像                        | 环境     | 使用场景                                                   |
+| --------------------------- | -------- | ---------------------------------------------------------- |
+| yaoapp/yao:0.10.3-amd64     | 生产环境 | 适用于云端部署                                             |
+| yaoapp/yao:0.10.3-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
+| yaoapp/yao:0.10.3-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
+| yaoapp/yao:0.10.3-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 
 </TabPane>
 
@@ -58,7 +58,7 @@ yao version
 
 1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
 
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-dev-amd64-dev`
+2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-amd64`
 
 进入容器:
 
@@ -79,7 +79,7 @@ yao version
 | yaoapp/yao:0.10.3-dev-amd64     | 生产环境 | 适用于云端部署                                             |
 | yaoapp/yao:0.10.3-dev-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
 | yaoapp/yao:0.10.3-dev-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.3-dev-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
+| yaoapp/yao:0.10.3-amd64-dev     | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
 
 </TabPane>
 
