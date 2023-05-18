@@ -2,7 +2,7 @@
 
 <blockquote>
   Login Widget 用于登录界面制作。 Login DSL 文件放在 logins 目录中, 文件扩展名为
-  .login.json。
+  .login.yao。
 </blockquote>
 
 **约定**
@@ -20,10 +20,10 @@ DSL 文件命名:
 
 | DSL 文件                          | Widget ID |
 | --------------------------------- | --------- |
-| /data/app/logins/admin.login.json | `admin`   |
-| /data/app/logins/user.login.json  | `user`    |
+| /data/app/logins/admin.login.yao | `admin`   |
+| /data/app/logins/user.login.yao  | `user`    |
 
-**当前版暂不支持多个登录界面。管理员登录界面描述文件固定为 admin.login.json, 用户登录界面描述固定为 user.login.json。**
+**当前版暂不支持多个登录界面。管理员登录界面描述文件固定为 admin.login.yao, 用户登录界面描述固定为 user.login.yao。**
 
 **路由**
 
@@ -37,7 +37,7 @@ DSL 文件命名:
 
 `http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/login/user`
 
-<Detail title="查看管理员登录示例 /data/app/logins/admin.login.json">
+<Detail title="查看管理员登录示例 /data/app/logins/admin.login.yao">
 
 ```json
 {
@@ -54,7 +54,7 @@ DSL 文件命名:
 
 </Detail>
 
-<Detail title="查看用户登录示例 /data/app/logins/user.login.json">
+<Detail title="查看用户登录示例 /data/app/logins/user.login.yao">
 
 ```json
 {

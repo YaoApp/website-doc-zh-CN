@@ -2,7 +2,7 @@
 
 Store 键-值存储，支持将数据保存在 `内存` `Redis`, `MongoDB` 中。
 
-Store DSL 文件放置在项目 `stores` 文件夹下，命名为小写英文字母，扩展名为 `.类型.json` [查看示例](https://github.com/YaoApp/yao/tree/main/tests/stores)
+Store DSL 文件放置在项目 `stores` 文件夹下，命名为小写英文字母，扩展名为 `.类型.yao` [查看示例](https://github.com/YaoApp/yao/tree/main/tests/stores)
 
 | 引擎版本 | 说明                                                             |
 | -------- | ---------------------------------------------------------------- |
@@ -13,7 +13,7 @@ Store DSL 文件放置在项目 `stores` 文件夹下，命名为小写英文字
 
 <Detail title="查看源码">
 
-Connector: `redis.conn.json`
+Connector: `redis.conn.yao`
 
 ```json
 {
@@ -30,7 +30,7 @@ Connector: `redis.conn.json`
 }
 ```
 
-Store: `share.redis.json`
+Store: `share.redis.yao`
 
 ````json
 {
@@ -41,7 +41,7 @@ Store: `share.redis.json`
 }
 
 
-LRU缓存: `cache.lru.json`
+LRU缓存: `cache.lru.yao`
 
 ```json
 {

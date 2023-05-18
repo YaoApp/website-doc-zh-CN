@@ -4,25 +4,109 @@
 
 <Detail title="查看源码">
 
+新建`/models/service.mod.yao`,写入以下代码
+
 ```json
 {
-  "comment": "统计各行业最高分",
-  "select": ["industries@", "city", ":MAX(score) as high_score"],
-  "from": "service",
-  "wheres": [
-    { ":created_at": "创建时间", ">=": "2021-01-01" },
-    { ":created_at": "创建时间", "<=": "{'2021-12-31'}" },
-    { ":updated_at": "更新时间", "is": "null" },
+  "name": "行业",
+  "table": { "name": "service", "comment": "行业" },
+  "columns": [
+    { "label": "ID", "name": "id", "type": "ID", "comment": "ID" },
     {
-      "wheres": [
-        { ":type": "类型", "=": 1 },
-        { "or:type": "或类型", "=": 2 }
-      ]
+      "label": "名称",
+      "name": "name",
+      "type": "string",
+      "index": true,
+      "comment": "名称"
+    },
+    {
+      "label": "行业",
+      "name": "industries",
+      "type": "string",
+      "nullable": true,
+      "comment": "行业"
+    },
+    {
+      "label": "城市",
+      "name": "city",
+      "type": "string",
+      "index": true,
+      "comment": "城市"
+    },
+    {
+      "label": "份数",
+      "name": "score",
+      "type": "integer",
+      "index": true,
+      "comment": "份数"
+    },
+    {
+      "label": "类型",
+      "name": "type",
+      "type": "integer",
+      "nullable": true,
+      "comment": "类型"
     }
   ],
-  "orders": "high_score desc",
-  "limit": 100,
-  "groups": ["industries@", "city"]
+  "relations": {},
+  "option": {
+    "timestamps": true,
+    "soft_deletes": true
+  },
+  "values": [
+    {
+      "id": 1,
+      "name": "电脑",
+      "industries": "互联网",
+      "city": "北京",
+      "score": 100,
+      "type": 1
+    },
+    {
+      "id": 2,
+      "name": "鼠标",
+      "industries": "互联网",
+      "city": "北京",
+      "score": 90,
+      "type": 1
+    },
+    {
+      "id": 3,
+      "name": "键盘",
+      "industries": "互联网",
+      "city": "北京",
+      "score": 80,
+      "type": 1
+    }
+  ]
+}
+```
+
+在`/scripts/test.js`,写入以下代码
+
+```javascript
+function Service() {
+  var query = new Query();
+  var data = query.Get({
+    comment: "统计各行业最高分",
+    select: ["industries", "city", ":MAX(score) as high_score"],
+    from: "service",
+    wheres: [
+      { ":created_at": "创建时间", ">=": "2021-01-01" },
+      { ":created_at": "创建时间", "<=": "2025-01-01" },
+      { ":updated_at": "更新时间", is: "null" },
+      {
+        wheres: [
+          { ":type": "类型", "=": 1 },
+          { "or:type": "或类型", "=": 2 },
+        ],
+      },
+    ],
+    orders: "high_score desc",
+    limit: 100,
+    groups: ["industries", "city"],
+  });
+  return data;
 }
 ```
 

@@ -8,17 +8,22 @@
 
 Query DSL:
 
-```json
-{
-  "select": ["id", "name"],
-  "query": {
-    "comment": "通过子查询生成一张新数据表(必须设置别名)",
-    "select": ["id", "short_name as name"],
-    "from": "manu as m",
-    "limit": 50
-  },
-  "orders": "id",
-  "limit": 20
+```javascript
+function select_child() {
+  var query = new Query();
+  var data = query.Get({
+    debug: true,
+    select: ["id", "name"],
+    query: {
+      comment: "通过子查询生成一张新数据表(必须设置别名)",
+      select: ["id", "name as name"],
+      from: "service as m",
+      limit: 50,
+    },
+    orders: "id",
+    limit: 20,
+  });
+  return data;
 }
 ```
 
@@ -26,34 +31,35 @@ Query DSL:
 
 ```sql
 SELECT `id`, `name`
-FROM (
-  SELECT `id`, `short_name` as `name` FROM `manu` LIMIT 50
-) AS `m`
+FROM (SELECT `id`, `name` AS `name` FROM `service` AS `m`) AS `_SUB_`
 ORDER BY `id` ASC
-LIMIT 50
 ```
 
 ### 用于 WHERE 场景
 
 Query DSL:
 
-```json
-{
-  "select": ["id", "name"],
-  "form": "service",
-  "wheres": [
-    {
-      "field": "manu_id",
-      "op": "in",
-      "query": {
-        "comment": "查询查询厂商ID数组",
-        "select": ["id"],
-        "from": "manu"
-      }
-    }
-  ],
-  "orders": "id",
-  "limit": 20
+```javascript
+function select_wheres() {
+  var query = new Query();
+  var data = query.Get({
+    select: ["id", "name"],
+    from: "service",
+    wheres: [
+      {
+        field: "type",
+        op: "in",
+        query: {
+          comment: "查询查询厂商ID数组",
+          select: ["id"],
+          from: "service",
+        },
+      },
+    ],
+    orders: "id",
+    limit: 20,
+  });
+  return data;
 }
 ```
 
@@ -62,14 +68,11 @@ Query DSL:
 ```sql
 SELECT `id`, `name`
 FROM `service`
-WHERE `manu_id` IN (
-  SELECT `id` FROM `manu`
-)
+WHERE `type` IN (SELECT `id` FROM `service`)
 ORDER BY `id` ASC
-LIMIT 50
 ```
 
-### 用于 HAVING 场景
+<!-- ### 用于 HAVING 场景
 
 Gou Query DSL:
 
@@ -98,7 +101,7 @@ FROM `service`
 GROUP BY `id`
 HAVING `数量` = ( SELECT 1 )
 LIMIT 50
-```
+``` -->
 
 ### 表连接(不推荐) `joins`
 
@@ -106,38 +109,41 @@ LIMIT 50
 
 Gou Query DSL:
 
-```json
-{
-  "select": ["id", "name", "manu.name as manu_name"],
-  "form": "service",
-  "joins": [
-    {
-      "left": true,
-      "from": "manu",
-      "key": "id",
-      "foreign": "service.manu_id"
-    }
-  ]
+```javascript
+function joins() {
+  var query = new Query();
+  var data = query.Get({
+    debug: true,
+    select: ["service.id", "service.name", "parent.city as city"],
+    from: "service",
+    joins: [
+      {
+        left: true,
+        from: "service as parent",
+        key: "parent.id",
+        foreign: "service.id",
+      },
+    ],
+  });
+  return data;
 }
 ```
 
 解析后的 `SQL语句` :
 
 ```sql
-SELECT `service`.`id`, `service`.`name`, `manu`.`name` as `manu_name`
-FROM `service`
-LEFT JOIN `manu` ON `manu`.`id` = `service`.`manu_id`
+select `service`.`id`, `service`.`name`, `parent`.`city` as `city`
+from `service`
+left join `service` as `parent` on `parent`.`id` = `service`.`id`
 ```
 
 查询结果为:
 
-| id  | name           | manu_name                        |
-| --- | -------------- | -------------------------------- |
-| 1   | 腾讯云主机 CVM | 北京云道天成科技有限公司         |
-| 2   | 腾讯云磁盘     | 北京云道天成科技有限公司         |
-| 3   | 阿里主机       | 象传高新（北京）数字科技有限公司 |
-| 4   | UCloud 云主机  | 象传智数（北京）软件科技有限公司 |
-| 5   | adfasdf        | 北京云道天成科技有限公司         |
+| id  | name | city |
+| --- | ---- | ---- |
+| 1   | 电脑 | 北京 |
+| 2   | 键盘 | 北京 |
+| 3   | 鼠标 | 北京 |
 
 #### Object Join 数据结构
 

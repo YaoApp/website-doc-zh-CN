@@ -2,7 +2,7 @@
 
 <blockquote>
   Chart Widget 用于图表界面制作。 Chart DSL 文件放在 charts 目录中, 文件扩展名为
-  .chart.json。
+  .chart.yao。
 </blockquote>
 
 **约定**
@@ -20,9 +20,9 @@ DSL 文件命名:
 
 | DSL 文件                                       | Widget ID            |
 | ---------------------------------------------- | -------------------- |
-| /data/app/charts/dashboard.chart.json          | `dashboard`          |
-| /data/app/charts/user/dashboard.chart.json     | `user.dashboard`     |
-| /data/app/charts/user/pet/dashboard.chart.json | `user.pet.dashboard` |
+| /data/app/charts/dashboard.chart.yao          | `dashboard`          |
+| /data/app/charts/user/dashboard.chart.yao     | `user.dashboard`     |
+| /data/app/charts/user/pet/dashboard.chart.yao | `user.pet.dashboard` |
 
 **路由**
 
@@ -34,7 +34,7 @@ Query 参数:
 
 `http://<IP|域名>:<YAO_PORT>/<管理后台路由前缀>/x/Chart/<Widget ID>?<URLQuery Params>`
 
-<Detail title="查看图表示例 /data/app/charts/dashboard.chart.json">
+<Detail title="查看图表示例 /data/app/charts/dashboard.chart.yao">
 
 ```json
 {

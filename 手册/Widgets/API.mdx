@@ -38,18 +38,18 @@ Yao 当前支持 RESTFul API 描述 MQTT、Socket、WEB Socket API ; 用于数�
 
 | 文件夹 (相对业务接口根目录) | 文件名         | 接口名称             | API 类型            |
 | --------------------------- | -------------- | -------------------- | ------------------- |
-| /                           | name.http.json | `name`               | `http` RESTFul API  |
-| /group                      | name.http.json | `group.name`         | `http` RESTFul API  |
-| /group1/group2              | name.http.json | `group1.group2.name` | `http` RESTFul API  |
-| /                           | name.mqtt.json | `name`               | `mqtt` MQTT API     |
-| /group                      | name.mqtt.json | `group.name`         | `mqtt` MQTT API     |
-| /group1/group2              | name.mqtt.json | `group1.group2.name` | `mqtt` MQTT API     |
-| /                           | name.sock.json | `name`               | `sock` Socket API   |
-| /group                      | name.sock.json | `group.name`         | `sock` Socket API   |
-| /group1/group2              | name.sock.json | `group1.group2.name` | `sock` Socket API   |
-| /                           | name.ws.json   | `name`               | `ws` WEB Socket API |
-| /group                      | name.ws.json   | `group.name`         | `ws` WEB Socket API |
-| /group1/group2              | name.ws.json   | `group1.group2.name` | `ws` WEB Socket API |
+| /                           | name.http.yao | `name`               | `http` RESTFul API  |
+| /group                      | name.http.yao | `group.name`         | `http` RESTFul API  |
+| /group1/group2              | name.http.yao | `group1.group2.name` | `http` RESTFul API  |
+| /                           | name.mqtt.yao | `name`               | `mqtt` MQTT API     |
+| /group                      | name.mqtt.yao | `group.name`         | `mqtt` MQTT API     |
+| /group1/group2              | name.mqtt.yao | `group1.group2.name` | `mqtt` MQTT API     |
+| /                           | name.sock.yao | `name`               | `sock` Socket API   |
+| /group                      | name.sock.yao | `group.name`         | `sock` Socket API   |
+| /group1/group2              | name.sock.yao | `group1.group2.name` | `sock` Socket API   |
+| /                           | name.ws.yao   | `name`               | `ws` WEB Socket API |
+| /group                      | name.ws.yao   | `group.name`         | `ws` WEB Socket API |
+| /group1/group2              | name.ws.yao   | `group1.group2.name` | `ws` WEB Socket API |
 
 ## 各协议规范文档
 
@@ -237,7 +237,7 @@ API 将通过路由 `/api/<group>/<path>`访问, 请求成功响应 `out` 中定
 
 ## 示例：
 
-### 编写一个接口描述文件 `apis/select.http.json`，指定接口路径、请求方式以及绑定的处理器，放置在应用的 `apis` 目录中。
+### 编写一个接口描述文件 `apis/select.http.yao`，指定接口路径、请求方式以及绑定的处理器，放置在应用的 `apis` 目录中。
 
 ```json
 {

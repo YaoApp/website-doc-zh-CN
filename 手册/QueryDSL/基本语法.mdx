@@ -8,50 +8,54 @@ Query DSL(Domain Specific Language) 用来描述数据查询条件，适用基�
 
 数据表 `service` :
 
-| id  | industries       | city | score | created_at          | updated_at |
-| --- | ---------------- | ---- | ----- | ------------------- | ---------- |
-| 1   | ["旅游", "教育"] | 北京 | 99    | 2021-10-03 13:40:52 | NULL       |
-| 2   | ["旅游", "教育"] | 上海 | 68    | 2021-10-03 13:40:52 | NULL       |
-| 3   | ["旅游", "教育"] | 北京 | 92    | 2021-10-03 13:40:52 | NULL       |
-| 4   | ["旅游", "教育"] | 上海 | 87    | 2021-10-03 13:40:52 | NULL       |
-| 5   | ["旅游", "教育"] | 北京 | 71    | 2021-10-03 13:46:06 | NULL       |
+| id  | industries | city | score | created_at          | updated_at |
+| --- | ---------- | ---- | ----- | ------------------- | ---------- |
+| 1   | "互联网"   | 北京 | 99    | 2021-10-03 13:40:52 | NULL       |
+| 2   | "互联网"   | 上海 | 68    | 2021-10-03 13:40:52 | NULL       |
+| 3   | "互联网"   | 北京 | 92    | 2021-10-03 13:40:52 | NULL       |
+| 4   | "互联网"   | 上海 | 87    | 2021-10-03 13:40:52 | NULL       |
+| 5   | "互联网"   | 北京 | 71    | 2021-10-03 13:46:06 | NULL       |
 
 ## 输入 Query DSL:
 
-```json
-{
-  "comment": "统计各行业最高分",
-  "select": ["@industries", "city", ":MAX(score) as high_score"],
-  "from": "service",
-  "wheres": [
-    { "field": "created_at", "op": ">=", "value": "2021-01-01" },
-    { "field": "created_at", "op": "<=", "value": "{'2021-12-31'}" },
-    { "field": "{updated_at}", "op": "null" },
-    {
-      "wheres": [
-        { "field": "type", "value": 1 },
-        { "or": true, "field": "type", "value": 2 }
-      ]
-    }
-  ],
-  "orders": [{ "field": "high_score", "sort": "desc" }],
-  "limit": 100,
-  "groups": ["@industries", "city"]
+```javascript
+function Service() {
+  var query = new Query();
+  var data = query.Get({
+    comment: "统计各行业最高分",
+    select: ["industries", "city", ":MAX(score) as high_score"],
+    from: "service",
+    wheres: [
+      { ":created_at": "创建时间", ">=": "2021-01-01" },
+      { ":created_at": "创建时间", "<=": "2025-01-01" },
+      { ":updated_at": "更新时间", is: "null" },
+      {
+        wheres: [
+          { ":type": "类型", "=": 1 },
+          { "or:type": "或类型", "=": 2 },
+        ],
+      },
+    ],
+    orders: "high_score desc",
+    limit: 100,
+    groups: ["industries", "city"],
+  });
+  return data;
 }
 ```
 
 解析后的 `SQL语句` 为 (MySQL 8):
 
 ```sql
-SELECT `@industries`.`industries`,`city`, MAX(`score`) AS `high_score`
+SELECT `industries`, `city`, MAX(`score`) AS `high_score`
 FROM `service`
-JOIN JSON_TABLE(`service`.`industries`, '$[*]' columns (`industries` varchar(50) path '$') ) as `@industries`
 WHERE `created_at` >= '2021-01-01'
-  AND `created_at` <= '2021-12-31'
-  AND `updated_at` IS NULL
-  AND ( `type` = 1 OR `type` = 2)
-GROUP BY `@industries`.`industries`, `city`
+AND `created_at` <= '2025-01-01'
+AND `updated_at` is null
+AND (`type` = ?)
+GROUP BY `industries`, `city`
 ORDER BY `high_score` DESC
+
 ```
 
 ## 输出:

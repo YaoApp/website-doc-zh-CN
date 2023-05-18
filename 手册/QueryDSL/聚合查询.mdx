@@ -32,37 +32,36 @@
 
 Gou Query DSL:
 
-```json
-{
-  "select": ["kind as 类型", "city as 城市", ":SUM(amount) as 数量"],
-  "from": "service",
-  "groups": [
-    { "field": "kind", "comment": "按类型统计" },
-    { "field": "city", "comment": "按城市统计" }
-  ]
+```javascript
+function Groups() {
+  var query = new Query();
+  var data = query.Get({
+    select: ["type as 类型", "city as 城市", ":COUNT(id) as 数量"],
+    from: "service",
+    groups: [
+      { field: "type", comment: "按类型统计" },
+      { field: "city", comment: "按城市统计" },
+    ],
+  });
+  return data;
 }
 ```
 
 解析后的 `SQL语句` 为(MySQL):
 
 ```sql
-  SELECT
-    `kind` AS `类型`,
-    `city` AS `城市`,
-    SUM(`amount`) AS `数量`
-  FROM `service`
-  GROUP BY `kind`, `city`
+ SELECT `type` AS `类型`, `city` AS `城市`, COUNT(`id`) AS `数量`
+ FROM `service`
+ GROUP BY `type`, `city`
 ```
 
 查询结果为:
 
-| 类型   | 城市 | 数量 |
-| ------ | ---- | ---- |
-| 云主机 | 北京 | 100  |
-| 云存储 | 北京 | 50   |
-| 云主机 | 上海 | 200  |
+| 类型 | 城市 | 数量 |
+| ---- | ---- | ---- |
+| 1    | 北京 | 3    |
 
-## 多层级聚合统计 `rollup`
+<!-- ## 多层级聚合统计 `rollup`
 
 Gou Query DSL:
 
@@ -97,9 +96,9 @@ Gou Query DSL:
 | 云主机       | **NULL** | 300  |
 | 云存储       | 北京     | 50   |
 | 云存储       | **NULL** | 50   |
-| **所有类型** | **NULL** | 350  |
+| **所有类型** | **NULL** | 350  | -->
 
-Gou Query DSL:
+<!-- Gou Query DSL:
 
 ```json
 {
@@ -132,7 +131,7 @@ Gou Query DSL:
 | 云主机       | **所有城市** | 300  |
 | 云存储       | 北京         | 50   |
 | 云存储       | **所有城市** | 50   |
-| **所有类型** | **所有城市** | 350  |
+| **所有类型** | **所有城市** | 350  | -->
 
 ## 聚合函数 `aggregate functions`
 
@@ -163,7 +162,7 @@ Gou Query DSL:
 | JSON_ARRAYAGG()  | [`Field Expression`]                    | 合并为一个 JSON Array  | `:JSON_ARRAYAGG(amount)`                                 | `[50, 50, 50, 200]`         |
 | JSON_OBJECTAGG() | [`Field Expression`,`Field Expression`] | 合并为一个 JSON Object | `:JSON_OBJECTAGG(city,price)`                            | `{"上海": 200, "北京": 50}` |
 
-## 聚合结果筛选 `havings`
+<!-- ## 聚合结果筛选 `havings`
 
 在 `wheres` 中不能筛选聚合结果数据，如需对聚合查询结果进行筛选，可以使用 `havings` 实现, 数据结构为 `Array<Object Having>`
 
@@ -218,7 +217,7 @@ Gou Query DSL:
 | or      | Bool                   | `true` 查询条件逻辑关系为 `or`, 默认为 `false` 查询条件逻辑关系为 `and`             | 否     |
 | havings | Array\<Object Having\> | 分组查询。用于 `condition 1` `and` ( `condition 2` OR `condition 3`) 的场景         | 否     |
 | query   | Object QueryDSL        | 子查询；如设定 `query` 则忽略 `value` 数值。 [查看子查询文档](手册/QueryDSL/子查询) | 否     |
-| comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                          | 否     |
+| comment | String                 | 查询条件注释，用于帮助理解查询条件逻辑和在开发平台中呈现。                          | 否     | -->
 
 ## 数据聚合语法糖 `groups syntactic sugar`
 
