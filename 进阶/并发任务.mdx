@@ -4,7 +4,7 @@
 
 ## Yao 支持 task 并发任务
 
-- 新建文件目录 `/tasks/task.js`:
+- 新建文件目录 `/tasks/task.yao`:
 
 ```json
 {
@@ -120,7 +120,7 @@ function OnError(id, err) {
 ```javascript
 function task() {
   for (i = 1; i < 100; i++) {
-    Process("tasks.test.Add", "进入任务" + i);
+    Process("tasks.task.Add", "进入任务" + i);
   }
 }
 ```
