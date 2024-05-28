@@ -14,76 +14,8 @@
 
 ## 安装
 
-<Tabs defaultActiveKey='1'>
-<TabPane tab='Linux & MacOS' key='1'>
+[Yao Version 0.10.4 安装下载] (https://github.com/YaoApp/xgen-dev-app)
 
-在终端下运行脚本:
-
-```bash
-curl -fsSL https://website.yaoapps.com/install.sh | bash
-```
-
-</TabPane>
-
-<TabPane tab='Windows' key='2'>
-
-1. 安装 Docker [下载安装 Docker](https://docs.docker.com/desktop/windows/install/)
-
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-amd64`
-
-进入容器:
-
-```bash
-docker exec -it yao /bin/bash
-```
-
-在容器内使用 yao 命令
-
-```bash
-yao version
-```
-
-**Yao Docker Images**
-
-| 镜像                        | 环境     | 使用场景                                                   |
-| --------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.3-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.3-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
-| yaoapp/yao:0.10.3-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.3-amd64-dev | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-
-</TabPane>
-
-<TabPane tab='Docker (推荐)' key='3'>
-
-1. 安装 Docker [下载安装 Docker](https://docs.docker.com/get-docker/)
-
-2. 创建并启动容器: `docker run -d --name yao -v <project root>:/data/app -p 5099:5099 -p 5077:5077 yaoapp/yao:0.10.3-amd64-dev`
-
-进入容器:
-
-```bash
-docker exec -it yao /bin/bash
-```
-
-在容器内使用 yao 命令
-
-```bash
-yao version
-```
-
-**Yao Docker Images**
-
-| 镜像                            | 环境     | 使用场景                                                   |
-| ------------------------------- | -------- | ---------------------------------------------------------- |
-| yaoapp/yao:0.10.3-dev-amd64     | 生产环境 | 适用于云端部署                                             |
-| yaoapp/yao:0.10.3-dev-arm64     | 生产环境 | 适用于物联网边缘设备部署                                   |
-| yaoapp/yao:0.10.3-dev-arm64-dev | 开发环境 | `arm64` 适用于 MacOS M1, 树莓派, RK 开发板等               |
-| yaoapp/yao:0.10.3-amd64-dev     | 开发环境 | `amd64` 适用于 MacOS Intel, Windows X86 64 位, Linux 64 位 |
-
-</TabPane>
-
-</Tabs>
 
 <Notice type="success">
   Yao 默认使用 Sqlite 存储数据，如果您需要使用
